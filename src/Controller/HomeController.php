@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class SecurityController extends AbstractController
+class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_login')]
     public function login(): Response
