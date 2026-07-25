@@ -9,7 +9,7 @@ document.querySelectorAll('input, select').forEach(input => {
     });
 });
 
-const togglePass = document.querySelector('button[type="button"]');
+const togglePass = document.getElementById('togglePassword');
 const passInput = document.getElementById('password');
 if (togglePass && passInput) {
     togglePass.addEventListener('click', () => {
