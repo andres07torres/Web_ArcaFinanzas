@@ -12,3 +12,11 @@ body {
 select::-ms-expand {
   display: none;
 }
+@keyframes eye-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+.animate-eye {
+  animation: eye-pop 0.3s ease;
+}
