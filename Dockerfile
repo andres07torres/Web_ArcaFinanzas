@@ -78,6 +78,12 @@ COPY . .
 COPY --from=vite /app/public/build/ /app/public/build/
 
 RUN echo "APP_ENV=prod" > .env && \
+    echo "APP_SECRET=ChangeMeInRenderEnv" >> .env && \
+    echo "APP_DEBUG=0" >> .env && \
+    echo "DEFAULT_URI=https://web-arcafinanzas.onrender.com" >> .env && \
+    echo "DATABASE_URL=sqlite:////dev/shm/db.sqlite" >> .env && \
+    echo "MAILER_DSN=null://null" >> .env && \
+    echo "MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0" >> .env && \
     APP_ENV=prod \
         APP_DEBUG=0 \
         APP_SECRET=ChangeMeInRenderEnv \
@@ -88,4 +94,4 @@ RUN mkdir -p /app/var && chmod -R 777 /app/var
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public public/index.php"]
