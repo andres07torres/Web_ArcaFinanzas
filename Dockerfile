@@ -48,7 +48,8 @@ COPY composer.json symfony.lock ./
 RUN composer install \
         --no-dev \
         --optimize-autoloader \
-        --no-interaction
+        --no-interaction \
+        --no-scripts
 
 # =============================================================================
 # VITE — build de assets frontend
