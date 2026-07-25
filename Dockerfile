@@ -1,7 +1,7 @@
 # =============================================================================
 # BASE — PHP-FPM (para desarrollo local con docker-compose)
 # =============================================================================
-FROM php:8.2-fpm-alpine AS fpm_base
+FROM php:8.3-fpm-alpine AS fpm_base
 
 RUN apk add --no-cache \
         postgresql-dev \
@@ -21,7 +21,7 @@ WORKDIR /app
 # =============================================================================
 # BASE — PHP CLI (para producción / tareas)
 # =============================================================================
-FROM php:8.2-cli-alpine AS cli_base
+FROM php:8.3-cli-alpine AS cli_base
 
 RUN apk add --no-cache \
         postgresql-dev \
