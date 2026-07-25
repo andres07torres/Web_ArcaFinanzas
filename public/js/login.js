@@ -20,9 +20,11 @@ if (togglePass && passInput) {
             const name = isPass ? 'visibility_off' : 'visibility';
             icon.textContent = name;
             icon.setAttribute('data-icon', name);
-            icon.classList.remove('animate-eye');
-            void icon.offsetWidth;
-            icon.classList.add('animate-eye');
+            icon.animate([
+                { transform: 'scale(1)' },
+                { transform: 'scale(1.25)' },
+                { transform: 'scale(1)' }
+            ], { duration: 300, easing: 'ease' });
         }
     });
 }
