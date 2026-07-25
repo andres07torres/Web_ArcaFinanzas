@@ -18,7 +18,7 @@ services:
   php:
     build:
       context: .
-      target: app_php
+      target: fpm_base
     volumes:
       - .:/app
       - /app/var/
@@ -37,7 +37,7 @@ services:
   vite:
     build:
       context: .
-      target: app_vite
+      target: vite
     volumes:
       - .:/app
       - /app/node_modules/
