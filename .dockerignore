@@ -15,4 +15,4 @@ docker-compose*
 Thumbs.db
 .DS_Store
 *.log
-docker/
+
