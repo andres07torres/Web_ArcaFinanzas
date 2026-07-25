@@ -8,13 +8,13 @@ export default defineConfig({
     plugins: [
         /* react(), // if you're using React */
         symfonyPlugin({
-            originOverride: "http://localhost:5173",
+            originOverride: process.env.VITE_ORIGIN || "http://localhost:5173",
         }),
     ],
     server: {
-        host: "localhost",
-        port: 5173,
-        origin: "http://localhost:5173",
+        host: process.env.VITE_HOST || "localhost",
+        port: Number(process.env.VITE_PORT) || 5173,
+        origin: process.env.VITE_ORIGIN || "http://localhost:5173",
     },
     build: {
         rollupOptions: {
