@@ -77,7 +77,8 @@ COPY . .
 
 COPY --from=vite /app/public/build/ /app/public/build/
 
-RUN APP_ENV=prod \
+RUN echo "APP_ENV=prod" > .env && \
+    APP_ENV=prod \
         APP_DEBUG=0 \
         APP_SECRET=ChangeMeInRenderEnv \
         DATABASE_URL="sqlite:////dev/shm/db.sqlite" \
