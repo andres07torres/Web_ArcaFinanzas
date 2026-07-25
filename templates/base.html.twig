@@ -21,6 +21,21 @@
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
             {{ vite_entry_script_tags('app') }}
+            <script>
+            document.addEventListener('click', function(e) {
+                var btn = e.target.closest('#togglePassword');
+                if (!btn) return;
+                var input = document.getElementById('password');
+                if (!input) return;
+                var show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                var icon = btn.querySelector('.material-symbols-outlined');
+                if (icon) {
+                    icon.textContent = show ? 'visibility_off' : 'visibility';
+                    icon.setAttribute('data-icon', show ? 'visibility_off' : 'visibility');
+                }
+            });
+            </script>
         {% endblock %}
     </body>
 </html>
