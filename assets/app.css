@@ -1,0 +1,14 @@
+body {
+  font-family: 'Inter', sans-serif;
+}
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-display: block;
+}
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+select::-ms-expand {
+  display: none;
+}

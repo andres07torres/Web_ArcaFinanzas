@@ -1,0 +1,33 @@
+/vendor/
+/node_modules/
+/var/
+/public/build/
+/bin/phpunit
+
+# Environment
+.env
+.env.*
+
+# Symfony secrets
+/config/secrets/
+
+# Symfony cache
+/var/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+
+# Docker
+docker-compose.override.yml
+
