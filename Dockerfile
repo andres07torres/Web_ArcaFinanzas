@@ -25,6 +25,8 @@ FROM php:8.2-cli-alpine AS cli_base
 
 RUN apk add --no-cache \
         postgresql-dev \
+        git \
+        unzip \
     && docker-php-ext-install -j$(nproc) \
         pdo_pgsql \
         intl \
@@ -74,7 +76,13 @@ COPY . .
 
 COPY --from=vite /app/public/build/ /app/public/build/
 
-RUN APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear
+RUN APP_ENV=prod \
+        APP_DEBUG=0 \
+        APP_SECRET=ChangeMeInRenderEnv \
+        DATABASE_URL="sqlite:////dev/shm/db.sqlite" \
+        php bin/console cache:clear --no-warmup
+
+RUN mkdir -p /app/var && chmod -R 777 /app/var
 
 EXPOSE 8080
 
