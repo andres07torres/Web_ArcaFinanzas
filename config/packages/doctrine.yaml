@@ -8,6 +8,9 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+        schema_filter: ~^(?!.*(auth|storage|realtime|vault|extensions)\.)~
+        mapping_types:
+            _text: text
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
