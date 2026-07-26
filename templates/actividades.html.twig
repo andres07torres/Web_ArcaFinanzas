@@ -116,7 +116,16 @@
 								<a href="{{ path('app_actividades_detalle', {id: activity.id}) }}" class="h-8 px-md border border-outline text-on-surface-variant rounded-md font-label-bold text-xs hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
 									<span class="material-symbols-outlined text-sm">visibility</span> Ver Detalles
 								</a>
-								<a href="{{ path('app_actividades_editar', {id: activity.id}) }}" class="h-8 px-md border border-secondary text-secondary rounded-md font-label-bold text-xs hover:bg-secondary hover:text-on-secondary transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+								<a href="{{ path('app_actividades_editar', {id: activity.id}) }}"
+								   data-edit-activity="true"
+								   data-id="{{ activity.id }}"
+								   data-name="{{ activity.name|e('html_attr') }}"
+								   data-description="{{ activity.description|e('html_attr') }}"
+								   data-category="{{ activity.category|e('html_attr') }}"
+								   data-goal="{{ activity.goalAmount }}"
+								   data-start="{{ activity.startDate ? activity.startDate|date('Y-m-d') : '' }}"
+								   data-end="{{ activity.endDate ? activity.endDate|date('Y-m-d') : '' }}"
+								   class="h-8 px-md border border-secondary text-secondary rounded-md font-label-bold text-xs hover:bg-secondary hover:text-on-secondary transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
 									<span class="material-symbols-outlined text-sm">edit</span> Editar
 								</a>
 								<form method="post" action="{{ path('app_actividades_cerrar', {id: activity.id}) }}" class="inline-block">
@@ -278,6 +287,49 @@
 					if (e.target === actModal) closeActModal();
 				});
 			}
+
+			// LOGICA PARA EDITAR ACTIVIDADES EN MODAL
+			const editActModal = document.getElementById('editActivityModal');
+			const editActForm = document.getElementById('editActivityForm');
+			const closeEditActBtn = document.getElementById('closeEditActModalBtn');
+			const cancelEditActBtn = document.getElementById('cancelEditActModalBtn');
+
+			function closeEditActModal() {
+				if (editActModal) editActModal.classList.add('hidden');
+			}
+
+			document.querySelectorAll('[data-edit-activity="true"]').forEach(btn => {
+				btn.addEventListener('click', function(e) {
+					e.preventDefault();
+					const id = this.getAttribute('data-id');
+					const name = this.getAttribute('data-name');
+					const desc = this.getAttribute('data-description');
+					const cat = this.getAttribute('data-category');
+					const goal = this.getAttribute('data-goal');
+					const start = this.getAttribute('data-start');
+					const end = this.getAttribute('data-end');
+
+					if (editActForm) {
+						editActForm.action = '/actividades/' + id + '/editar';
+						document.getElementById('editActName').value = name || '';
+						document.getElementById('editActDescription').value = desc || '';
+						document.getElementById('editActCategory').value = cat || 'recaudacion';
+						document.getElementById('editActGoal').value = goal || '0.00';
+						document.getElementById('editActStartDate').value = start || '';
+						document.getElementById('editActEndDate').value = end || '';
+					}
+
+					if (editActModal) editActModal.classList.remove('hidden');
+				});
+			});
+
+			if (closeEditActBtn) closeEditActBtn.addEventListener('click', closeEditActModal);
+			if (cancelEditActBtn) cancelEditActBtn.addEventListener('click', closeEditActModal);
+			if (editActModal) {
+				editActModal.addEventListener('click', function(e) {
+					if (e.target === editActModal) closeEditActModal();
+				});
+			}
 		});
 	</script>
 
@@ -343,6 +395,74 @@
 					<button type="button" id="cancelActModalBtn" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-variant cursor-pointer">Cancelar</button>
 					<button type="submit" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary-container cursor-pointer shadow-xs flex items-center gap-xs">
 						<span class="material-symbols-outlined text-sm">save</span> Crear Actividad
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- MODAL: EDITAR ACTIVIDAD -->
+	<div id="editActivityModal" class="hidden fixed inset-0 bg-on-surface/50 backdrop-blur-sm z-[100] flex items-center justify-center p-md sm:p-lg overflow-y-auto">
+		<div class="bg-white border border-outline-variant rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
+			<div class="p-lg bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+				<div class="flex items-center gap-sm">
+					<div class="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold">
+						<span class="material-symbols-outlined text-xl">edit</span>
+					</div>
+					<div>
+						<h3 class="font-bold text-body-lg text-on-background">Editar Actividad</h3>
+						<p class="text-xs text-on-surface-variant">Modifica los detalles de la actividad</p>
+					</div>
+				</div>
+				<button type="button" id="closeEditActModalBtn" class="p-xs text-on-surface-variant hover:text-error transition-colors rounded-full cursor-pointer">
+					<span class="material-symbols-outlined text-xl">close</span>
+				</button>
+			</div>
+			<form id="editActivityForm" action="" method="POST" class="flex flex-col flex-1 overflow-hidden">
+				<input type="hidden" name="activity[_token]" value="{{ csrf_token('submit') }}"/>
+				<div class="p-lg overflow-y-auto space-y-md flex-1">
+					<div>
+						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Nombre de la Actividad</label>
+						<input type="text" id="editActName" name="activity[name]" required class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md font-bold"/>
+					</div>
+					<div>
+						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Descripción</label>
+						<textarea id="editActDescription" name="activity[description]" rows="2" class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm"></textarea>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Categoría</label>
+							<select id="editActCategory" name="activity[category]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm">
+								<option value="recaudacion">Recaudación</option>
+								<option value="mision">Misión</option>
+								<option value="social">Social</option>
+								<option value="juvenil">Juvenil</option>
+								<option value="infantil">Infantil</option>
+								<option value="musica">Música</option>
+								<option value="construccion">Construcción</option>
+								<option value="otro">Otro</option>
+							</select>
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Meta ($)</label>
+							<input type="number" step="0.01" min="0" id="editActGoal" name="activity[goalAmount]" required class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-headline-sm font-data-mono"/>
+						</div>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Fecha de Inicio</label>
+							<input type="date" id="editActStartDate" name="activity[startDate]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md"/>
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Fecha de Cierre</label>
+							<input type="date" id="editActEndDate" name="activity[endDate]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md"/>
+						</div>
+					</div>
+				</div>
+				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-center items-center gap-sm sm:gap-md">
+					<button type="button" id="cancelEditActModalBtn" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-variant cursor-pointer">Cancelar</button>
+					<button type="submit" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary-container cursor-pointer shadow-xs flex items-center gap-xs">
+						<span class="material-symbols-outlined text-sm">save</span> Guardar Cambios
 					</button>
 				</div>
 			</form>

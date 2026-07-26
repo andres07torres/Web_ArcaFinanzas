@@ -135,65 +135,139 @@
 									</div>
 								</div>
 								<div class="flex gap-sm w-full md:w-auto">
-									<a href="{{ path('app_directorio_editar', {id: selected_member.id}) }}" class="h-9 px-lg border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors inline-flex items-center justify-center cursor-pointer">Editar Perfil</a>
+									<a href="{{ path('app_directorio_editar', {id: selected_member.id}) }}"
+									   data-edit-member="true"
+									   data-id="{{ selected_member.id }}"
+									   data-firstname="{{ selected_member.firstName|e('html_attr') }}"
+									   data-lastname="{{ selected_member.lastName|e('html_attr') }}"
+									   data-phone="{{ selected_member.phone|e('html_attr') }}"
+									   data-email="{{ selected_member.email|e('html_attr') }}"
+									   data-role="{{ selected_member.role|e('html_attr') }}"
+									   data-birthdate="{{ selected_member.joinDate ? selected_member.joinDate|date('Y-m-d') : '' }}"
+									   data-address="{{ selected_member.address|e('html_attr') }}"
+									   class="h-9 px-lg border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors inline-flex items-center justify-center cursor-pointer">Editar Perfil</a>
 									<button class="h-9 px-lg bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm inline-flex items-center justify-center cursor-pointer">Mensaje</button>
 								</div>
 							</div>
 						</div>
 						<div class="flex-1 flex flex-col min-h-0">
 							<div class="px-xl flex border-b border-outline-variant">
-								<button class="py-md px-md border-b-2 border-primary text-primary font-label-bold text-label-bold">Historial de Contribuciones</button>
-								<button class="py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors">Tickets y Eventos</button>
-								<button class="py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors">Notas</button>
+								<button type="button" data-member-tab="contributions" class="member-tab-btn py-md px-md border-b-2 border-primary text-primary font-label-bold text-label-bold cursor-pointer transition-colors">Historial de Contribuciones</button>
+								<button type="button" data-member-tab="tickets" class="member-tab-btn py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors cursor-pointer">Tickets y Eventos</button>
+								<button type="button" data-member-tab="notes" class="member-tab-btn py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors cursor-pointer">Notas</button>
 							</div>
 							<div class="flex-1 overflow-y-auto p-xl space-y-md">
-								{% if member_transactions is empty %}
-									<div class="text-center py-xl">
-										<span class="material-symbols-outlined text-on-surface-variant text-5xl">receipt_long</span>
-										<p class="font-body-sm text-on-surface-variant mt-md">No hay transacciones registradas</p>
-									</div>
-								{% else %}
-									<table class="w-full text-left">
-										<thead class="text-on-surface-variant font-label-bold text-label-bold uppercase border-b border-outline-variant">
-											<tr>
-												<th class="pb-md">Fecha</th>
-												<th class="pb-md">Categoría</th>
-												<th class="pb-md text-right">Monto</th>
-												<th class="pb-md text-center">Estado</th>
-											</tr>
-										</thead>
-										<tbody class="divide-y divide-outline-variant">
-											{% for transaction in member_transactions %}
-												<tr class="hover:bg-surface-container-low transition-colors">
-													<td class="py-md font-data-mono text-body-sm">{{ transaction.transactionDate|date('d') }} de {{ months[transaction.transactionDate|date('n') - 1] }}, {{ transaction.transactionDate|date('Y') }}</td>
-													<td class="py-md">
-														<div class="flex items-center gap-sm">
-															{% if transaction.type == 'income' %}
-																<span class="material-symbols-outlined text-secondary text-[18px]">volunteer_activism</span>
-															{% else %}
-																<span class="material-symbols-outlined text-error text-[18px]">payments</span>
-															{% endif %}
-															{{ transaction.category }}
-														</div>
-													</td>
-													<td class="py-md text-right font-bold">${{ transaction.amount|number_format(2, '.', ',') }}</td>
-													<td class="py-md text-center">
-														{% if transaction.type == 'income' %}
-															<span class="px-sm py-1 bg-secondary-container/30 text-on-secondary-container rounded text-[10px] font-bold uppercase">Ingreso</span>
-														{% else %}
-															<span class="px-sm py-1 bg-error-container/40 text-on-error-container rounded text-[10px] font-bold uppercase">Gasto</span>
-														{% endif %}
-													</td>
+								<!-- PESTAÑA 1: HISTORIAL DE CONTRIBUCIONES -->
+								<div id="memberTab_contributions" class="member-tab-content">
+									{% if member_transactions is empty %}
+										<div class="text-center py-xl">
+											<span class="material-symbols-outlined text-on-surface-variant text-5xl">receipt_long</span>
+											<p class="font-body-sm text-on-surface-variant mt-md">No hay transacciones registradas</p>
+										</div>
+									{% else %}
+										<table class="w-full text-left">
+											<thead class="text-on-surface-variant font-label-bold text-label-bold uppercase border-b border-outline-variant">
+												<tr>
+													<th class="pb-md">Fecha</th>
+													<th class="pb-md">Categoría</th>
+													<th class="pb-md text-right">Monto</th>
+													<th class="pb-md text-center">Estado</th>
 												</tr>
+											</thead>
+											<tbody class="divide-y divide-outline-variant">
+												{% for transaction in member_transactions %}
+													<tr class="hover:bg-surface-container-low transition-colors">
+														<td class="py-md font-data-mono text-body-sm">{{ transaction.transactionDate|date('d') }} de {{ months[transaction.transactionDate|date('n') - 1] }}, {{ transaction.transactionDate|date('Y') }}</td>
+														<td class="py-md">
+															<div class="flex items-center gap-sm">
+																{% if transaction.type == 'income' %}
+																	<span class="material-symbols-outlined text-secondary text-[18px]">volunteer_activism</span>
+																{% else %}
+																	<span class="material-symbols-outlined text-error text-[18px]">payments</span>
+																{% endif %}
+																{{ transaction.category }}
+															</div>
+														</td>
+														<td class="py-md text-right font-bold">${{ transaction.amount|number_format(2, '.', ',') }}</td>
+														<td class="py-md text-center">
+															{% if transaction.type == 'income' %}
+																<span class="px-sm py-1 bg-secondary-container/30 text-on-secondary-container rounded text-[10px] font-bold uppercase">Ingreso</span>
+															{% else %}
+																<span class="px-sm py-1 bg-error-container/40 text-on-error-container rounded text-[10px] font-bold uppercase">Gasto</span>
+															{% endif %}
+														</td>
+													</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+										<div class="pt-xl flex justify-center">
+											<button type="button" onclick="window.print()" class="text-body-sm font-label-bold text-primary flex items-center gap-xs cursor-pointer hover:underline">
+												Imprimir Historial <span class="material-symbols-outlined text-[18px]">print</span>
+											</button>
+										</div>
+									{% endif %}
+								</div>
+
+								<!-- PESTAÑA 2: TICKETS Y EVENTOS -->
+								<div id="memberTab_tickets" class="member-tab-content hidden space-y-md">
+									{% set has_events = false %}
+									{% for tx in member_transactions %}
+										{% if tx.activity %}
+											{% set has_events = true %}
+										{% endif %}
+									{% endfor %}
+
+									{% if has_events %}
+										<div class="space-y-sm">
+											{% for tx in member_transactions %}
+												{% if tx.activity %}
+													<div class="p-md bg-surface-container-low border border-outline-variant rounded-xl flex items-center justify-between">
+														<div class="flex items-center gap-md">
+															<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
+																<span class="material-symbols-outlined text-xl">confirmation_number</span>
+															</div>
+															<div>
+																<h4 class="font-bold text-body-md text-on-background">{{ tx.activity.name }}</h4>
+																<p class="text-xs text-on-surface-variant">{{ tx.transactionDate|date('d/m/Y') }} · {{ tx.activity.category }}</p>
+															</div>
+														</div>
+														<span class="px-md py-xs bg-secondary-container/30 text-on-secondary-container rounded-full text-xs font-bold">${{ tx.amount|number_format(2, '.', ',') }}</span>
+													</div>
+												{% endif %}
 											{% endfor %}
-										</tbody>
-									</table>
-									<div class="pt-xl flex justify-center">
-										<button class="text-body-sm font-label-bold text-primary flex items-center gap-xs">
-											Descargar Historial Completo <span class="material-symbols-outlined text-[18px]">download</span>
-										</button>
+										</div>
+									{% else %}
+										<div class="text-center py-xl">
+											<span class="material-symbols-outlined text-on-surface-variant text-5xl opacity-40">confirmation_number</span>
+											<p class="font-body-sm font-semibold text-on-background mt-md">No hay tickets ni eventos registrados</p>
+											<p class="text-xs text-on-surface-variant mt-xs">Este miembro aún no ha participado en actividades vinculadas.</p>
+										</div>
+									{% endif %}
+								</div>
+
+								<!-- PESTAÑA 3: NOTAS Y DIRECCIÓN -->
+								<div id="memberTab_notes" class="member-tab-content hidden space-y-md">
+									<div class="bg-surface-container-low border border-outline-variant rounded-xl p-lg space-y-md">
+										<div>
+											<h4 class="font-bold text-xs uppercase text-on-surface-variant mb-xs">Dirección Registrada</h4>
+											<p class="text-body-md text-on-background font-medium">
+												{% if selected_member.address %}
+													{{ selected_member.address }}{% if selected_member.city %}, {{ selected_member.city }}{% endif %}{% if selected_member.state %}, {{ selected_member.state }}{% endif %}
+												{% else %}
+													<span class="text-on-surface-variant italic">No se ha registrado una dirección física.</span>
+												{% endif %}
+											</p>
+										</div>
+										<div class="pt-md border-t border-outline-variant">
+											<h4 class="font-bold text-xs uppercase text-on-surface-variant mb-xs">Notas Adicionales</h4>
+											{% if selected_member.notes %}
+												<p class="text-body-sm text-on-background whitespace-pre-line">{{ selected_member.notes }}</p>
+											{% else %}
+												<p class="text-xs text-on-surface-variant italic">No existen observaciones o notas para este miembro.</p>
+											{% endif %}
+										</div>
 									</div>
-								{% endif %}
+								</div>
 							</div>
 						</div>
 					</div>
@@ -306,6 +380,151 @@
 					if (e.target === memModal) closeMemModal();
 				});
 			}
+
+			// LOGICA PARA EDITAR MIEMBROS EN MODAL
+			const editMemModal = document.getElementById('editMemberModal');
+			const editMemForm = document.getElementById('editMemberForm');
+			const closeEditMemBtn = document.getElementById('closeEditMemModalBtn');
+			const cancelEditMemBtn = document.getElementById('cancelEditMemModalBtn');
+
+			function closeEditMemModal() {
+				if (editMemModal) editMemModal.classList.add('hidden');
+			}
+
+			document.querySelectorAll('[data-edit-member="true"]').forEach(btn => {
+				btn.addEventListener('click', function(e) {
+					e.preventDefault();
+					const id = this.getAttribute('data-id');
+					const fn = this.getAttribute('data-firstname');
+					const ln = this.getAttribute('data-lastname');
+					const phone = this.getAttribute('data-phone');
+					const email = this.getAttribute('data-email');
+					const role = this.getAttribute('data-role');
+					const bday = this.getAttribute('data-birthdate');
+					const addr = this.getAttribute('data-address');
+
+					if (editMemForm) {
+						editMemForm.action = '/directorio/' + id + '/editar';
+						document.getElementById('editMemFirstName').value = fn || '';
+						document.getElementById('editMemLastName').value = ln || '';
+						document.getElementById('editMemPhone').value = phone || '';
+						document.getElementById('editMemEmail').value = email || '';
+						document.getElementById('editMemRole').value = role || 'miembro';
+						document.getElementById('editMemBirthDate').value = bday || '';
+						document.getElementById('editMemAddress').value = addr || '';
+					}
+
+					if (editMemModal) editMemModal.classList.remove('hidden');
+				});
+			});
+
+			if (closeEditMemBtn) closeEditMemBtn.addEventListener('click', closeEditMemModal);
+			if (cancelEditMemBtn) cancelEditMemBtn.addEventListener('click', closeEditMemModal);
+			if (editMemModal) {
+				editMemModal.addEventListener('click', function(e) {
+					if (e.target === editMemModal) closeEditMemModal();
+				});
+			}
+
+			// PESTAÑAS DEL PERFIL DE MIEMBRO (Historial, Tickets, Notas)
+			const memberTabBtns = document.querySelectorAll('.member-tab-btn');
+			const memberTabContents = document.querySelectorAll('.member-tab-content');
+
+			if (memberTabBtns.length) {
+				memberTabBtns.forEach(btn => {
+					btn.addEventListener('click', function() {
+						const targetTab = this.getAttribute('data-member-tab');
+
+						memberTabBtns.forEach(b => {
+							b.classList.remove('border-b-2', 'border-primary', 'text-primary');
+							b.classList.add('text-on-surface-variant');
+						});
+
+						this.classList.remove('text-on-surface-variant');
+						this.classList.add('border-b-2', 'border-primary', 'text-primary');
+
+						memberTabContents.forEach(content => {
+							if (content.id === 'memberTab_' + targetTab) {
+								content.classList.remove('hidden');
+							} else {
+								content.classList.add('hidden');
+							}
+						});
+					});
+				});
+			}
 		});
 	</script>
+
+	<!-- MODAL: EDITAR MIEMBRO -->
+	<div id="editMemberModal" class="hidden fixed inset-0 bg-on-surface/50 backdrop-blur-sm z-[100] flex items-center justify-center p-md sm:p-lg overflow-y-auto">
+		<div class="bg-white border border-outline-variant rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
+			<div class="p-lg bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+				<div class="flex items-center gap-sm">
+					<div class="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold">
+						<span class="material-symbols-outlined text-xl">edit</span>
+					</div>
+					<div>
+						<h3 class="font-bold text-body-lg text-on-background">Editar Miembro</h3>
+						<p class="text-xs text-on-surface-variant">Modifica la información personal del miembro</p>
+					</div>
+				</div>
+				<button type="button" id="closeEditMemModalBtn" class="p-xs text-on-surface-variant hover:text-error transition-colors rounded-full cursor-pointer">
+					<span class="material-symbols-outlined text-xl">close</span>
+				</button>
+			</div>
+			<form id="editMemberForm" action="" method="POST" class="flex flex-col flex-1 overflow-hidden">
+				<input type="hidden" name="member[_token]" value="{{ csrf_token('submit') }}"/>
+				<div class="p-lg overflow-y-auto space-y-md flex-1">
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Nombre</label>
+							<input type="text" id="editMemFirstName" name="member[firstName]" required class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md font-bold"/>
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Apellido</label>
+							<input type="text" id="editMemLastName" name="member[lastName]" required class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md font-bold"/>
+						</div>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Teléfono</label>
+							<input type="tel" id="editMemPhone" name="member[phone]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md"/>
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Correo Electrónico</label>
+							<input type="email" id="editMemEmail" name="member[email]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md"/>
+						</div>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Rol / Cargo</label>
+							<select id="editMemRole" name="member[role]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm">
+								<option value="miembro">Miembro</option>
+								<option value="diacono">Diácono</option>
+								<option value="anciano">Anciano</option>
+								<option value="pastor">Pastor</option>
+								<option value="colaborador">Colaborador</option>
+								<option value="visitante">Visitante</option>
+							</select>
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Fecha de Cumpleaños</label>
+							<input type="date" id="editMemBirthDate" name="member[joinDate]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md"/>
+						</div>
+					</div>
+					<div>
+						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Dirección</label>
+						<textarea id="editMemAddress" name="member[address]" rows="2" class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm"></textarea>
+					</div>
+				</div>
+				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-center items-center gap-sm sm:gap-md">
+					<button type="button" id="cancelEditMemModalBtn" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-variant cursor-pointer">Cancelar</button>
+					<button type="submit" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary-container cursor-pointer shadow-xs flex items-center gap-xs">
+						<span class="material-symbols-outlined text-sm">save</span> Guardar Cambios
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
 {% endblock %}
