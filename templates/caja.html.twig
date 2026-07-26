@@ -144,7 +144,7 @@
 				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
 				<span class="font-label-bold text-label-bold">Control de Caja</span>
 			</a>
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="#">
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_directorio') }}">
 				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">group</span>
 				<span class="font-label-bold text-label-bold">Directorio</span>
 			</a>
@@ -397,25 +397,21 @@
 	</main>
 
 	<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-highest flex justify-around items-center h-16 z-50">
-		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="{{ path('app_dashboard') }}">
+		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_dashboard') }}">
 			<span class="material-symbols-outlined">dashboard</span>
-			<span class="text-[10px] font-bold">INICIO</span>
+			<span class="text-[10px] font-label-bold">Inicio</span>
 		</a>
-		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="{{ path('app_actividades') }}">
+		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_actividades') }}">
 			<span class="material-symbols-outlined">event_available</span>
-			<span class="text-[10px] font-bold">ACTS</span>
+			<span class="text-[10px] font-label-bold">Eventos</span>
 		</a>
-		<a class="flex flex-col items-center gap-xs text-primary" href="{{ path('app_caja') }}">
+		<a class="flex flex-col items-center gap-1 text-primary" href="{{ path('app_caja') }}">
 			<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
-			<span class="text-[10px] font-bold">CAJA</span>
+			<span class="text-[10px] font-label-bold">Caja</span>
 		</a>
-		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_directorio') }}">
 			<span class="material-symbols-outlined">group</span>
-			<span class="text-[10px] font-bold">DIR</span>
-		</a>
-		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
-			<span class="material-symbols-outlined">settings</span>
-			<span class="text-[10px] font-bold">MEN\u00da</span>
+			<span class="text-[10px] font-label-bold">Gente</span>
 		</a>
 	</nav>
 {% endblock %}
