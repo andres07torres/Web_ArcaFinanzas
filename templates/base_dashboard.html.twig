@@ -488,4 +488,113 @@
 			fetchNotifications();
 		});
 	</script>
+
+	<!-- MODAL: REGISTRAR TRANSACCIÓN (ENTRADA RÁPIDA) -->
+	<div id="quickTransactionModal" class="hidden fixed inset-0 bg-on-surface/50 backdrop-blur-sm z-[100] flex items-center justify-center p-md sm:p-lg overflow-y-auto">
+		<div class="bg-white border border-outline-variant rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden animate-scale-up">
+			<div class="p-lg bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+				<div class="flex items-center gap-sm">
+					<div class="w-9 h-9 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
+						<span class="material-symbols-outlined text-xl">receipt_long</span>
+					</div>
+					<div>
+						<h3 class="font-bold text-body-lg text-on-background">Registrar Nueva Transacción</h3>
+						<p class="text-xs text-on-surface-variant">Ingreso o Gasto de Caja</p>
+					</div>
+				</div>
+				<button type="button" id="closeTxModalBtn" class="p-xs text-on-surface-variant hover:text-error transition-colors rounded-full cursor-pointer">
+					<span class="material-symbols-outlined text-xl">close</span>
+				</button>
+			</div>
+			<form action="{{ path('app_caja_nueva') }}" method="POST" enctype="multipart/form-data" class="flex flex-col flex-1 overflow-hidden">
+				<input type="hidden" name="transaction[_token]" value="{{ csrf_token('submit') }}"/>
+				<div class="p-lg overflow-y-auto space-y-md flex-1">
+					<div>
+						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Tipo de Transacción</label>
+						<select name="transaction[type]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md font-bold">
+							<option value="income">Ingreso (+)</option>
+							<option value="expense">Gasto (-)</option>
+						</select>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Monto ($)</label>
+							<input type="number" step="0.01" min="0.01" name="transaction[amount]" required placeholder="0.00" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-headline-sm font-data-mono"/>
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Fecha</label>
+							<input type="date" name="transaction[transactionDate]" required value="{{ 'now'|date('Y-m-d') }}" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md"/>
+						</div>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Categoría</label>
+							<select name="transaction[category]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm">
+								<option value="diezmos">Diezmos</option>
+								<option value="ofrendas">Ofrendas</option>
+								<option value="donaciones" selected>Donaciones</option>
+								<option value="eventos">Eventos</option>
+								<option value="mantenimiento">Mantenimiento</option>
+								<option value="servicios">Servicios</option>
+								<option value="materiales">Materiales</option>
+								<option value="salarios">Salarios</option>
+								<option value="misiones">Misiones</option>
+								<option value="otro">Otro</option>
+							</select>
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Método de Pago</label>
+							<select name="transaction[paymentMethod]" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm">
+								<option value="efectivo" selected>Efectivo</option>
+								<option value="transferencia">Transferencia Bancaria</option>
+								<option value="cheque">Cheque</option>
+								<option value="tarjeta_credito">Tarjeta de Crédito</option>
+								<option value="tarjeta_debito">Tarjeta de Débito</option>
+							</select>
+						</div>
+					</div>
+					<div>
+						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Descripción</label>
+						<textarea name="transaction[description]" rows="2" placeholder="Detalles de la transacción..." class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm"></textarea>
+					</div>
+				</div>
+				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-center items-center gap-sm sm:gap-md">
+					<button type="button" id="cancelTxModalBtn" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-variant cursor-pointer">Cancelar</button>
+					<button type="submit" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary-container cursor-pointer shadow-xs flex items-center gap-xs">
+						<span class="material-symbols-outlined text-sm">save</span> Guardar Transacción
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const txModal = document.getElementById('quickTransactionModal');
+			const closeBtn = document.getElementById('closeTxModalBtn');
+			const cancelBtn = document.getElementById('cancelTxModalBtn');
+
+			function openTxModal() {
+				if (txModal) txModal.classList.remove('hidden');
+			}
+			function closeTxModal() {
+				if (txModal) txModal.classList.add('hidden');
+			}
+
+			document.querySelectorAll('a[href*="/caja/nueva"], a[href*="/nueva"]').forEach(link => {
+				link.addEventListener('click', function(e) {
+					e.preventDefault();
+					openTxModal();
+				});
+			});
+
+			if (closeBtn) closeBtn.addEventListener('click', closeTxModal);
+			if (cancelBtn) cancelBtn.addEventListener('click', closeTxModal);
+			if (txModal) {
+				txModal.addEventListener('click', function(e) {
+					if (e.target === txModal) closeTxModal();
+				});
+			}
+		});
+	</script>
 {% endblock %}
