@@ -21,6 +21,7 @@ class TransactionType extends AbstractType
     {
         $builder
             ->add('type', ChoiceType::class, [
+                'label' => 'Tipo de Transacción',
                 'choices' => [
                     'Ingreso' => 'income',
                     'Gasto' => 'expense',
@@ -32,6 +33,7 @@ class TransactionType extends AbstractType
                 'expanded' => false,
             ])
             ->add('amount', NumberType::class, [
+                'label' => 'Monto ($)',
                 'attr' => [
                     'class' => 'w-full h-12 pl-md pr-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary text-headline-sm font-data-mono',
                     'placeholder' => '0.00',
@@ -42,6 +44,7 @@ class TransactionType extends AbstractType
                 'scale' => 2,
             ])
             ->add('transactionDate', DateType::class, [
+                'label' => 'Fecha de Transacción',
                 'widget' => 'single_text',
                 'attr' => [
                     'class' => 'w-full h-12 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary',
@@ -49,6 +52,7 @@ class TransactionType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant'],
             ])
             ->add('paymentMethod', ChoiceType::class, [
+                'label' => 'Método de Pago',
                 'choices' => [
                     'Efectivo' => 'efectivo',
                     'Transferencia Bancaria' => 'transferencia',
@@ -63,6 +67,7 @@ class TransactionType extends AbstractType
                 'required' => false,
             ])
             ->add('category', ChoiceType::class, [
+                'label' => 'Categoría',
                 'choices' => [
                     'Diezmos' => 'diezmos',
                     'Ofrendas' => 'ofrendas',
@@ -82,6 +87,7 @@ class TransactionType extends AbstractType
                 'required' => false,
             ])
             ->add('activity', EntityType::class, [
+                'label' => 'Actividad / Evento',
                 'class' => Activity::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Fondo General',
@@ -92,6 +98,7 @@ class TransactionType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant'],
             ])
             ->add('description', TextareaType::class, [
+                'label' => 'Descripción',
                 'attr' => [
                     'class' => 'w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary',
                     'placeholder' => 'Agregue detalles opcionales sobre esta transacción...',

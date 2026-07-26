@@ -38,39 +38,39 @@
 
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-xl">
 			<div class="card-elevation rounded-xl p-lg flex flex-col justify-between">
-				<div class="flex justify-between items-start">
+				<div class="flex justify-between items-start mb-sm">
 					<div class="bg-secondary-container p-sm rounded-lg text-on-secondary-container">
-						<span class="material-symbols-outlined">trending_up</span>
+						<span class="material-symbols-outlined text-sm">trending_up</span>
 					</div>
-					<span class="font-label-bold text-label-bold text-secondary">{{ transaction_count }} transacciones</span>
+					<span class="font-label-bold text-xs text-secondary">{{ transaction_count }} transacciones</span>
 				</div>
-				<div class="mt-md">
-					<p class="font-label-bold text-label-bold text-on-surface-variant uppercase opacity-70">Ingresos Totales</p>
-					<h3 class="font-headline-lg text-headline-lg text-primary">${{ total_income|number_format(2, '.', ',') }}</h3>
+				<div>
+					<p class="font-label-bold text-xs text-on-surface-variant uppercase opacity-70">Ingresos Totales</p>
+					<h3 class="font-headline-md text-headline-md text-primary mt-xs">${{ total_income|number_format(2, '.', ',') }}</h3>
 				</div>
 			</div>
 			<div class="card-elevation rounded-xl p-lg flex flex-col justify-between">
-				<div class="flex justify-between items-start">
+				<div class="flex justify-between items-start mb-sm">
 					<div class="bg-error-container p-sm rounded-lg text-on-error-container">
-						<span class="material-symbols-outlined">trending_down</span>
+						<span class="material-symbols-outlined text-sm">trending_down</span>
 					</div>
-					<span class="font-label-bold text-label-bold text-error">Total</span>
+					<span class="font-label-bold text-xs text-error">Total</span>
 				</div>
-				<div class="mt-md">
-					<p class="font-label-bold text-label-bold text-on-surface-variant uppercase opacity-70">Egresos Totales</p>
-					<h3 class="font-headline-lg text-headline-lg text-primary">${{ total_expenses|number_format(2, '.', ',') }}</h3>
+				<div>
+					<p class="font-label-bold text-xs text-on-surface-variant uppercase opacity-70">Egresos Totales</p>
+					<h3 class="font-headline-md text-headline-md text-primary mt-xs">${{ total_expenses|number_format(2, '.', ',') }}</h3>
 				</div>
 			</div>
 			<div class="card-elevation rounded-xl p-lg flex flex-col justify-between bg-primary-container text-on-primary">
-				<div class="flex justify-between items-start">
+				<div class="flex justify-between items-start mb-sm">
 					<div class="bg-white/20 p-sm rounded-lg text-white">
-						<span class="material-symbols-outlined">account_balance</span>
+						<span class="material-symbols-outlined text-sm">account_balance</span>
 					</div>
-					<span class="font-label-bold text-label-bold text-secondary-fixed">{{ balance >= 0 ? 'Saludable' : 'Atención' }}</span>
+					<span class="font-label-bold text-xs text-secondary-fixed">{{ balance >= 0 ? 'Saludable' : 'Atención' }}</span>
 				</div>
-				<div class="mt-md">
-					<p class="font-label-bold text-label-bold text-on-primary-container uppercase opacity-90">Saldo Neto</p>
-					<h3 class="font-headline-lg text-headline-lg text-white">${{ balance|number_format(2, '.', ',') }}</h3>
+				<div>
+					<p class="font-label-bold text-xs text-on-primary-container uppercase opacity-90">Saldo Neto</p>
+					<h3 class="font-headline-md text-headline-md text-white mt-xs">${{ balance|number_format(2, '.', ',') }}</h3>
 				</div>
 			</div>
 		</div>

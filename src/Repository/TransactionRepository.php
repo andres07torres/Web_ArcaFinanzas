@@ -169,11 +169,11 @@ class TransactionRepository extends ServiceEntityRepository
     ): void {
         if ($startDate) {
             $qb->andWhere('t.transactionDate >= :startDate')
-               ->setParameter('startDate', $startDate);
+               ->setParameter('startDate', $startDate->format('Y-m-d'));
         }
         if ($endDate) {
             $qb->andWhere('t.transactionDate <= :endDate')
-               ->setParameter('endDate', $endDate);
+               ->setParameter('endDate', $endDate->format('Y-m-d'));
         }
         if ($activityId) {
             $qb->andWhere('a.id = :activityId')

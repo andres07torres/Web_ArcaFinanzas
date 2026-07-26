@@ -36,11 +36,19 @@ class CashController extends AbstractController
     }
 
     #[Route('/nueva', name: 'app_caja_nueva')]
-    public function create(Request $request, TransactionRepository $transactionRepo): Response
+    public function create(Request $request, TransactionRepository $transactionRepo, ActivityRepository $activityRepo): Response
     {
         $transaction = new Transaction();
         $transaction->setTransactionDate(new \DateTime());
         $transaction->setCreatedBy($this->getUser());
+
+        $actividadId = $request->query->getInt('actividad');
+        if ($actividadId) {
+            $act = $activityRepo->find($actividadId);
+            if ($act) {
+                $transaction->setActivity($act);
+            }
+        }
 
         $form = $this->createForm(TransactionType::class, $transaction);
         $form->handleRequest($request);
@@ -61,6 +69,17 @@ class CashController extends AbstractController
             }
 
             $transactionRepo->save($transaction, true);
+
+            $activity = $transaction->getActivity();
+            if ($activity) {
+                $activityIncomes = $transactionRepo->findBy(['activity' => $activity, 'type' => 'income']);
+                $totalRaised = 0.0;
+                foreach ($activityIncomes as $inc) {
+                    $totalRaised += (float) $inc->getAmount();
+                }
+                $activity->setRaisedAmount((string) $totalRaised);
+                $activityRepo->save($activity, true);
+            }
 
             $this->addFlash('success', 'Transacción registrada exitosamente.');
 

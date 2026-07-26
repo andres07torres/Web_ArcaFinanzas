@@ -18,6 +18,7 @@ class ActivityType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'label' => 'Nombre de la Actividad',
                 'attr' => [
                     'class' => 'w-full px-md py-md border border-outline-variant rounded-xl bg-surface focus:ring-2 focus:ring-primary focus:border-primary text-body-sm',
                     'placeholder' => 'Nombre de la actividad',
@@ -25,6 +26,7 @@ class ActivityType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant mb-xs block'],
             ])
             ->add('description', TextareaType::class, [
+                'label' => 'Descripción',
                 'required' => false,
                 'attr' => [
                     'class' => 'w-full px-md py-md border border-outline-variant rounded-xl bg-surface focus:ring-2 focus:ring-primary focus:border-primary text-body-sm',
@@ -34,6 +36,7 @@ class ActivityType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant mb-xs block'],
             ])
             ->add('category', ChoiceType::class, [
+                'label' => 'Categoría',
                 'choices' => [
                     'Recaudación' => 'recaudacion',
                     'Misión' => 'mision',
@@ -52,6 +55,7 @@ class ActivityType extends AbstractType
                 'required' => false,
             ])
             ->add('goalAmount', NumberType::class, [
+                'label' => 'Meta de Recaudación ($)',
                 'attr' => [
                     'class' => 'w-full px-md py-md border border-outline-variant rounded-xl bg-surface focus:ring-2 focus:ring-primary focus:border-primary text-body-sm',
                     'placeholder' => '0.00',
@@ -62,6 +66,7 @@ class ActivityType extends AbstractType
                 'scale' => 2,
             ])
             ->add('startDate', DateType::class, [
+                'label' => 'Fecha de Inicio',
                 'widget' => 'single_text',
                 'attr' => [
                     'class' => 'w-full px-md py-md border border-outline-variant rounded-xl bg-surface focus:ring-2 focus:ring-primary focus:border-primary text-body-sm',
@@ -70,6 +75,7 @@ class ActivityType extends AbstractType
                 'required' => false,
             ])
             ->add('endDate', DateType::class, [
+                'label' => 'Fecha de Cierre',
                 'widget' => 'single_text',
                 'attr' => [
                     'class' => 'w-full px-md py-md border border-outline-variant rounded-xl bg-surface focus:ring-2 focus:ring-primary focus:border-primary text-body-sm',

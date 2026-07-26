@@ -103,12 +103,12 @@
 			</form>
 
 			<div class="bento-grid mb-lg">
-				<div class="col-span-12 md:col-span-8 corte-card rounded-xl p-xl flex flex-col justify-between relative overflow-hidden">
+				<div class="col-span-12 md:col-span-8 corte-card rounded-xl p-lg flex flex-col justify-between relative overflow-hidden">
 					<div class="relative z-10">
-						<div class="flex justify-between items-start mb-md">
+						<div class="flex justify-between items-start mb-sm">
 							<div>
-								<h3 class="font-label-bold text-label-bold text-outline uppercase">Posición Neta de Caja</h3>
-								<p class="font-headline-lg text-headline-lg text-primary">${{ balance|number_format(2, '.', ',') }}</p>
+								<h3 class="font-label-bold text-xs text-outline uppercase">Posición Neta de Caja</h3>
+								<p class="font-headline-md text-headline-md text-primary mt-xs">${{ balance|number_format(2, '.', ',') }}</p>
 							</div>
 							{% if balance_change != 0 %}
 								<div class="bg-{{ balance_change > 0 ? 'secondary-container text-on-secondary-container' : 'error-container text-on-error-container' }} px-sm py-xs rounded text-[10px] font-bold">

@@ -41,135 +41,135 @@
 			</div>
 		{% endfor %}
 
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
-			<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl">
-				<div class="flex items-center gap-md mb-sm">
-					<div class="h-10 w-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
-						<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">add</span>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-lg">
+			<div class="bg-surface border border-outline-variant rounded-xl p-lg shadow-sm">
+				<div class="flex items-center gap-sm mb-xs">
+					<div class="h-8 w-8 rounded-lg bg-secondary-container/30 flex items-center justify-center text-secondary">
+						<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">add</span>
 					</div>
-					<span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Ingresos Totales</span>
+					<span class="font-label-bold text-label-bold text-on-surface-variant">Ingresos Totales</span>
 				</div>
-				<p class="font-headline-lg text-headline-lg text-secondary">$ {{ total_income|number_format(2, '.', ',') }}</p>
+				<h3 class="font-headline-md text-headline-md text-secondary">$ {{ total_income|number_format(2, '.', ',') }}</h3>
 			</div>
-			<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl">
-				<div class="flex items-center gap-md mb-sm">
-					<div class="h-10 w-10 rounded-full bg-error-container/30 flex items-center justify-center text-error">
-						<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">remove</span>
+			<div class="bg-surface border border-outline-variant rounded-xl p-lg shadow-sm">
+				<div class="flex items-center gap-sm mb-xs">
+					<div class="h-8 w-8 rounded-lg bg-error-container/30 flex items-center justify-center text-error">
+						<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">remove</span>
 					</div>
-					<span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Gastos Totales</span>
+					<span class="font-label-bold text-label-bold text-on-surface-variant">Gastos Totales</span>
 				</div>
-				<p class="font-headline-lg text-headline-lg text-error">$ {{ total_expenses|number_format(2, '.', ',') }}</p>
+				<h3 class="font-headline-md text-headline-md text-error">$ {{ total_expenses|number_format(2, '.', ',') }}</h3>
 			</div>
-			<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl">
-				<div class="flex items-center gap-md mb-sm">
-					<div class="h-10 w-10 rounded-full bg-primary-container/30 flex items-center justify-center text-primary">
-						<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+			<div class="bg-surface border border-outline-variant rounded-xl p-lg shadow-sm">
+				<div class="flex items-center gap-sm mb-xs">
+					<div class="h-8 w-8 rounded-lg bg-primary-container/30 flex items-center justify-center text-primary">
+						<span class="material-symbols-outlined text-sm">account_balance_wallet</span>
 					</div>
-					<span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Balance</span>
+					<span class="font-label-bold text-label-bold text-on-surface-variant">Balance</span>
 				</div>
-				<p class="font-headline-lg text-headline-lg {% if balance >= 0 %}text-secondary{% else %}text-error{% endif %}">$ {{ balance|number_format(2, '.', ',') }}</p>
+				<h3 class="font-headline-md text-headline-md {% if balance >= 0 %}text-secondary{% else %}text-error{% endif %}">$ {{ balance|number_format(2, '.', ',') }}</h3>
 			</div>
 		</div>
 
-		<div class="grid grid-cols-12 gap-gutter">
-			<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
-				<a href="{{ path('app_caja_nueva') }}" class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-all group cursor-pointer">
-					<div class="flex border-b border-outline-variant">
-						<div class="flex-1 py-xl font-label-bold text-label-bold flex justify-center items-center gap-sm transition-all tab-active">
-							<span class="material-symbols-outlined text-secondary">add_circle</span>
+		<div class="grid grid-cols-12 gap-lg">
+			<div class="col-span-12 lg:col-span-8 flex flex-col gap-lg">
+				<a href="{{ path('app_caja_nueva') }}" class="bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-all group cursor-pointer">
+					<div class="flex border-b border-outline-variant text-xs">
+						<div class="flex-1 py-sm font-bold flex justify-center items-center gap-xs transition-all tab-active">
+							<span class="material-symbols-outlined text-secondary text-sm">add_circle</span>
 							REGISTRAR INGRESO
 						</div>
-						<div class="flex-1 py-xl font-label-bold text-label-bold flex justify-center items-center gap-sm transition-all text-on-surface-variant hover:bg-surface-container-low">
-							<span class="material-symbols-outlined text-error">remove_circle</span>
+						<div class="flex-1 py-sm font-bold flex justify-center items-center gap-xs transition-all text-on-surface-variant hover:bg-surface-container-low">
+							<span class="material-symbols-outlined text-error text-sm">remove_circle</span>
 							REGISTRAR GASTO
 						</div>
 					</div>
-					<div class="p-xl flex flex-col items-center justify-center py-2xl">
-						<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors mb-md">edit_note</span>
-						<p class="font-headline-sm text-headline-sm text-on-surface-variant mb-sm">Registrar nueva transacción</p>
-						<p class="text-body-sm text-on-surface-variant">Haz clic aquí para registrar un ingreso o gasto</p>
+					<div class="p-lg flex flex-col items-center justify-center py-lg">
+						<span class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-primary transition-colors mb-xs">edit_note</span>
+						<p class="font-bold text-body-lg text-on-background mb-xs">Registrar nueva transacción</p>
+						<p class="text-xs text-on-surface-variant">Haz clic aquí para registrar un ingreso o gasto</p>
 					</div>
 				</a>
 
-				<div class="bg-primary-container text-on-primary-container p-xl rounded-xl shadow-sm border border-primary-container/20 relative overflow-hidden">
-					<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-xl">
-						<div class="space-y-xs">
-							<p class="font-label-bold text-label-bold uppercase opacity-80">Salud Financiera General</p>
-							<h3 class="font-headline-md text-headline-md">Saldo General</h3>
+				<div class="bg-primary-container text-on-primary-container p-lg rounded-xl shadow-sm border border-primary-container/20 relative overflow-hidden">
+					<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-md">
+						<div>
+							<p class="font-label-bold text-xs uppercase opacity-80">Salud Financiera General</p>
+							<h3 class="font-bold text-body-lg">Saldo General</h3>
 						</div>
-						<div class="flex items-center gap-xl">
+						<div class="flex items-center gap-md">
 							<div class="text-center md:text-right">
-								<p class="font-label-bold text-label-bold uppercase opacity-80">Balance Actual</p>
-								<p class="font-headline-lg text-headline-lg text-white">$ {{ balance|number_format(2, '.', ',') }}</p>
+								<p class="font-label-bold text-xs uppercase opacity-80">Balance Actual</p>
+								<p class="font-headline-md text-headline-md text-white">$ {{ balance|number_format(2, '.', ',') }}</p>
 							</div>
-							<div class="bg-secondary-container text-on-secondary-container p-md rounded-full">
+							<div class="bg-secondary-container text-on-secondary-container p-sm rounded-full">
 								{% if balance >= 0 %}
-									<span class="material-symbols-outlined text-[32px]">trending_up</span>
+									<span class="material-symbols-outlined text-xl">trending_up</span>
 								{% else %}
-									<span class="material-symbols-outlined text-[32px]">trending_down</span>
+									<span class="material-symbols-outlined text-xl">trending_down</span>
 								{% endif %}
 							</div>
 						</div>
 					</div>
-					<div class="absolute -right-8 -bottom-8 opacity-10">
-						<span class="material-symbols-outlined text-[160px]">calculate</span>
+					<div class="absolute -right-6 -bottom-6 opacity-10">
+						<span class="material-symbols-outlined text-[90px]">calculate</span>
 					</div>
 				</div>
 			</div>
 
-			<div class="col-span-12 lg:col-span-4 space-y-gutter">
+			<div class="col-span-12 lg:col-span-4 space-y-lg">
 				<div class="bg-white rounded-xl border border-outline-variant shadow-sm h-full flex flex-col">
-					<div class="p-xl border-b border-outline-variant flex justify-between items-center">
-						<h2 class="font-headline-sm text-headline-sm text-on-background">Registros Recientes</h2>
-						<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">filter_list</span>
+					<div class="p-md border-b border-outline-variant flex justify-between items-center">
+						<h2 class="font-bold text-body-lg text-on-background">Registros Recientes</h2>
+						<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary text-sm">filter_list</span>
 					</div>
-					<div class="flex-1 overflow-y-auto max-h-[600px] custom-scrollbar">
+					<div class="flex-1 overflow-y-auto max-h-[500px] custom-scrollbar">
 						<div class="divide-y divide-outline-variant">
 							{% if recent_transactions|length > 0 %}
 								{% for transaction in recent_transactions %}
-									<div class="p-xl hover:bg-surface-container-low transition-colors group">
+									<div class="p-md hover:bg-surface-container-low transition-colors group">
 										<div class="flex justify-between items-start mb-xs">
-											<div class="flex items-center gap-sm">
+											<div class="flex items-center gap-xs">
 												{% if transaction.type == 'income' %}
-													<div class="h-8 w-8 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
-														<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
+													<div class="h-6 w-6 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+														<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">add</span>
 													</div>
-													<span class="font-label-bold text-label-bold text-secondary">INGRESO</span>
+													<span class="font-bold text-[11px] text-secondary">INGRESO</span>
 												{% else %}
-													<div class="h-8 w-8 rounded-full bg-error-container/30 flex items-center justify-center text-error">
-														<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">remove</span>
+													<div class="h-6 w-6 rounded-full bg-error-container/30 flex items-center justify-center text-error">
+														<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">remove</span>
 													</div>
-													<span class="font-label-bold text-label-bold text-error">GASTO</span>
+													<span class="font-bold text-[11px] text-error">GASTO</span>
 												{% endif %}
 											</div>
-											<span class="font-data-mono text-body-sm text-on-surface-variant">{{ transaction.transactionDate|date('d/m/Y') }}</span>
+											<span class="font-data-mono text-xs text-on-surface-variant">{{ transaction.transactionDate|date('d/m/Y') }}</span>
 										</div>
-										<p class="font-headline-sm text-headline-sm mb-base {% if transaction.type == 'income' %}text-secondary{% else %}text-error{% endif %}">
+										<p class="font-bold text-body-lg mb-xs {% if transaction.type == 'income' %}text-secondary{% else %}text-error{% endif %}">
 											{% if transaction.type == 'income' %}${{ transaction.amount|number_format(2, '.', ',') }}{% else %}-${{ transaction.amount|number_format(2, '.', ',') }}{% endif %}
 										</p>
-										<p class="text-body-sm font-semibold text-on-background">{{ transaction.description }}</p>
-										<div class="mt-sm flex flex-wrap gap-xs">
+										<p class="text-xs font-semibold text-on-background truncate">{{ transaction.description }}</p>
+										<div class="mt-xs flex flex-wrap gap-xs">
 											{% if transaction.category %}
-												<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">{{ transaction.category }}</span>
+												<span class="px-xs py-0.5 bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">{{ transaction.category }}</span>
 											{% endif %}
 											{% if transaction.paymentMethod %}
-												<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">{{ transaction.paymentMethod }}</span>
+												<span class="px-xs py-0.5 bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">{{ transaction.paymentMethod }}</span>
 											{% endif %}
 										</div>
 									</div>
 								{% endfor %}
 							{% else %}
-								<div class="p-2xl flex flex-col items-center justify-center text-center">
-									<span class="material-symbols-outlined text-[48px] text-outline mb-md">receipt_long</span>
-									<p class="font-body-md text-body-md text-on-surface-variant">No hay transacciones registradas</p>
+								<div class="p-lg flex flex-col items-center justify-center text-center">
+									<span class="material-symbols-outlined text-3xl text-outline mb-xs">receipt_long</span>
+									<p class="text-xs text-on-surface-variant">No hay transacciones registradas</p>
 								</div>
 							{% endif %}
 						</div>
 					</div>
-					<div class="p-xl bg-surface-container-low border-t border-outline-variant">
-						<a href="{{ path('app_reportes') }}" class="w-full text-primary font-label-bold text-label-bold flex justify-center items-center gap-sm hover:gap-md transition-all">
+					<div class="p-md bg-surface-container-low border-t border-outline-variant">
+						<a href="{{ path('app_reportes') }}" class="w-full text-primary font-bold text-xs flex justify-center items-center gap-xs hover:gap-sm transition-all">
 							VER REGISTRO DE AUDITORÍA COMPLETO
-							<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+							<span class="material-symbols-outlined text-xs">arrow_forward</span>
 						</a>
 					</div>
 				</div>

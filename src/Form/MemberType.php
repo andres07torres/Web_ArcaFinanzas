@@ -19,6 +19,7 @@ class MemberType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
+                'label' => 'Nombre',
                 'attr' => [
                     'class' => 'w-full border-outline-variant focus:border-primary focus:ring-primary rounded-lg text-body-md py-2 px-md',
                     'placeholder' => 'ej. Juan',
@@ -26,6 +27,7 @@ class MemberType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant uppercase ml-1'],
             ])
             ->add('lastName', TextType::class, [
+                'label' => 'Apellido',
                 'attr' => [
                     'class' => 'w-full border-outline-variant focus:border-primary focus:ring-primary rounded-lg text-body-md py-2 px-md',
                     'placeholder' => 'ej. Pérez',
@@ -33,6 +35,7 @@ class MemberType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant uppercase ml-1'],
             ])
             ->add('email', EmailType::class, [
+                'label' => 'Correo Electrónico',
                 'required' => false,
                 'attr' => [
                     'class' => 'w-full border-outline-variant focus:border-primary focus:ring-primary rounded-lg text-body-md py-2 px-md',
@@ -41,6 +44,7 @@ class MemberType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant uppercase ml-1'],
             ])
             ->add('phone', TelType::class, [
+                'label' => 'Teléfono',
                 'required' => false,
                 'attr' => [
                     'class' => 'w-full border-outline-variant focus:border-primary focus:ring-primary rounded-lg text-body-md py-2 px-md',
@@ -49,6 +53,7 @@ class MemberType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant uppercase ml-1'],
             ])
             ->add('role', ChoiceType::class, [
+                'label' => 'Rol / Cargo',
                 'choices' => [
                     'Miembro' => 'miembro',
                     'Diácono' => 'diacono',
@@ -65,6 +70,7 @@ class MemberType extends AbstractType
                 'placeholder' => 'Seleccionar rol',
             ])
             ->add('joinDate', DateType::class, [
+                'label' => 'Fecha de Ingreso',
                 'widget' => 'single_text',
                 'required' => false,
                 'attr' => [
@@ -73,6 +79,7 @@ class MemberType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant uppercase ml-1'],
             ])
             ->add('address', TextareaType::class, [
+                'label' => 'Dirección',
                 'required' => false,
                 'attr' => [
                     'class' => 'w-full border-outline-variant focus:border-primary focus:ring-primary rounded-lg text-body-md py-2 px-md',
@@ -281,6 +288,7 @@ class MemberType extends AbstractType
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant uppercase ml-1'],
             ])
             ->add('notes', TextareaType::class, [
+                'label' => 'Notas',
                 'required' => false,
                 'attr' => [
                     'class' => 'w-full border-outline-variant focus:border-primary focus:ring-primary rounded-lg text-body-md py-2 px-md',
