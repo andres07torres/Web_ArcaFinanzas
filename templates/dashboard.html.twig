@@ -207,11 +207,11 @@
 						<div class="bg-secondary-container p-sm rounded-lg text-on-secondary-container">
 							<span class="material-symbols-outlined">trending_up</span>
 						</div>
-						<span class="font-label-bold text-label-bold text-secondary">+12.4% vs mes ant.</span>
+						<span class="font-label-bold text-label-bold text-secondary">{{ transaction_count }} transacciones</span>
 					</div>
 					<div class="mt-md">
 						<p class="font-label-bold text-label-bold text-on-surface-variant uppercase opacity-70">Ingresos Totales</p>
-						<h3 class="font-headline-lg text-headline-lg text-primary">$42,850.00</h3>
+						<h3 class="font-headline-lg text-headline-lg text-primary">${{ total_income|number_format(2, '.', ',') }}</h3>
 					</div>
 				</div>
 				<div class="card-elevation rounded-xl p-lg flex flex-col justify-between">
@@ -219,11 +219,11 @@
 						<div class="bg-error-container p-sm rounded-lg text-on-error-container">
 							<span class="material-symbols-outlined">trending_down</span>
 						</div>
-						<span class="font-label-bold text-label-bold text-error">+4.1% vs mes ant.</span>
+						<span class="font-label-bold text-label-bold text-error">Total</span>
 					</div>
 					<div class="mt-md">
 						<p class="font-label-bold text-label-bold text-on-surface-variant uppercase opacity-70">Egresos Totales</p>
-						<h3 class="font-headline-lg text-headline-lg text-primary">$18,240.50</h3>
+						<h3 class="font-headline-lg text-headline-lg text-primary">${{ total_expenses|number_format(2, '.', ',') }}</h3>
 					</div>
 				</div>
 				<div class="card-elevation rounded-xl p-lg flex flex-col justify-between bg-primary-container text-on-primary">
@@ -231,11 +231,11 @@
 						<div class="bg-white/20 p-sm rounded-lg text-white">
 							<span class="material-symbols-outlined">account_balance</span>
 						</div>
-						<span class="font-label-bold text-label-bold text-secondary-fixed">Estado Saludable</span>
+						<span class="font-label-bold text-label-bold text-secondary-fixed">{{ balance >= 0 ? 'Saludable' : 'Atención' }}</span>
 					</div>
 					<div class="mt-md">
 						<p class="font-label-bold text-label-bold text-on-primary-container uppercase opacity-90">Saldo Neto</p>
-						<h3 class="font-headline-lg text-headline-lg text-white">$24,609.50</h3>
+						<h3 class="font-headline-lg text-headline-lg text-white">${{ balance|number_format(2, '.', ',') }}</h3>
 					</div>
 				</div>
 			</div>
@@ -257,38 +257,26 @@
 								</tr>
 							</thead>
 							<tbody class="divide-y divide-outline-variant">
-								<tr class="hover:bg-surface-container-low transition-colors group">
-									<td class="px-lg py-md font-data-mono text-data-mono">24 Oct, 2023</td>
-									<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">Colecci\u00f3n Semanal de Diezmos</td>
-									<td class="px-lg py-md">
-										<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">Fondo General</span>
-									</td>
-									<td class="px-lg py-md font-data-mono text-data-mono text-right text-secondary">+$4,200.00</td>
-								</tr>
-								<tr class="hover:bg-surface-container-low transition-colors group">
-									<td class="px-lg py-md font-data-mono text-data-mono">22 Oct, 2023</td>
-									<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">Factura de Electricidad - Sal\u00f3n Principal</td>
-									<td class="px-lg py-md">
-										<span class="bg-surface-variant text-on-surface-variant px-sm py-xs rounded text-[11px] font-bold uppercase">Servicios</span>
-									</td>
-									<td class="px-lg py-md font-data-mono text-data-mono text-right text-error">-$845.20</td>
-								</tr>
-								<tr class="hover:bg-surface-container-low transition-colors group">
-									<td class="px-lg py-md font-data-mono text-data-mono">21 Oct, 2023</td>
-									<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">Donaci\u00f3n Banco de Alimentos</td>
-									<td class="px-lg py-md">
-										<span class="bg-tertiary-container/20 text-tertiary px-sm py-xs rounded text-[11px] font-bold uppercase">Misi\u00f3n</span>
-									</td>
-									<td class="px-lg py-md font-data-mono text-data-mono text-right text-error">-$1,200.00</td>
-								</tr>
-								<tr class="hover:bg-surface-container-low transition-colors group">
-									<td class="px-lg py-md font-data-mono text-data-mono">20 Oct, 2023</td>
-									<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">Ofrenda Especial: Campamento Juvenil</td>
-									<td class="px-lg py-md">
-										<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">Actividades</span>
-									</td>
-									<td class="px-lg py-md font-data-mono text-data-mono text-right text-secondary">+$2,850.00</td>
-								</tr>
+								{% if recent_transactions|length > 0 %}
+									{% for transaction in recent_transactions %}
+										<tr class="hover:bg-surface-container-low transition-colors group">
+											<td class="px-lg py-md font-data-mono text-data-mono">{{ transaction.transactionDate|date('d M, Y') }}</td>
+											<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">{{ transaction.description }}</td>
+											<td class="px-lg py-md">
+												<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">{{ transaction.category ?? 'Sin categor\u00eda' }}</span>
+											</td>
+											<td class="px-lg py-md font-data-mono text-data-mono text-right {{ transaction.type == 'income' ? 'text-secondary' : 'text-error' }}">
+												{{ transaction.type == 'income' ? '+' : '-' }}${{ transaction.amount|number_format(2, '.', ',') }}
+											</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td colspan="4" class="px-lg py-xl text-center text-on-surface-variant">
+											No hay transacciones registradas a\u00fan.
+										</td>
+									</tr>
+								{% endif %}
 							</tbody>
 						</table>
 					</div>
@@ -298,54 +286,31 @@
 					<div class="card-elevation rounded-xl p-lg flex-1">
 						<h4 class="font-headline-sm text-headline-sm text-primary mb-xl">Metas de Actividad</h4>
 						<div class="space-y-xl">
-							<div>
-								<div class="flex justify-between items-end mb-sm">
+							{% if active_activities|length > 0 %}
+								{% for activity in active_activities %}
+									{% set progress = activity.goalAmount > 0 ? ((activity.raisedAmount / activity.goalAmount) * 100)|round(0) : 0 %}
 									<div>
-										<p class="font-body-md text-body-md text-on-surface font-semibold">Rifa Pro-Templo</p>
-										<p class="text-[12px] text-on-surface-variant">Recaudaci\u00f3n anual para construcci\u00f3n</p>
+										<div class="flex justify-between items-end mb-sm">
+											<div>
+												<p class="font-body-md text-body-md text-on-surface font-semibold">{{ activity.name }}</p>
+												<p class="text-[12px] text-on-surface-variant">{{ activity.description ?? activity.category }}</p>
+											</div>
+											<span class="font-data-mono text-data-mono text-secondary">{{ progress }}%</span>
+										</div>
+										<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+											<div class="bg-secondary h-full rounded-full transition-all duration-1000" style="width: {{ progress }}%"></div>
+										</div>
+										<div class="flex justify-between mt-xs">
+											<span class="text-[10px] text-on-surface-variant">${{ activity.raisedAmount|number_format(0, '.', ',') }} recaudados</span>
+											<span class="text-[10px] text-on-surface-variant">Meta: ${{ activity.goalAmount|number_format(0, '.', ',') }}</span>
+										</div>
 									</div>
-									<span class="font-data-mono text-data-mono text-secondary">65%</span>
+								{% endfor %}
+							{% else %}
+								<div class="text-center py-lg text-on-surface-variant">
+									<p>No hay actividades activas registradas.</p>
 								</div>
-								<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
-									<div class="bg-secondary h-full rounded-full transition-all duration-1000" style="width: 65%"></div>
-								</div>
-								<div class="flex justify-between mt-xs">
-									<span class="text-[10px] text-on-surface-variant">$13,000 recaudados</span>
-									<span class="text-[10px] text-on-surface-variant">Meta: $20,000</span>
-								</div>
-							</div>
-							<div>
-								<div class="flex justify-between items-end mb-sm">
-									<div>
-										<p class="font-body-md text-body-md text-on-surface font-semibold">Misi\u00f3n 2024</p>
-										<p class="text-[12px] text-on-surface-variant">Proyecto de alcance regional</p>
-									</div>
-									<span class="font-data-mono text-data-mono text-secondary">42%</span>
-								</div>
-								<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
-									<div class="bg-secondary h-full rounded-full transition-all duration-1000" style="width: 42%"></div>
-								</div>
-								<div class="flex justify-between mt-xs">
-									<span class="text-[10px] text-on-surface-variant">$4,200 recaudados</span>
-									<span class="text-[10px] text-on-surface-variant">Meta: $10,000</span>
-								</div>
-							</div>
-							<div>
-								<div class="flex justify-between items-end mb-sm">
-									<div>
-										<p class="font-body-md text-body-md text-on-surface font-semibold">Fondo para Despensa</p>
-										<p class="text-[12px] text-on-surface-variant">Apoyo comunitario continuo</p>
-									</div>
-									<span class="font-data-mono text-data-mono text-secondary">92%</span>
-								</div>
-								<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
-									<div class="bg-secondary h-full rounded-full transition-all duration-1000" style="width: 92%"></div>
-								</div>
-								<div class="flex justify-between mt-xs">
-									<span class="text-[10px] text-on-surface-variant">$2,760 recaudados</span>
-									<span class="text-[10px] text-on-surface-variant">Meta: $3,000</span>
-								</div>
-							</div>
+							{% endif %}
 						</div>
 					</div>
 					<div class="card-elevation rounded-xl p-lg bg-surface-container flex items-center gap-md relative overflow-hidden group">
