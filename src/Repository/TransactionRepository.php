@@ -206,4 +206,15 @@ class TransactionRepository extends ServiceEntityRepository
 
         return array_column($result, 'category');
     }
+
+    public function searchTransactions(string $query, int $limit = 5): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.description LIKE :query OR t.category LIKE :query OR t.paymentMethod LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('t.transactionDate', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

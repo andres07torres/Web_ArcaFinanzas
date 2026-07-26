@@ -1,0 +1,162 @@
+{% extends 'base_dashboard.html.twig' %}
+
+{% set active_menu = 'ayuda' %}
+
+{% block title %}Arca Finanzas - Centro de Ayuda y Soporte Técnico{% endblock %}
+
+{% block dashboard_content %}
+	<div class="p-lg max-w-container-max mx-auto w-full space-y-gutter">
+		<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-lg">
+			<div>
+				<nav class="flex items-center gap-xs text-on-surface-variant font-label-bold text-label-bold mb-xs">
+					<span>Soporte</span>
+					<span class="material-symbols-outlined text-xs">chevron_right</span>
+					<span class="text-primary">Centro de Ayuda</span>
+				</nav>
+				<h1 class="font-headline-lg text-headline-lg text-on-background">Centro de Ayuda y Soporte Técnico</h1>
+				<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Contacta directamente al equipo desarrollador del sistema o consulta las guías de uso rápido.</p>
+			</div>
+		</div>
+
+		{% for label, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="flex items-center gap-md p-md rounded-xl border shadow-sm {% if label == 'success' %}bg-secondary-container/20 border-secondary/30 text-on-secondary-container{% elseif label == 'error' %}bg-error-container/30 border-error/30 text-on-error-container{% else %}bg-surface-container-low border-outline-variant text-on-surface{% endif %}">
+					<span class="material-symbols-outlined text-[20px]">{% if label == 'success' %}check_circle{% elseif label == 'error' %}error{% else %}info{% endif %}</span>
+					<span class="font-body-sm flex-1">{{ message }}</span>
+				</div>
+			{% endfor %}
+		{% endfor %}
+
+		<!-- Contacto con el Desarrollador -->
+		<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+			<section class="lg:col-span-5 bg-gradient-to-br from-primary-container to-primary text-on-primary p-xl rounded-2xl shadow-xl flex flex-col justify-between relative overflow-hidden">
+				<div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+					<span class="material-symbols-outlined text-[240px]">developer_board</span>
+				</div>
+				<div class="relative z-10">
+					<div class="inline-flex items-center gap-xs px-md py-xs rounded-full bg-white/10 backdrop-blur-md text-xs font-bold mb-md border border-white/20">
+						<span class="w-2 h-2 rounded-full bg-secondary"></span>
+						Soporte Oficial del Desarrollador
+					</div>
+					<h2 class="font-headline-md text-headline-md font-bold mb-xs">Atención al Usuario</h2>
+					<p class="font-body-sm text-on-primary/80 mb-lg">Si requieres asistencia técnica, reportar alguna incidencia o solicitar personalizaciones en el sistema, puedes contactar al equipo desarrollador:</p>
+					
+					<div class="space-y-md">
+						<div class="flex items-center gap-md p-md rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+							<span class="material-symbols-outlined text-secondary-fixed text-2xl">mail</span>
+							<div>
+								<span class="text-[11px] font-bold text-on-primary/70 uppercase block">Correo Electrónico del Desarrollador</span>
+								<a href="mailto:andres07torresg@gmail.com" class="font-bold text-sm hover:underline">andres07torresg@gmail.com</a>
+							</div>
+						</div>
+						<div class="flex items-center gap-md p-md rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+							<span class="material-symbols-outlined text-secondary-fixed text-2xl">support_agent</span>
+							<div>
+								<span class="text-[11px] font-bold text-on-primary/70 uppercase block">Atención Telefónica / WhatsApp</span>
+								<a href="https://wa.me/573000000000" target="_blank" class="font-bold text-sm hover:underline">+57 300 000 0000</a>
+							</div>
+						</div>
+						<div class="flex items-center gap-md p-md rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+							<span class="material-symbols-outlined text-secondary-fixed text-2xl">schedule</span>
+							<div>
+								<span class="text-[11px] font-bold text-on-primary/70 uppercase block">Horario de Soporte</span>
+								<span class="font-semibold text-xs">Lunes a Viernes: 8:00 AM - 6:00 PM</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="relative z-10 pt-lg mt-lg border-t border-white/15 flex items-center justify-between text-xs text-on-primary/70">
+					<span>Sistema ArcaFinanzas v2.4</span>
+					<span>Estado: <strong class="text-secondary-fixed">Operativo</strong></span>
+				</div>
+			</section>
+
+			<!-- Formulario de Mensaje Directo al Desarrollador -->
+			<section class="lg:col-span-7 bg-surface-container-lowest p-xl rounded-2xl border border-outline-variant shadow-sm">
+				<div class="flex items-center justify-between mb-lg">
+					<div>
+						<h3 class="font-headline-sm text-headline-sm text-primary font-bold">Enviar Consulta al Desarrollador</h3>
+						<p class="font-body-sm text-on-surface-variant">Completa el formulario a continuación para enviar un mensaje directo a soporte.</p>
+					</div>
+					<span class="material-symbols-outlined text-primary text-3xl">send</span>
+				</div>
+
+				<form method="post" action="{{ path('app_ayuda') }}" class="space-y-lg">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+						<div>
+							<label class="block font-label-bold text-label-bold text-on-surface-variant mb-xs">Asunto de la Consulta</label>
+							<select name="asunto" required class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary text-body-sm">
+								<option value="Soporte Técnico">Soporte Técnico o Incidencia</option>
+								<option value="Consulta sobre Caja">Consulta sobre Control de Caja</option>
+								<option value="Consulta sobre Informes">Duda sobre Informes y Auditoría</option>
+								<option value="Solicitud de Función">Solicitar nueva funcionalidad</option>
+								<option value="Otro">Otro asunto</option>
+							</select>
+						</div>
+						<div>
+							<label class="block font-label-bold text-label-bold text-on-surface-variant mb-xs">Prioridad</label>
+							<select name="prioridad" class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary text-body-sm">
+								<option value="Normal">Normal</option>
+								<option value="Alta">Alta</option>
+								<option value="Urgente">Urgente</option>
+							</select>
+						</div>
+					</div>
+
+					<div>
+						<label class="block font-label-bold text-label-bold text-on-surface-variant mb-xs">Detalle del Mensaje</label>
+						<textarea name="mensaje" rows="4" required placeholder="Describe brevemente la situación, duda o solicitud..." class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary text-body-sm"></textarea>
+					</div>
+
+					<div class="flex flex-col sm:flex-row items-center gap-sm sm:gap-md pt-lg border-t border-outline-variant">
+						<button type="submit" class="h-11 w-full sm:w-[170px] sm:min-w-[170px] bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm hover:bg-primary-container active:scale-95 transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+							<span class="material-symbols-outlined text-base">send</span>
+							Enviar Mensaje
+						</button>
+						<a href="{{ path('app_dashboard') }}" class="h-11 w-full sm:w-[170px] sm:min-w-[170px] border border-outline text-on-surface-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-all inline-flex items-center justify-center cursor-pointer">
+							Cancelar
+						</a>
+					</div>
+				</form>
+			</section>
+		</div>
+
+		<!-- Preguntas Frecuentes -->
+		<section class="bg-surface-container-lowest p-xl rounded-2xl border border-outline-variant shadow-sm mt-xl">
+			<div class="flex items-center gap-md mb-lg">
+				<span class="material-symbols-outlined text-primary text-3xl">quiz</span>
+				<div>
+					<h3 class="font-headline-sm text-headline-sm text-primary font-bold">Preguntas Frecuentes (FAQ)</h3>
+					<p class="font-body-sm text-on-surface-variant">Respuestas rápidas a las consultas habituales de administración.</p>
+				</div>
+			</div>
+
+			<div class="space-y-md">
+				<details class="group bg-surface-container-low rounded-xl p-md border border-outline-variant cursor-pointer">
+					<summary class="font-bold text-sm text-on-background flex justify-between items-center">
+						<span>¿Cómo registrar un nuevo ingreso o egreso en Caja?</span>
+						<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+					</summary>
+					<p class="text-xs text-on-surface-variant mt-sm leading-relaxed">Dirígete al menú <strong>Control de Caja</strong> y haz clic en el botón <strong>Registrar Transacción</strong> o utiliza el botón <strong>Entrada Rápida</strong> en la parte superior. Completa los campos obligatorios y guarda.</p>
+				</details>
+
+				<details class="group bg-surface-container-low rounded-xl p-md border border-outline-variant cursor-pointer">
+					<summary class="font-bold text-sm text-on-background flex justify-between items-center">
+						<span>¿Cómo adjuntar y previsualizar comprobantes de pago?</span>
+						<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+					</summary>
+					<p class="text-xs text-on-surface-variant mt-sm leading-relaxed">En el módulo de <strong>Informes</strong>, ubica la tabla de Auditoría Detallada. En la columna <strong>Comprobante</strong>, presiona <strong>+ Subir</strong> para adjuntar un archivo (JPG, PNG o PDF) o haz clic en <strong>Ver Comprobante</strong> para previsualizarlo en pantalla completa.</p>
+				</details>
+
+				<details class="group bg-surface-container-low rounded-xl p-md border border-outline-variant cursor-pointer">
+					<summary class="font-bold text-sm text-on-background flex justify-between items-center">
+						<span>¿Cómo cambiar mi contraseña o correo de usuario?</span>
+						<span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+					</summary>
+					<p class="text-xs text-on-surface-variant mt-sm leading-relaxed">Haz clic en la rueda de engranaje (⚙️) o en tu perfil en la esquina superior derecha para acceder a <strong>Configuración de Usuario</strong>, donde podrás modificar tus datos personales y credenciales de acceso.</p>
+				</details>
+			</div>
+		</section>
+	</div>
+{% endblock %}

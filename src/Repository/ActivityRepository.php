@@ -64,4 +64,15 @@ class ActivityRepository extends ServiceEntityRepository
 
         return (float) ($result['total'] ?? 0);
     }
+
+    public function searchActivities(string $query, int $limit = 5): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.name LIKE :query OR a.description LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('a.startDate', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

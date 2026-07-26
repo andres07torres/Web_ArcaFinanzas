@@ -122,10 +122,17 @@
 {% block body %}
 	{% set active_menu = active_menu|default('dashboard') %}
 
-	<aside class="hidden lg:flex fixed left-0 top-0 h-full w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant z-50">
-		<div class="px-lg mb-xl">
-			<h2 class="font-headline-md text-headline-md text-primary">Comunidad Grace</h2>
-			<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del Tesorero</p>
+	<div id="mobileSidebarBackdrop" class="hidden fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-xs transition-opacity"></div>
+
+	<aside class="hidden lg:flex fixed left-0 top-0 h-full w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant z-50 shadow-2xl lg:shadow-none">
+		<div class="px-lg mb-xl flex items-start justify-between">
+			<div>
+				<h2 class="font-headline-md text-headline-md text-primary">Comunidad Grace</h2>
+				<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del Tesorero</p>
+			</div>
+			<button type="button" id="mobileSidebarClose" class="lg:hidden p-xs text-on-surface-variant hover:text-error hover:bg-surface-variant rounded-full transition-colors cursor-pointer" title="Cerrar Menú">
+				<span class="material-symbols-outlined text-2xl">close</span>
+			</button>
 		</div>
 		<nav class="flex-1 space-y-1">
 			<a class="flex items-center {{ active_menu == 'dashboard' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
@@ -153,7 +160,7 @@
 			<button class="w-full mb-md bg-primary text-on-primary py-md rounded-xl font-label-bold text-label-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">
 				Exportar Datos
 			</button>
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="#">
+			<a class="flex items-center {{ active_menu == 'ayuda' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_ayuda') }}">
 				<span class="material-symbols-outlined mr-md">help</span>
 				<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
 			</a>
@@ -171,9 +178,16 @@
 					<span class="material-symbols-outlined text-2xl">menu</span>
 				</button>
 				<span class="font-headline-sm text-headline-sm font-bold text-primary">Arca Finanzas</span>
-				<div class="hidden md:flex items-center bg-surface-container-low rounded-full px-md py-1 border border-outline-variant ml-xl">
-					<span class="material-symbols-outlined text-on-surface-variant text-sm mr-xs">search</span>
-					<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48" placeholder="Buscar registros..." type="text"/>
+				<div class="relative hidden sm:flex items-center ml-md lg:ml-xl" id="globalSearchWrapper">
+					<div class="flex items-center bg-surface-container-low rounded-full px-md py-1 border border-outline-variant focus-within:ring-2 focus-within:ring-primary focus-within:border-primary transition-all">
+						<span class="material-symbols-outlined text-on-surface-variant text-sm mr-xs">search</span>
+						<input id="globalSearchInput" class="bg-transparent border-none focus:ring-0 text-body-sm w-48 lg:w-64 outline-none" placeholder="Buscar en Arca Finanzas..." type="text" autocomplete="off"/>
+						<kbd class="hidden lg:inline-block px-1.5 py-0.5 text-[10px] font-semibold text-on-surface-variant bg-surface-container border border-outline-variant rounded">Ctrl K</kbd>
+					</div>
+					<div id="globalSearchResultsPopover" class="hidden absolute top-full left-0 mt-2 w-80 sm:w-96 lg:w-[420px] bg-white border border-outline-variant rounded-2xl shadow-2xl z-50 overflow-hidden">
+						<div id="globalSearchResultsContent" class="max-h-96 overflow-y-auto divide-y divide-outline-variant">
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="flex items-center gap-md">
@@ -321,12 +335,122 @@
 			});
 
 			const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+			const mobileSidebarClose = document.getElementById('mobileSidebarClose');
+			const mobileSidebarBackdrop = document.getElementById('mobileSidebarBackdrop');
 			const sidebar = document.querySelector('aside');
-			if (mobileSidebarToggle && sidebar) {
+
+			function openMobileSidebar() {
+				if (sidebar) {
+					sidebar.classList.remove('hidden');
+					sidebar.classList.add('flex');
+				}
+				if (mobileSidebarBackdrop) {
+					mobileSidebarBackdrop.classList.remove('hidden');
+				}
+			}
+
+			function closeMobileSidebar() {
+				if (sidebar) {
+					sidebar.classList.add('hidden');
+					sidebar.classList.remove('flex');
+				}
+				if (mobileSidebarBackdrop) {
+					mobileSidebarBackdrop.classList.add('hidden');
+				}
+			}
+
+			if (mobileSidebarToggle) {
 				mobileSidebarToggle.addEventListener('click', function(e) {
 					e.stopPropagation();
-					sidebar.classList.toggle('hidden');
-					sidebar.classList.toggle('flex');
+					if (sidebar && sidebar.classList.contains('hidden')) {
+						openMobileSidebar();
+					} else {
+						closeMobileSidebar();
+					}
+				});
+			}
+
+			if (mobileSidebarClose) {
+				mobileSidebarClose.addEventListener('click', closeMobileSidebar);
+			}
+
+			if (mobileSidebarBackdrop) {
+				mobileSidebarBackdrop.addEventListener('click', closeMobileSidebar);
+			}
+
+			// Búsqueda Global en tiempo real
+			const searchInput = document.getElementById('globalSearchInput');
+			const searchWrapper = document.getElementById('globalSearchWrapper');
+			const searchPopover = document.getElementById('globalSearchResultsPopover');
+			const searchContent = document.getElementById('globalSearchResultsContent');
+			let searchDebounceTimer = null;
+
+			if (searchInput && searchPopover && searchContent && searchWrapper) {
+				document.addEventListener('keydown', function(e) {
+					if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+						e.preventDefault();
+						searchInput.focus();
+					}
+				});
+
+				searchInput.addEventListener('input', function() {
+					clearTimeout(searchDebounceTimer);
+					const q = searchInput.value.trim();
+
+					if (q.length < 2) {
+						searchPopover.classList.add('hidden');
+						return;
+					}
+
+					searchDebounceTimer = setTimeout(() => {
+						fetch('{{ path("app_buscar_api") }}?q=' + encodeURIComponent(q))
+							.then(r => r.json())
+							.then(data => {
+								if (!data.results || data.results.length === 0) {
+									searchContent.innerHTML = `
+										<div class="p-xl text-center text-on-surface-variant">
+											<span class="material-symbols-outlined text-3xl mb-xs block opacity-50">search_off</span>
+											<p class="font-body-sm font-semibold">Sin resultados para "${data.query}"</p>
+											<p class="text-xs text-on-surface-variant mt-xs">Intenta buscando por nombre, descripción o categoría.</p>
+										</div>
+									`;
+								} else {
+									searchContent.innerHTML = `
+										<div class="p-xs bg-surface-container-low font-label-bold text-[11px] text-on-surface-variant uppercase px-md py-xs border-b border-outline-variant flex justify-between">
+											<span>Coincidencias encontradas</span>
+											<span class="text-primary font-bold">${data.total} resultados</span>
+										</div>
+										${data.results.map(item => `
+											<a href="${item.url}" class="p-md flex items-center gap-md hover:bg-surface-container-low transition-colors block group">
+												<div class="p-xs rounded-xl ${item.icon_bg} shadow-xs">
+													<span class="material-symbols-outlined text-[20px]">${item.icon}</span>
+												</div>
+												<div class="flex-1 min-w-0">
+													<div class="flex items-center justify-between">
+														<h4 class="text-xs font-bold text-on-background group-hover:text-primary transition-colors truncate">${item.title}</h4>
+														<span class="text-[10px] text-on-surface-variant font-medium ml-xs">${item.date}</span>
+													</div>
+													<div class="flex items-center justify-between mt-0.5">
+														<p class="text-xs text-on-surface-variant truncate">${item.subtitle}</p>
+														<span class="text-[9px] font-bold text-outline uppercase px-1.5 py-0.5 bg-surface-container rounded">${item.category}</span>
+													</div>
+												</div>
+											</a>
+										`).join('')}
+									`;
+								}
+								searchPopover.classList.remove('hidden');
+							})
+							.catch(err => {
+								console.error('Error al realizar búsqueda:', err);
+							});
+					}, 250);
+				});
+
+				document.addEventListener('click', function(e) {
+					if (!searchWrapper.contains(e.target)) {
+						searchPopover.classList.add('hidden');
+					}
 				});
 			}
 
