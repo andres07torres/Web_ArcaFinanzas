@@ -1,0 +1,470 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Control de Caja - FaithFinance{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+	<script id="tailwind-config">
+		tailwind.config = {
+			darkMode: "class",
+			theme: {
+				extend: {
+					"colors": {
+						"surface-variant": "#e0e3e5",
+						"on-surface-variant": "#444651",
+						"on-primary": "#ffffff",
+						"surface-dim": "#d8dadc",
+						"on-secondary-fixed-variant": "#005049",
+						"on-primary-fixed-variant": "#264191",
+						"outline-variant": "#c5c5d3",
+						"secondary": "#006a61",
+						"background": "#f7f9fb",
+						"on-tertiary-container": "#a1a4ff",
+						"tertiary-fixed-dim": "#c0c1ff",
+						"on-background": "#191c1e",
+						"secondary-fixed": "#89f5e7",
+						"primary-fixed-dim": "#b6c4ff",
+						"surface-container-lowest": "#ffffff",
+						"on-primary-container": "#90a8ff",
+						"on-tertiary-fixed": "#07006c",
+						"on-tertiary-fixed-variant": "#2f2ebe",
+						"surface-bright": "#f7f9fb",
+						"surface-container-highest": "#e0e3e5",
+						"inverse-surface": "#2d3133",
+						"error-container": "#ffdad6",
+						"inverse-on-surface": "#eff1f3",
+						"on-secondary": "#ffffff",
+						"outline": "#757682",
+						"on-tertiary": "#ffffff",
+						"surface-container-high": "#e6e8ea",
+						"primary": "#00236f",
+						"inverse-primary": "#b6c4ff",
+						"primary-container": "#1e3a8a",
+						"surface-tint": "#4059aa",
+						"surface-container-low": "#f2f4f6",
+						"on-error-container": "#93000a",
+						"on-secondary-fixed": "#00201d",
+						"on-primary-fixed": "#00164e",
+						"on-secondary-container": "#006f66",
+						"tertiary-fixed": "#e1e0ff",
+						"surface-container": "#eceef0",
+						"secondary-fixed-dim": "#6bd8cb",
+						"surface": "#f7f9fb",
+						"secondary-container": "#86f2e4",
+						"primary-fixed": "#dce1ff",
+						"on-error": "#ffffff",
+						"on-surface": "#191c1e",
+						"tertiary": "#0d0097",
+						"tertiary-container": "#2724b8",
+						"error": "#ba1a1a"
+					},
+					"borderRadius": {
+						"DEFAULT": "0.125rem",
+						"lg": "0.25rem",
+						"xl": "0.5rem",
+						"full": "0.75rem"
+					},
+					"spacing": {
+						"md": "16px",
+						"xs": "4px",
+						"gutter": "24px",
+						"lg": "24px",
+						"xl": "32px",
+						"sm": "8px",
+						"base": "4px",
+						"container-max": "1280px"
+					},
+					"fontFamily": {
+						"body-lg": ["Inter"],
+						"headline-lg-mobile": ["Inter"],
+						"headline-md": ["Inter"],
+						"body-md": ["Inter"],
+						"data-mono": ["Inter"],
+						"body-sm": ["Inter"],
+						"headline-lg": ["Inter"],
+						"headline-sm": ["Inter"],
+						"label-bold": ["Inter"]
+					},
+					"fontSize": {
+						"body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+						"headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+						"headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+						"body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+						"data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+						"body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+						"headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+						"headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+						"label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+					}
+				},
+			},
+		}
+	</script>
+	<style>
+		.material-symbols-outlined {
+			font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+			vertical-align: middle;
+		}
+		.custom-scrollbar::-webkit-scrollbar {
+			width: 4px;
+		}
+		.custom-scrollbar::-webkit-scrollbar-track {
+			background: transparent;
+		}
+		.custom-scrollbar::-webkit-scrollbar-thumb {
+			background: #cbd5e1;
+			border-radius: 10px;
+		}
+		.tab-active {
+			border-bottom: 2px solid #00236f;
+			color: #00236f;
+			font-weight: 700;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<header class="sticky top-0 w-full z-40 flex justify-between items-center px-lg h-16 bg-surface border-b border-outline-variant shadow-sm">
+		<div class="flex items-center gap-xl">
+			<span class="font-headline-sm text-headline-sm font-bold text-primary">FaithFinance</span>
+			<nav class="hidden md:flex gap-md">
+				<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="{{ path('app_dashboard') }}">Tablero</a>
+				<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="{{ path('app_actividades') }}">Actividades</a>
+				<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary" href="{{ path('app_caja') }}">Control de Caja</a>
+				<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Directorio</a>
+			</nav>
+		</div>
+		<div class="flex items-center gap-md">
+			<button class="material-symbols-outlined p-sm hover:bg-surface-container-low rounded-full transition-colors cursor-pointer">notifications</button>
+			<button class="material-symbols-outlined p-sm hover:bg-surface-container-low rounded-full transition-colors cursor-pointer">settings</button>
+			<div class="h-10 w-10 rounded-full overflow-hidden border border-outline-variant">
+				<img alt="Perfil" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM7woA1tCUKlfd71ZnhVIolPzCKw6JRz9AJA0yMHUwoyDle9j21cDdOs0wn6gslf4oj71cFTLSZCaNWDYbAeGifnIgJ2qAJ20OiXPiiaC9ORpYtRc0aTc4-8uJALrF-miNnjfSXXLO4QFafbVyzjrPzCNJmhwANdDHP-r2Bt-jqBmBy0offI7DyscA0kk7j8uV8NVW62HOngRECzHq3DWxKGGQEvQnCU-lGWxMxjLoYFYgUopjaG4zYYofV8J23N02vwtHtLWav-4"/>
+			</div>
+		</div>
+	</header>
+
+	<div class="flex">
+		<aside class="hidden lg:flex sticky left-0 top-16 h-[calc(100vh-64px)] w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant">
+			<div class="px-md mb-xl">
+				<h2 class="font-headline-sm text-headline-sm text-primary">Grace Community</h2>
+				<p class="font-label-bold text-label-bold text-on-surface-variant uppercase">Portal del Tesorero</p>
+			</div>
+			<nav class="flex-1 space-y-xs">
+				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
+					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">dashboard</span>
+					<span class="font-label-bold text-label-bold">Tablero</span>
+				</a>
+				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
+					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">event_available</span>
+					<span class="font-label-bold text-label-bold">Actividades</span>
+				</a>
+				<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
+					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+					<span class="font-label-bold text-label-bold">Control de Caja</span>
+				</a>
+				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="#">
+					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">group</span>
+					<span class="font-label-bold text-label-bold">Directorio</span>
+				</a>
+				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="#">
+					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">assessment</span>
+					<span class="font-label-bold text-label-bold">Informes</span>
+				</a>
+			</nav>
+			<div class="px-md mt-auto pt-md space-y-xs">
+				<button class="w-full flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all group">
+					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">help</span>
+					<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
+				</button>
+				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all group" href="{{ path('app_logout') }}">
+					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">logout</span>
+					<span class="font-label-bold text-label-bold">Cerrar Sesi\u00f3n</span>
+				</a>
+			</div>
+		</aside>
+
+		<main class="flex-1 max-w-container-max mx-auto p-lg md:p-xl bg-background">
+			<div class="grid grid-cols-12 gap-gutter">
+				<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+					<div class="flex items-center justify-between">
+						<div>
+							<h1 class="font-headline-lg text-headline-lg text-on-background">Control de Caja</h1>
+							<p class="text-on-surface-variant">Rastree todos los flujos financieros con precisi\u00f3n.</p>
+						</div>
+						<button class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:shadow-lg active:scale-95 transition-all flex items-center gap-sm">
+							<span class="material-symbols-outlined text-[18px]">file_download</span>
+							EXPORTAR DATOS
+						</button>
+					</div>
+
+					<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+						<div class="flex border-b border-outline-variant">
+							<button class="flex-1 py-xl font-label-bold text-label-bold flex justify-center items-center gap-sm transition-all tab-active" id="tab-income" onclick="switchTab('income')">
+								<span class="material-symbols-outlined text-secondary">add_circle</span>
+								REGISTRAR INGRESO
+							</button>
+							<button class="flex-1 py-xl font-label-bold text-label-bold flex justify-center items-center gap-sm transition-all text-on-surface-variant hover:bg-surface-container-low" id="tab-expense" onclick="switchTab('expense')">
+								<span class="material-symbols-outlined text-error">remove_circle</span>
+								REGISTRAR GASTO
+							</button>
+						</div>
+						<div class="p-xl space-y-xl">
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-xl">
+								<div class="flex flex-col gap-xs">
+									<label class="font-label-bold text-label-bold text-on-surface-variant">MONTO ($)</label>
+									<div class="relative">
+										<input class="w-full h-12 pl-md pr-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary text-headline-sm font-data-mono" placeholder="0.00" step="0.01" type="number"/>
+									</div>
+								</div>
+								<div class="flex flex-col gap-xs">
+									<label class="font-label-bold text-label-bold text-on-surface-variant">FECHA</label>
+									<input class="w-full h-12 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary" type="date"/>
+								</div>
+								<div class="flex flex-col gap-xs">
+									<label class="font-label-bold text-label-bold text-on-surface-variant">M\u00c9TODO DE PAGO</label>
+									<select class="w-full h-12 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary">
+										<option>Efectivo</option>
+										<option>Transferencia Bancaria</option>
+										<option>Cheque</option>
+										<option>Tarjeta de Cr\u00e9dito</option>
+									</select>
+								</div>
+								<div class="flex flex-col gap-xs">
+									<label class="font-label-bold text-label-bold text-on-surface-variant">ACTIVIDAD VINCULADA</label>
+									<div class="relative group">
+										<select class="w-full h-12 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary appearance-none" id="activity-select">
+											<option value="0">Fondo General</option>
+											<option value="1200">Retiro Juvenil 2024</option>
+											<option value="500">Programa de Despensa</option>
+											<option value="3500">Expansi\u00f3n del Edificio</option>
+											<option value="250">Suministros Escuela Dominical</option>
+										</select>
+										<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+									</div>
+								</div>
+							</div>
+							<div class="flex flex-col gap-sm" id="contributor-section">
+								<div class="flex justify-between items-center">
+									<label class="font-label-bold text-label-bold text-on-surface-variant uppercase">V\u00ednculo con Colaborador</label>
+									<button class="text-primary text-body-sm font-semibold flex items-center gap-xs hover:underline transition-all">
+										<span class="material-symbols-outlined text-[16px]">person_add</span>
+										Agregar Nuevo
+									</button>
+								</div>
+								<div class="flex flex-wrap gap-sm">
+									<button class="px-md py-sm bg-surface-container-low border border-outline-variant rounded-full text-body-sm hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all">John Doe</button>
+									<button class="px-md py-sm bg-surface-container-low border border-outline-variant rounded-full text-body-sm hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all">Sarah Smith</button>
+									<button class="px-md py-sm bg-surface-container-low border border-outline-variant rounded-full text-body-sm hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all">Robert Johnson</button>
+									<button class="px-md py-sm border border-dashed border-outline rounded-full text-body-sm text-outline flex items-center gap-xs hover:border-primary hover:text-primary px-lg">
+										Ver Todo el Directorio
+									</button>
+								</div>
+							</div>
+							<div class="flex flex-col gap-xs">
+								<label class="font-label-bold text-label-bold text-on-surface-variant">DESCRIPCI\u00d3N / NOTAS</label>
+								<textarea class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Agregue detalles opcionales sobre esta transacci\u00f3n..." rows="3"></textarea>
+							</div>
+							<div class="pt-md">
+								<button class="w-full bg-primary text-on-primary h-14 rounded-xl font-headline-sm hover:shadow-xl active:scale-95 transition-all flex justify-center items-center gap-md">
+									<span class="material-symbols-outlined" id="submit-icon">save</span>
+									<span id="submit-text">Registrar Ingreso</span>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="bg-primary-container text-on-primary-container p-xl rounded-xl shadow-sm border border-primary-container/20 relative overflow-hidden">
+						<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-xl">
+							<div class="space-y-xs">
+								<p class="font-label-bold text-label-bold uppercase opacity-80">Salud Financiera de la Actividad</p>
+								<h3 class="font-headline-md text-headline-md" id="selected-activity-name">Fondo General</h3>
+							</div>
+							<div class="flex items-center gap-xl">
+								<div class="text-center md:text-right">
+									<p class="font-label-bold text-label-bold uppercase opacity-80">Utilidad Neta</p>
+									<p class="font-headline-lg text-headline-lg text-white" id="net-profit-value">$14,250.00</p>
+								</div>
+								<div class="bg-secondary-container text-on-secondary-container p-md rounded-full">
+									<span class="material-symbols-outlined text-[32px]">trending_up</span>
+								</div>
+							</div>
+						</div>
+						<div class="absolute -right-8 -bottom-8 opacity-10">
+							<span class="material-symbols-outlined text-[160px]">calculate</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-span-12 lg:col-span-4 space-y-gutter">
+					<div class="bg-white rounded-xl border border-outline-variant shadow-sm h-full flex flex-col">
+						<div class="p-xl border-b border-outline-variant flex justify-between items-center">
+							<h2 class="font-headline-sm text-headline-sm text-on-background">Registros Recientes</h2>
+							<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">filter_list</span>
+						</div>
+						<div class="flex-1 overflow-y-auto max-h-[600px] custom-scrollbar">
+							<div class="divide-y divide-outline-variant">
+								<div class="p-xl hover:bg-surface-container-low transition-colors group">
+									<div class="flex justify-between items-start mb-xs">
+										<div class="flex items-center gap-sm">
+											<div class="h-8 w-8 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+												<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
+											</div>
+											<span class="font-label-bold text-label-bold text-secondary">INGRESO</span>
+										</div>
+										<span class="font-data-mono text-body-sm text-on-surface-variant">10:45 AM</span>
+									</div>
+									<p class="font-headline-sm text-headline-sm mb-base">$1,200.00</p>
+									<p class="text-body-sm font-semibold text-on-background">Diezmos - Servicio Dominical</p>
+									<div class="mt-sm flex flex-wrap gap-xs">
+										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Fondo General</span>
+										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Efectivo</span>
+									</div>
+								</div>
+								<div class="p-xl hover:bg-surface-container-low transition-colors group">
+									<div class="flex justify-between items-start mb-xs">
+										<div class="flex items-center gap-sm">
+											<div class="h-8 w-8 rounded-full bg-error-container/30 flex items-center justify-center text-error">
+												<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">remove</span>
+											</div>
+											<span class="font-label-bold text-label-bold text-error">GASTO</span>
+										</div>
+										<span class="font-data-mono text-body-sm text-on-surface-variant">09:15 AM</span>
+									</div>
+									<p class="font-headline-sm text-headline-sm mb-base text-error">-$450.00</p>
+									<p class="text-body-sm font-semibold text-on-background">Mantenimiento - Reparaci\u00f3n Aire Acondicionado</p>
+									<div class="mt-sm flex flex-wrap gap-xs">
+										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Edificio</span>
+										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Transferencia</span>
+									</div>
+								</div>
+								<div class="p-xl hover:bg-surface-container-low transition-colors group">
+									<div class="flex justify-between items-start mb-xs">
+										<div class="flex items-center gap-sm">
+											<div class="h-8 w-8 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+												<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
+											</div>
+											<span class="font-label-bold text-label-bold text-secondary">INGRESO</span>
+										</div>
+										<span class="font-data-mono text-body-sm text-on-surface-variant">Ayer</span>
+									</div>
+									<p class="font-headline-sm text-headline-sm mb-base">$3,500.00</p>
+									<p class="text-body-sm font-semibold text-on-background">Donaci\u00f3n para Expansi\u00f3n</p>
+									<div class="mt-sm flex flex-wrap gap-xs">
+										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Edificio</span>
+										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Cheque</span>
+									</div>
+								</div>
+								<div class="p-xl hover:bg-surface-container-low transition-colors group">
+									<div class="flex justify-between items-start mb-xs">
+										<div class="flex items-center gap-sm">
+											<div class="h-8 w-8 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+												<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
+											</div>
+											<span class="font-label-bold text-label-bold text-secondary">INGRESO</span>
+										</div>
+										<span class="font-data-mono text-body-sm text-on-surface-variant">24 Oct</span>
+									</div>
+									<p class="font-headline-sm text-headline-sm mb-base">$85.00</p>
+									<p class="text-body-sm font-semibold text-on-background">Venta de Recursos</p>
+									<div class="mt-sm flex flex-wrap gap-xs">
+										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Centro de Recursos</span>
+										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Efectivo</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="p-xl bg-surface-container-low border-t border-outline-variant">
+							<button class="w-full text-primary font-label-bold text-label-bold flex justify-center items-center gap-sm hover:gap-md transition-all">
+								VER REGISTRO DE AUDITOR\u00cdA COMPLETO
+								<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant flex justify-around items-center h-16 z-50">
+		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="{{ path('app_dashboard') }}">
+			<span class="material-symbols-outlined">dashboard</span>
+			<span class="text-[10px] font-bold">INICIO</span>
+		</a>
+		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="{{ path('app_actividades') }}">
+			<span class="material-symbols-outlined">event_available</span>
+			<span class="text-[10px] font-bold">ACTS</span>
+		</a>
+		<a class="flex flex-col items-center gap-xs text-primary" href="{{ path('app_caja') }}">
+			<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+			<span class="text-[10px] font-bold">CAJA</span>
+		</a>
+		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+			<span class="material-symbols-outlined">group</span>
+			<span class="text-[10px] font-bold">DIR</span>
+		</a>
+		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+			<span class="material-symbols-outlined">settings</span>
+			<span class="text-[10px] font-bold">MEN\u00da</span>
+		</a>
+	</nav>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		function switchTab(type) {
+			const incomeTab = document.getElementById('tab-income');
+			const expenseTab = document.getElementById('tab-expense');
+			const submitBtn = document.getElementById('submit-text');
+			const submitIcon = document.getElementById('submit-icon');
+			const contributorSection = document.getElementById('contributor-section');
+
+			if (type === 'income') {
+				incomeTab.classList.add('tab-active');
+				incomeTab.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-low');
+				expenseTab.classList.remove('tab-active');
+				expenseTab.classList.add('text-on-surface-variant', 'hover:bg-surface-container-low');
+				submitBtn.innerText = 'Registrar Ingreso';
+				submitIcon.innerText = 'save';
+				contributorSection.classList.remove('hidden');
+			} else {
+				expenseTab.classList.add('tab-active');
+				expenseTab.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-low');
+				incomeTab.classList.remove('tab-active');
+				incomeTab.classList.add('text-on-surface-variant', 'hover:bg-surface-container-low');
+				submitBtn.innerText = 'Registrar Gasto';
+				submitIcon.innerText = 'receipt_long';
+				contributorSection.classList.add('hidden');
+			}
+		}
+
+		const activitySelect = document.getElementById('activity-select');
+		const netProfitDisplay = document.getElementById('net-profit-value');
+		const activityNameDisplay = document.getElementById('selected-activity-name');
+
+		activitySelect.addEventListener('change', (e) => {
+			const value = e.target.value;
+			const text = e.target.options[e.target.selectedIndex].text;
+			netProfitDisplay.classList.add('opacity-50');
+			setTimeout(() => {
+				activityNameDisplay.innerText = text;
+				if (value === '0') {
+					netProfitDisplay.innerText = '$14,250.00';
+				} else {
+					const randomValue = (Math.random() * 5000 + parseInt(value)).toFixed(2);
+					netProfitDisplay.innerText = '$' + parseFloat(randomValue).toLocaleString();
+				}
+				netProfitDisplay.classList.remove('opacity-50');
+			}, 300);
+		});
+
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'n' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+				e.preventDefault();
+				document.querySelector('input[type="number"]').focus();
+			}
+		});
+	</script>
+{% endblock %}
