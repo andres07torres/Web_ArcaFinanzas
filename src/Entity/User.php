@@ -115,4 +115,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getInitials(): string
+    {
+        if ($this->fullName) {
+            $parts = explode(' ', trim($this->fullName));
+            if (count($parts) >= 2) {
+                return strtoupper(substr($parts[0], 0, 1) . substr($parts[count($parts) - 1], 0, 1));
+            }
+            return strtoupper(substr($parts[0], 0, 2));
+        }
+
+        return strtoupper(substr($this->email ?? 'U', 0, 2));
+    }
 }

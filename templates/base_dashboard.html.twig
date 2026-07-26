@@ -174,18 +174,23 @@
 				</div>
 			</div>
 			<div class="flex items-center gap-md">
-				<button class="hidden md:flex items-center bg-primary text-on-primary px-lg py-sm rounded-full font-label-bold text-label-bold cursor-pointer active:scale-95 transition-all">
+				<a href="{{ path('app_caja_nueva') }}" class="hidden md:flex items-center bg-primary text-on-primary px-lg py-sm rounded-full font-label-bold text-label-bold cursor-pointer active:scale-95 hover:bg-primary-container transition-all">
 					Entrada Rápida
-				</button>
-				<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative">
+				</a>
+				<a href="{{ path('app_reportes') }}" title="Notificaciones" class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative">
 					<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
 					<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
-				</button>
-				<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
+				</a>
+				<a href="{{ path('app_dashboard') }}" title="Configuración" class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
 					<span class="material-symbols-outlined text-on-surface-variant">settings</span>
-				</button>
-				<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant">
-					<img alt="Perfil" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQvJ2EbpVF8wcyJuhEUE2pe93psv8LpTE5ukr34M-UrR755jxm08a7E6z7BJMat37kFwBPbKu441Z9Ta8Y01dCum6op_oroDZzmIUvLl5I8xth7YOj2dKcfxlt0W7g9XC9qoruVs5tQlkT_xvSUexyXaJ-Pzh0CRCk8mKyS9EyWhpBF4-5MD065NaAevYKiZoYMMlGBbjRZbmkAN-POlZ4ohFyFFvT-CijdV-pC8WjFvQXa5kjrAAcufKXkxlVfEXO0gsSuwOgEoc"/>
+				</a>
+				<div class="flex items-center gap-sm">
+					<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs border border-outline-variant shadow-sm" title="{{ app.user ? app.user.fullName : 'Usuario' }}">
+						{{ app.user ? app.user.getInitials() : 'U' }}
+					</div>
+					{% if app.user and app.user.fullName %}
+						<span class="hidden xl:inline-block font-label-bold text-label-bold text-on-surface-variant">{{ app.user.fullName }}</span>
+					{% endif %}
 				</div>
 			</div>
 		</header>
