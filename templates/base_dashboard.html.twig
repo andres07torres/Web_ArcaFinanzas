@@ -203,18 +203,26 @@
 						<div class="p-md bg-surface-container-low border-b border-outline-variant flex justify-between items-center gap-xs">
 							<div class="flex items-center gap-xs min-w-0">
 								<span class="material-symbols-outlined text-primary text-sm shrink-0">notifications_active</span>
-								<span class="font-headline-sm text-xs sm:text-sm font-bold text-primary truncate">Notificaciones en Tiempo Real</span>
+								<span class="font-headline-sm text-xs sm:text-sm font-bold text-primary truncate">Notificaciones</span>
 							</div>
-							<span id="notifCountTag" class="px-2 py-0.5 bg-primary-container text-on-primary-container rounded-full text-[10px] font-bold whitespace-nowrap shrink-0">Cargando...</span>
+							<div class="flex items-center gap-xs">
+								<button id="clearNotifBtn" type="button" class="px-2 py-1 text-[11px] font-bold text-primary hover:bg-primary/10 rounded-md transition-colors flex items-center gap-0.5 cursor-pointer" title="Marcar todas como vistas y limpiar">
+									<span class="material-symbols-outlined text-xs">done_all</span> Limpiar
+								</button>
+								<span id="notifCountTag" class="px-2 py-0.5 bg-primary-container text-on-primary-container rounded-full text-[10px] font-bold whitespace-nowrap shrink-0">Cargando...</span>
+							</div>
 						</div>
 						<div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-outline-variant">
 							<div class="p-lg text-center text-body-sm text-on-surface-variant">
 								Cargando actividad reciente...
 							</div>
 						</div>
-						<div class="p-sm bg-surface-container-low border-t border-outline-variant text-center">
-							<a href="{{ path('app_reportes') }}" class="text-xs font-bold text-primary hover:underline flex items-center justify-center gap-xs">
-								Ver Registro de Auditoría Completo <span class="material-symbols-outlined text-xs">arrow_forward</span>
+						<div class="p-sm bg-surface-container-low border-t border-outline-variant flex justify-between items-center text-xs">
+							<button id="clearNotifBtnFooter" type="button" class="font-bold text-on-surface-variant hover:text-error transition-colors flex items-center gap-xs cursor-pointer">
+								<span class="material-symbols-outlined text-xs">delete_sweep</span> Marcar vistas
+							</button>
+							<a href="{{ path('app_reportes') }}" class="font-bold text-primary hover:underline flex items-center gap-xs">
+								Ver Auditoría <span class="material-symbols-outlined text-xs">arrow_forward</span>
 							</a>
 						</div>
 					</div>
@@ -275,8 +283,31 @@
 			const notifList = document.getElementById('notifList');
 			const notifCountTag = document.getElementById('notifCountTag');
 			const notifBadge = document.getElementById('notifBadge');
+			const clearNotifBtn = document.getElementById('clearNotifBtn');
+			const clearNotifBtnFooter = document.getElementById('clearNotifBtnFooter');
 
 			if (!toggleBtn || !menu) return;
+
+			function clearNotifications() {
+				fetch('{{ path("app_notificaciones_limpiar") }}', {
+					method: 'POST',
+					headers: {
+						'X-Requested-With': 'XMLHttpRequest'
+					}
+				})
+				.then(r => r.json())
+				.then(data => {
+					if (notifCountTag) notifCountTag.textContent = '0 leídas';
+					if (notifBadge) notifBadge.classList.add('hidden');
+					if (notifList) {
+						notifList.innerHTML = '<div class="p-lg text-center text-body-sm text-on-surface-variant flex flex-col items-center justify-center gap-xs py-xl"><span class="material-symbols-outlined text-secondary text-3xl">task_alt</span> <span class="font-bold text-on-background mt-xs">Todas las notificaciones marcadas como leídas.</span></div>';
+					}
+				})
+				.catch(err => console.error('Error al limpiar notificaciones:', err));
+			}
+
+			if (clearNotifBtn) clearNotifBtn.addEventListener('click', clearNotifications);
+			if (clearNotifBtnFooter) clearNotifBtnFooter.addEventListener('click', clearNotifications);
 
 			function fetchNotifications() {
 				fetch('{{ path("app_notificaciones_api") }}')

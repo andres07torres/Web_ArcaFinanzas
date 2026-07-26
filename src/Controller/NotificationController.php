@@ -7,16 +7,28 @@ use App\Repository\MemberRepository;
 use App\Repository\TransactionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 class NotificationController extends AbstractController
 {
     #[Route('/api/notificaciones', name: 'app_notificaciones_api', methods: ['GET'])]
     public function getNotifications(
+        Request $request,
         TransactionRepository $transactionRepo,
         ActivityRepository $activityRepo,
         MemberRepository $memberRepo
     ): JsonResponse {
+        $session = $request->getSession();
+        $isCleared = $session->get('notifications_cleared', false);
+
+        if ($isCleared) {
+            return $this->json([
+                'count' => 0,
+                'items' => [],
+            ]);
+        }
+
         $notifications = [];
 
         $recentTransactions = $transactionRepo->findBy([], ['id' => 'DESC'], 5);
@@ -62,6 +74,18 @@ class NotificationController extends AbstractController
         return $this->json([
             'count' => count($notifications),
             'items' => array_slice($notifications, 0, 8),
+        ]);
+    }
+
+    #[Route('/api/notificaciones/limpiar', name: 'app_notificaciones_limpiar', methods: ['POST'])]
+    public function clearNotifications(Request $request): JsonResponse
+    {
+        $session = $request->getSession();
+        $session->set('notifications_cleared', true);
+
+        return $this->json([
+            'success' => true,
+            'message' => 'Todas las notificaciones han sido marcadas como leídas y limpiadas.',
         ]);
     }
 }

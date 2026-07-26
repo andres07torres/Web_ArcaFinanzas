@@ -67,52 +67,54 @@
 				</a>
 			</div>
 		{% else %}
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+			<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-md">
 				{% for activity in activities %}
 					{% set progress = activity.goalAmount > 0 ? ((activity.raisedAmount / activity.goalAmount) * 100)|round(0) : 0 %}
 
 					{% if activity.status == 'active' %}
-						<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm hover:shadow-md transition-shadow flex flex-col">
-							<div class="flex justify-between items-start mb-lg">
-								<div class="flex gap-md">
-									<div class="w-16 h-16 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container">
-										<span class="material-symbols-outlined text-3xl">festival</span>
+						<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+							<div>
+								<div class="flex justify-between items-start mb-md">
+									<div class="flex items-center gap-md">
+										<div class="w-11 h-11 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0">
+											<span class="material-symbols-outlined text-xl">festival</span>
+										</div>
+										<div>
+											<span class="bg-secondary-container text-on-secondary-container text-[10px] px-xs py-[1px] rounded-full font-label-bold uppercase">Activa</span>
+											<h4 class="font-bold text-body-lg text-on-background mt-0.5">{{ activity.name }}</h4>
+											<p class="text-on-surface-variant text-xs">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
+										</div>
 									</div>
-									<div>
-										<span class="bg-secondary-container text-on-secondary-container text-[10px] px-sm py-[2px] rounded-full font-label-bold uppercase tracking-wider">Activa</span>
-										<h4 class="font-headline-sm text-headline-sm text-on-background mt-xs">{{ activity.name }}</h4>
-										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
+								</div>
+								<div class="space-y-xs">
+									<div class="flex justify-between items-center text-xs">
+										<span class="text-on-surface-variant">Progreso meta</span>
+										<span class="font-bold text-on-background">{{ progress }}%</span>
+									</div>
+									<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
+										<div class="h-full bg-secondary rounded-full transition-all duration-500" style="width: {{ progress }}%;"></div>
+									</div>
+									<div class="grid grid-cols-2 gap-sm pt-xs">
+										<div>
+											<p class="font-label-bold text-[10px] text-on-surface-variant uppercase">Recaudado</p>
+											<p class="text-body-md font-bold text-secondary">${{ activity.raisedAmount|number_format(2, '.', ',') }}</p>
+										</div>
+										<div>
+											<p class="font-label-bold text-[10px] text-on-surface-variant uppercase">Meta</p>
+											<p class="text-body-md font-bold text-on-background">${{ activity.goalAmount|number_format(2, '.', ',') }}</p>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="flex-1 space-y-md">
-								<div class="flex justify-between items-center text-body-sm">
-									<span class="text-on-surface-variant">Progreso hacia la Meta</span>
-									<span class="font-bold text-on-background">{{ progress }}%</span>
-								</div>
-								<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
-									<div class="h-full bg-secondary w-[{{ progress }}%] rounded-full transition-all duration-500"></div>
-								</div>
-								<div class="grid grid-cols-2 gap-md pt-md">
-									<div>
-										<p class="font-label-bold text-label-bold text-on-surface-variant uppercase">Recaudaciones Actuales</p>
-										<p class="text-headline-sm font-bold text-secondary">${{ activity.raisedAmount|number_format(2, '.', ',') }}</p>
-									</div>
-									<div>
-										<p class="font-label-bold text-label-bold text-on-surface-variant uppercase">Meta de Recaudación</p>
-										<p class="text-headline-sm font-bold text-on-background">${{ activity.goalAmount|number_format(2, '.', ',') }}</p>
-									</div>
-								</div>
-							</div>
-							<div class="mt-xl flex items-center gap-sm">
-								<a href="{{ path('app_actividades_detalle', {id: activity.id}) }}" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
-									<span class="material-symbols-outlined text-base">visibility</span> Ver Detalles
+							<div class="mt-md pt-xs border-t border-outline-variant flex items-center gap-xs flex-wrap">
+								<a href="{{ path('app_actividades_detalle', {id: activity.id}) }}" class="h-8 px-md border border-outline text-on-surface-variant rounded-md font-label-bold text-xs hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+									<span class="material-symbols-outlined text-sm">visibility</span> Ver Detalles
 								</a>
-								<a href="{{ path('app_actividades_editar', {id: activity.id}) }}" class="h-9 px-lg border border-secondary text-secondary rounded-lg font-label-bold text-label-bold hover:bg-secondary hover:text-on-secondary transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
-									<span class="material-symbols-outlined text-base">edit</span> Editar
+								<a href="{{ path('app_actividades_editar', {id: activity.id}) }}" class="h-8 px-md border border-secondary text-secondary rounded-md font-label-bold text-xs hover:bg-secondary hover:text-on-secondary transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+									<span class="material-symbols-outlined text-sm">edit</span> Editar
 								</a>
 								<form method="post" action="{{ path('app_actividades_cerrar', {id: activity.id}) }}" class="inline-block">
-									<button type="submit" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:bg-primary-container transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+									<button type="submit" class="h-8 px-md bg-primary text-on-primary rounded-md font-label-bold text-xs hover:bg-primary-container transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
 										Cerrar
 									</button>
 								</form>
@@ -120,73 +122,77 @@
 						</div>
 
 					{% elseif activity.status == 'finished' %}
-						<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm hover:shadow-md transition-shadow flex flex-col">
-							<div class="flex justify-between items-start mb-lg">
-								<div class="flex gap-md">
-									<div class="w-16 h-16 rounded-xl bg-surface-variant flex items-center justify-center text-on-surface-variant">
-										<span class="material-symbols-outlined text-3xl">volunteer_activism</span>
+						<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+							<div>
+								<div class="flex justify-between items-start mb-md">
+									<div class="flex items-center gap-md">
+										<div class="w-11 h-11 rounded-lg bg-surface-variant flex items-center justify-center text-on-surface-variant shrink-0">
+											<span class="material-symbols-outlined text-xl">volunteer_activism</span>
+										</div>
+										<div>
+											<span class="bg-surface-variant text-on-surface-variant text-[10px] px-xs py-[1px] rounded-full font-label-bold uppercase">Finalizada</span>
+											<h4 class="font-bold text-body-lg text-on-background mt-0.5">{{ activity.name }}</h4>
+											<p class="text-on-surface-variant text-xs">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
+										</div>
 									</div>
-									<div>
-										<span class="bg-surface-variant text-on-surface-variant text-[10px] px-sm py-[2px] rounded-full font-label-bold uppercase tracking-wider">Finalizada</span>
-										<h4 class="font-headline-sm text-headline-sm text-on-background mt-xs">{{ activity.name }}</h4>
-										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
+								</div>
+								<div class="space-y-xs">
+									<div class="flex justify-between items-center text-xs">
+										<span class="text-on-surface-variant">Resultado Final</span>
+										<span class="font-bold text-secondary">{{ progress }}% de Éxito</span>
+									</div>
+									<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
+										<div class="h-full bg-secondary rounded-full transition-all duration-500" style="width: {{ progress }}%;"></div>
+									</div>
+									<div class="grid grid-cols-2 gap-sm pt-xs">
+										<div>
+											<p class="font-label-bold text-[10px] text-on-surface-variant uppercase">Recaudado</p>
+											<p class="text-body-md font-bold text-secondary">${{ activity.raisedAmount|number_format(2, '.', ',') }}</p>
+										</div>
+										<div>
+											<p class="font-label-bold text-[10px] text-on-surface-variant uppercase">Meta Original</p>
+											<p class="text-body-md font-bold text-on-background">${{ activity.goalAmount|number_format(2, '.', ',') }}</p>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="flex-1 space-y-md">
-								<div class="flex justify-between items-center text-body-sm">
-									<span class="text-on-surface-variant">Resultado Final</span>
-									<span class="font-bold text-on-secondary-container">{{ progress }}% de Éxito</span>
-								</div>
-								<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
-									<div class="h-full bg-secondary w-full rounded-full transition-all duration-500"></div>
-								</div>
-								<div class="grid grid-cols-2 gap-md pt-md">
-									<div>
-										<p class="font-label-bold text-label-bold text-on-surface-variant uppercase">Recaudado</p>
-										<p class="text-headline-sm font-bold text-secondary">${{ activity.raisedAmount|number_format(2, '.', ',') }}</p>
-									</div>
-									<div>
-										<p class="font-label-bold text-label-bold text-on-surface-variant uppercase">Meta Original</p>
-										<p class="text-headline-sm font-bold text-on-background">${{ activity.goalAmount|number_format(2, '.', ',') }}</p>
-									</div>
-								</div>
-							</div>
-							<div class="mt-xl flex items-center gap-sm">
-								<a href="{{ path('app_actividades_detalle', {id: activity.id}) }}" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
-									<span class="material-symbols-outlined text-base">visibility</span> Ver Detalles
+							<div class="mt-md pt-xs border-t border-outline-variant flex items-center gap-xs">
+								<a href="{{ path('app_actividades_detalle', {id: activity.id}) }}" class="h-8 px-md border border-outline text-on-surface-variant rounded-md font-label-bold text-xs hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+									<span class="material-symbols-outlined text-sm">visibility</span> Ver Detalles
 								</a>
 							</div>
 						</div>
 
 					{% elseif activity.status == 'cancelled' %}
-						<div class="bg-surface-container-low border border-outline-variant opacity-75 grayscale-[0.3] rounded-xl p-lg shadow-sm flex flex-col">
-							<div class="flex justify-between items-start mb-lg">
-								<div class="flex gap-md">
-									<div class="w-16 h-16 rounded-xl bg-error-container flex items-center justify-center text-on-error-container">
-										<span class="material-symbols-outlined text-3xl">cancel</span>
-									</div>
-									<div>
-										<span class="bg-error-container text-on-error-container text-[10px] px-sm py-[2px] rounded-full font-label-bold uppercase tracking-wider">Cancelada</span>
-										<h4 class="font-headline-sm text-headline-sm text-on-background mt-xs">{{ activity.name }}</h4>
-										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
+						<div class="bg-surface-container-low border border-outline-variant opacity-75 grayscale-[0.3] rounded-xl p-md shadow-xs flex flex-col justify-between">
+							<div>
+								<div class="flex justify-between items-start mb-md">
+									<div class="flex items-center gap-md">
+										<div class="w-11 h-11 rounded-lg bg-error-container flex items-center justify-center text-on-error-container shrink-0">
+											<span class="material-symbols-outlined text-xl">cancel</span>
+										</div>
+										<div>
+											<span class="bg-error-container text-on-error-container text-[10px] px-xs py-[1px] rounded-full font-label-bold uppercase">Cancelada</span>
+											<h4 class="font-bold text-body-lg text-on-background mt-0.5">{{ activity.name }}</h4>
+											<p class="text-on-surface-variant text-xs">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
+										</div>
 									</div>
 								</div>
+								<div>
+									<p class="bg-surface p-sm rounded-lg border border-outline-variant text-xs text-on-surface-variant italic">
+										{{ activity.description }}
+									</p>
+								</div>
 							</div>
-							<div class="flex-1">
-								<p class="bg-surface p-md rounded-lg border border-outline-variant text-body-sm text-on-surface-variant italic">
-									{{ activity.description }}
-								</p>
-							</div>
-							<div class="mt-xl flex items-center gap-sm">
+							<div class="mt-md pt-xs border-t border-outline-variant flex items-center gap-xs">
 								<form method="post" action="{{ path('app_actividades_reactivar', {id: activity.id}) }}" class="inline-block">
-									<button type="submit" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
-										<span class="material-symbols-outlined text-base">restart_alt</span> Reactivar
+									<button type="submit" class="h-8 px-md border border-outline text-on-surface-variant rounded-md font-label-bold text-xs hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+										<span class="material-symbols-outlined text-sm">restart_alt</span> Reactivar
 									</button>
 								</form>
 								<form method="post" action="{{ path('app_actividades_eliminar', {id: activity.id}) }}" class="inline-block" onsubmit="return confirm('¿Estás seguro de eliminar esta actividad?')">
-									<button type="submit" class="h-9 px-lg border border-error/40 text-error rounded-lg font-label-bold text-label-bold hover:bg-error-container/30 transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
-										<span class="material-symbols-outlined text-base">delete</span> Eliminar
+									<button type="submit" class="h-8 px-md border border-error/40 text-error rounded-md font-label-bold text-xs hover:bg-error-container/30 transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+										<span class="material-symbols-outlined text-sm">delete</span> Eliminar
 									</button>
 								</form>
 							</div>
