@@ -123,12 +123,48 @@ class TransactionRepository extends ServiceEntityRepository
         int $page = 1,
         int $limit = 10
     ): array {
+        $countQb = $this->createQueryBuilder('t')
+            ->select('COUNT(t.id)');
+
         $qb = $this->createQueryBuilder('t')
             ->leftJoin('t.activity', 'a')
             ->addSelect('a')
             ->leftJoin('t.createdBy', 'u')
             ->addSelect('u');
 
+        if ($activityId) {
+            $countQb->leftJoin('t.activity', 'a');
+        }
+
+        $this->applyReportFilters($qb, $startDate, $endDate, $activityId, $category, $type);
+        $this->applyReportFilters($countQb, $startDate, $endDate, $activityId, $category, $type);
+
+        $total = (int) $countQb->getQuery()->getSingleScalarResult();
+
+        $qb->orderBy('t.transactionDate', 'DESC')
+           ->addOrderBy('t.id', 'DESC')
+           ->setMaxResults($limit)
+           ->setFirstResult(($page - 1) * $limit);
+
+        $transactions = $qb->getQuery()->getResult();
+
+        return [
+            'transactions' => $transactions,
+            'total' => $total,
+            'page' => $page,
+            'limit' => $limit,
+            'pages' => $total > 0 ? (int) ceil($total / $limit) : 0,
+        ];
+    }
+
+    private function applyReportFilters(
+        \Doctrine\ORM\QueryBuilder $qb,
+        ?\DateTimeInterface $startDate,
+        ?\DateTimeInterface $endDate,
+        ?int $activityId,
+        ?string $category,
+        ?string $type
+    ): void {
         if ($startDate) {
             $qb->andWhere('t.transactionDate >= :startDate')
                ->setParameter('startDate', $startDate);
@@ -149,25 +185,6 @@ class TransactionRepository extends ServiceEntityRepository
             $qb->andWhere('t.type = :type')
                ->setParameter('type', $type);
         }
-
-        $qb->orderBy('t.transactionDate', 'DESC')
-           ->addOrderBy('t.id', 'DESC');
-
-        $totalQuery = clone $qb;
-        $total = (int) $totalQuery->select('COUNT(t.id)')->getQuery()->getSingleScalarResult();
-
-        $qb->setMaxResults($limit)
-           ->setFirstResult(($page - 1) * $limit);
-
-        $transactions = $qb->getQuery()->getResult();
-
-        return [
-            'transactions' => $transactions,
-            'total' => $total,
-            'page' => $page,
-            'limit' => $limit,
-            'pages' => (int) ceil($total / $limit),
-        ];
     }
 
     public function getTransactionCategories(): array
@@ -178,6 +195,14 @@ class TransactionRepository extends ServiceEntityRepository
             ->orderBy('t.category', 'ASC')
             ->getQuery()
             ->getScalarResult();
+
+        if (empty($result)) {
+            return [];
+        }
+
+        if (is_string($result[0] ?? null)) {
+            return $result;
+        }
 
         return array_column($result, 'category');
     }
