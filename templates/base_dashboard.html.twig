@@ -127,8 +127,8 @@
 	<aside class="hidden lg:flex fixed left-0 top-0 h-full w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant z-50 shadow-2xl lg:shadow-none">
 		<div class="px-lg mb-xl flex items-start justify-between">
 			<div>
-				<h2 class="font-headline-md text-headline-md text-primary">Comunidad Grace</h2>
-				<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del Tesorero</p>
+				<h2 class="font-headline-md text-headline-md text-primary">Comunidad</h2>
+				<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del {{ app.user ? app.user.displayRole : 'Tesorero' }}</p>
 			</div>
 			<button type="button" id="mobileSidebarClose" class="lg:hidden p-xs text-on-surface-variant hover:text-error hover:bg-surface-variant rounded-full transition-colors cursor-pointer" title="Cerrar Menú">
 				<span class="material-symbols-outlined text-2xl">close</span>

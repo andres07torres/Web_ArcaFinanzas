@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $fullName = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Assert\Choice(choices: ['tesorero', 'administrador', 'colaborador'], message: 'El rol seleccionado no es válido.')]
+    #[Assert\Choice(choices: ['tesorero', 'coordinador', 'subcoordinador', 'sub-coordinador', 'miembro', 'administrador', 'colaborador'], message: 'El rol seleccionado no es válido.')]
     private ?string $registrationRole = null;
 
     public function getId(): ?int
@@ -127,5 +127,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return strtoupper(substr($this->email ?? 'U', 0, 2));
+    }
+
+    public function getDisplayRole(): string
+    {
+        if (!$this->registrationRole) {
+            return 'Tesorero';
+        }
+        $map = [
+            'tesorero' => 'Tesorero',
+            'coordinador' => 'Coordinador',
+            'subcoordinador' => 'Sub-Coordinador',
+            'sub-coordinador' => 'Sub-Coordinador',
+            'miembro' => 'Miembro',
+            'administrador' => 'Administrador',
+            'colaborador' => 'Colaborador',
+        ];
+        return $map[strtolower($this->registrationRole)] ?? ucfirst($this->registrationRole);
     }
 }
