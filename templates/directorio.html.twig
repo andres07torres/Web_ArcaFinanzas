@@ -128,8 +128,8 @@
 										{% endif %}
 										{% if selected_member.joinDate %}
 											<div class="flex items-center gap-xs">
-												<span class="material-symbols-outlined text-[18px]">calendar_today</span>
-												Se unió en {{ months[selected_member.joinDate|date('n') - 1]|capitalize }} de {{ selected_member.joinDate|date('Y') }}
+												<span class="material-symbols-outlined text-[18px]">cake</span>
+												Cumpleaños: {{ selected_member.joinDate|date('d/m/Y') }}
 											</div>
 										{% endif %}
 									</div>
@@ -260,7 +260,7 @@
 							</select>
 						</div>
 						<div>
-							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Fecha de Ingreso</label>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Fecha de Cumpleaños</label>
 							<input type="date" name="member[joinDate]" value="{{ 'now'|date('Y-m-d') }}" class="w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-md"/>
 						</div>
 					</div>

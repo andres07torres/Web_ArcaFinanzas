@@ -70,7 +70,7 @@ class MemberType extends AbstractType
                 'placeholder' => 'Seleccionar rol',
             ])
             ->add('joinDate', DateType::class, [
-                'label' => 'Fecha de Ingreso',
+                'label' => 'Fecha de Cumpleaños',
                 'widget' => 'single_text',
                 'required' => false,
                 'attr' => [

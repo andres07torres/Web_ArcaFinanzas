@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Arca Finanzas{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <title>{% block title %}Arca Finanzas | Sistema de Gestión Contable{% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}Arca Finanzas - Sistema integral de gestión contable, control de caja, directorio de miembros y transparencia financiera.{% endblock %}">
+        <meta name="keywords" content="contabilidad, finanzas, iglesias, transparencia, caja, auditoria, ecuador, membresia">
+        <meta name="author" content="Andrés Torres - Arca Finanzas">
+        <meta name="robots" content="index, follow">
+        <meta property="og:title" content="{% block og_title %}Arca Finanzas | Gestión Contable y Financiera{% endblock %}">
+        <meta property="og:description" content="{% block og_description %}Sistema integral de control de caja, gestión de eventos y transparencia financiera.{% endblock %}">
+        <meta property="og:type" content="website">
+        <meta name="theme-color" content="#00236f">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🏛️</text></svg>">
         {% block stylesheets %}
             {{ vite_entry_link_tags('app') }}
         {% endblock %}
