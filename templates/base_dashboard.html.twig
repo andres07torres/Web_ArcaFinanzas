@@ -581,11 +581,14 @@
 				if (txModal) txModal.classList.add('hidden');
 			}
 
-			document.querySelectorAll('a[href*="/caja/nueva"], a[href*="/nueva"]').forEach(link => {
-				link.addEventListener('click', function(e) {
-					e.preventDefault();
-					openTxModal();
-				});
+			document.querySelectorAll('a[href*="/caja/nueva"], a[href$="/nueva"]').forEach(link => {
+				const href = link.getAttribute('href') || '';
+				if (!href.includes('/actividades/') && !href.includes('/directorio/')) {
+					link.addEventListener('click', function(e) {
+						e.preventDefault();
+						openTxModal();
+					});
+				}
 			});
 
 			if (closeBtn) closeBtn.addEventListener('click', closeTxModal);
