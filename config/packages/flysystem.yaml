@@ -1,0 +1,8 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        supabase.storage:
+            adapter: 'aws'
+            options:
+                client: 'supabase_s3_client'
+                bucket: '%env(SUPABASE_BUCKET)%'

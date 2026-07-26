@@ -26,7 +26,7 @@ class ReportController extends AbstractController
             $actividadId = $request->query->getInt('actividad');
             $categoria = $request->query->get('categoria');
             $tipo = $request->query->get('tipo');
-            $page = max(1, $request->getInt('page', 1));
+            $page = max(1, $request->query->getInt('page', 1));
 
             $dates = $this->parseDates($periodo, $fechaInicio, $fechaFin);
             $startDate = $dates['start'];

@@ -21,3 +21,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    supabase_s3_client:
+        class: Aws\S3\S3Client
+        arguments:
+            -
+                version: 'latest'
+                region: '%env(SUPABASE_REGION)%'
+                endpoint: '%env(SUPABASE_ENDPOINT)%'
+                use_path_style_endpoint: true
+                credentials:
+                    key: '%env(SUPABASE_KEY)%'
+                    secret: '%env(SUPABASE_SECRET)%'

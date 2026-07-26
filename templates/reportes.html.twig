@@ -213,7 +213,7 @@
 									<td class="px-lg py-sm font-body-sm text-on-surface-variant">{{ tx.createdBy ? tx.createdBy.fullName : '---' }}</td>
 									<td class="px-lg py-sm text-center">
 										{% if tx.receiptFilename %}
-											<button type="button" onclick="openReceiptPreview('/uploads/receipts/{{ tx.receiptFilename }}', '{{ tx.description|escape('js') }}', '{{ tx.receiptFilename }}')" class="inline-flex items-center gap-xs px-md py-xs bg-secondary-container/40 text-on-secondary-container border border-secondary/30 rounded-lg text-xs font-bold hover:bg-secondary-container transition-all">
+											<button type="button" onclick="openReceiptPreview('{{ path('app_caja_ver_comprobante', {filename: tx.receiptFilename}) }}', '{{ tx.description|escape('js') }}', '{{ tx.receiptFilename }}')" class="inline-flex items-center gap-xs px-md py-xs bg-secondary-container/40 text-on-secondary-container border border-secondary/30 rounded-lg text-xs font-bold hover:bg-secondary-container transition-all">
 												<span class="material-symbols-outlined text-base">receipt_long</span>
 												Ver Comprobante
 											</button>

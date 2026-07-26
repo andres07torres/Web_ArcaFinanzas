@@ -6,9 +6,11 @@ use App\Entity\Transaction;
 use App\Form\TransactionType;
 use App\Repository\ActivityRepository;
 use App\Repository\TransactionRepository;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/caja')]
@@ -36,7 +38,7 @@ class CashController extends AbstractController
     }
 
     #[Route('/nueva', name: 'app_caja_nueva')]
-    public function create(Request $request, TransactionRepository $transactionRepo, ActivityRepository $activityRepo): Response
+    public function create(Request $request, TransactionRepository $transactionRepo, ActivityRepository $activityRepo, FilesystemOperator $supabaseStorage): Response
     {
         $transaction = new Transaction();
         $transaction->setTransactionDate(new \DateTime());
@@ -57,11 +59,11 @@ class CashController extends AbstractController
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile|null $receiptFile */
             $receiptFile = $form->get('receipt')->getData();
             if ($receiptFile) {
-                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/receipts';
                 $newFilename = uniqid('receipt_', true) . '.' . $receiptFile->guessExtension();
 
                 try {
-                    $receiptFile->move($uploadsDir, $newFilename);
+                    $contenido = file_get_contents($receiptFile->getPathname());
+                    $supabaseStorage->write($newFilename, $contenido);
                     $transaction->setReceiptFilename($newFilename);
                 } catch (\Exception $e) {
                     $this->addFlash('error', 'Error al guardar el archivo del comprobante.');
@@ -94,7 +96,7 @@ class CashController extends AbstractController
     }
 
     #[Route('/transaccion/{id}/subir-comprobante', name: 'app_caja_subir_comprobante', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function uploadReceipt(Transaction $transaction, Request $request, TransactionRepository $transactionRepo): Response
+    public function uploadReceipt(Transaction $transaction, Request $request, TransactionRepository $transactionRepo, FilesystemOperator $supabaseStorage): Response
     {
         $csrf = (string) $request->request->get('_csrf_token');
         if (!$this->isCsrfTokenValid('upload_receipt_' . $transaction->getId(), $csrf)) {
@@ -105,11 +107,11 @@ class CashController extends AbstractController
         /** @var \Symfony\Component\HttpFoundation\File\UploadedFile|null $receiptFile */
         $receiptFile = $request->files->get('receipt_file');
         if ($receiptFile) {
-            $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/receipts';
             $newFilename = uniqid('receipt_', true) . '.' . $receiptFile->guessExtension();
 
             try {
-                $receiptFile->move($uploadsDir, $newFilename);
+                $contenido = file_get_contents($receiptFile->getPathname());
+                $supabaseStorage->write($newFilename, $contenido);
                 $transaction->setReceiptFilename($newFilename);
                 $transactionRepo->save($transaction, true);
                 $this->addFlash('success', 'Comprobante adjuntado correctamente.');
@@ -122,6 +124,25 @@ class CashController extends AbstractController
 
         $redirect = $request->headers->get('referer') ?? $this->generateUrl('app_reportes');
         return $this->redirect($redirect);
+    }
+
+    #[Route('/comprobante/{filename}', name: 'app_caja_ver_comprobante', methods: ['GET'])]
+    public function viewReceipt(string $filename, FilesystemOperator $supabaseStorage): Response
+    {
+        if (!$supabaseStorage->fileExists($filename)) {
+            throw $this->createNotFoundException('El comprobante no existe.');
+        }
+
+        $stream = $supabaseStorage->readStream($filename);
+        $mimeType = $supabaseStorage->mimeType($filename);
+
+        $response = new StreamedResponse(function () use ($stream) {
+            fpassthru($stream);
+            fclose($stream);
+        });
+
+        $response->headers->set('Content-Type', $mimeType);
+        return $response;
     }
 
     #[Route('/{id}/eliminar', name: 'app_caja_eliminar', requirements: ['id' => '\d+'], methods: ['POST'])]

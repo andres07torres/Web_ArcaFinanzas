@@ -115,17 +115,17 @@
 	 <script src="{{ asset('js/registro.js') }}"></script>
 {% endblock %}
 
-{% block body_class %}min-h-screen w-full bg-surface p-0 m-0 overflow-x-hidden{% endblock %}
+{% block body_class %}min-h-screen lg:h-screen w-full bg-surface p-0 m-0 overflow-x-hidden lg:overflow-hidden{% endblock %}
 
 {% block body %}
-	<div class="min-h-screen w-full flex flex-col lg:flex-row">
+	<div class="min-h-screen lg:h-screen w-full flex flex-col lg:flex-row">
 		<!-- Columna Izquierda: Imagen Arca_home (Solo visible en Escritorio/Web, Oculta en Móvil) -->
-		<div class="hidden lg:block relative lg:w-1/2 min-h-screen overflow-hidden bg-surface-container-high">
-			<img src="{{ asset('images/Arca_home.png') }}" alt="Arca Finanzas" class="absolute inset-0 w-full h-full object-cover object-center"/>
+		<div class="hidden lg:block relative lg:w-1/2 overflow-hidden bg-surface-container-high">
+			<img src="{{ asset('images/logo.png') }}" alt="Arca Finanzas" class="absolute inset-0 object-cover object-center w-full h-full" style="min-height: 100%;"/>
 		</div>
 
 		<!-- Columna Derecha: Tarjeta Registro Centrada (50% pantalla en web) -->
-		<div class="w-full lg:w-1/2 min-h-screen flex flex-col justify-start lg:justify-center items-center px-4 sm:px-6 lg:px-12 py-2 sm:py-4 lg:py-12 bg-surface">
+		<div class="w-full lg:w-1/2 min-h-screen lg:h-screen flex flex-col justify-start lg:justify-center items-center px-4 sm:px-6 lg:px-12 py-2 sm:py-4 lg:py-12 bg-surface lg:overflow-y-auto">
 			<!-- Logo Móvil (visible solo en móvil) -->
 			<div class="flex lg:hidden">
 				<img src="{{ asset('images/logo_movil.png') }}" alt="Arca Finanzas" class="h-56 w-auto object-contain"/>

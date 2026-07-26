@@ -130,7 +130,7 @@
 								<td class="p-md">{{ tx.createdBy ? tx.createdBy.fullName : '---' }}</td>
 								<td class="p-md text-center">
 									{% if tx.receiptFilename %}
-										<button onclick="previewReceipt('{{ asset('uploads/receipts/' ~ tx.receiptFilename) }}', '{{ tx.receiptFilename }}')" class="inline-flex items-center gap-xs px-sm py-xs bg-secondary-container/30 text-secondary border border-secondary/20 rounded-md text-xs font-bold hover:bg-secondary hover:text-white transition-all cursor-pointer">
+										<button onclick="previewReceipt('{{ path('app_caja_ver_comprobante', {filename: tx.receiptFilename}) }}', '{{ tx.receiptFilename }}')" class="inline-flex items-center gap-xs px-sm py-xs bg-secondary-container/30 text-secondary border border-secondary/20 rounded-md text-xs font-bold hover:bg-secondary hover:text-white transition-all cursor-pointer">
 											<span class="material-symbols-outlined text-sm">visibility</span> Ver
 										</button>
 									{% else %}
