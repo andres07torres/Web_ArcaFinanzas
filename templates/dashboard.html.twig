@@ -23,11 +23,11 @@
 		<div class="mb-xl flex justify-between items-end">
 			<div>
 				<h2 class="font-headline-lg text-headline-lg text-primary">Vista General del Tablero</h2>
-				<p class="font-body-md text-body-md text-on-surface-variant">Bienvenido de nuevo. Aqu\u00ed est\u00e1 el estado financiero m\u00e1s reciente para Grace Community.</p>
+				<p class="font-body-md text-body-md text-on-surface-variant">Bienvenido de nuevo. Aquí está el estado financiero más reciente para Grace Community.</p>
 			</div>
 			<button class="flex items-center gap-sm bg-primary text-on-primary px-lg py-md rounded-lg font-label-bold text-label-bold active:scale-95 transition-transform">
 				<span class="material-symbols-outlined text-[18px]">add_circle</span>
-				Entrada R\u00e1pida
+				Entrada Rápida
 			</button>
 		</div>
 
@@ -61,7 +61,7 @@
 					<div class="bg-white/20 p-sm rounded-lg text-white">
 						<span class="material-symbols-outlined">account_balance</span>
 					</div>
-					<span class="font-label-bold text-label-bold text-secondary-fixed">{{ balance >= 0 ? 'Saludable' : 'Atenci\u00f3n' }}</span>
+					<span class="font-label-bold text-label-bold text-secondary-fixed">{{ balance >= 0 ? 'Saludable' : 'Atención' }}</span>
 				</div>
 				<div class="mt-md">
 					<p class="font-label-bold text-label-bold text-on-primary-container uppercase opacity-90">Saldo Neto</p>
@@ -81,8 +81,8 @@
 						<thead class="bg-surface-container-low">
 							<tr>
 								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Fecha</th>
-								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Descripci\u00f3n</th>
-								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Categor\u00eda</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Descripción</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Categoría</th>
 								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant text-right">Monto</th>
 							</tr>
 						</thead>
@@ -93,7 +93,7 @@
 										<td class="px-lg py-md font-data-mono text-data-mono">{{ transaction.transactionDate|date('d M, Y') }}</td>
 										<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">{{ transaction.description }}</td>
 										<td class="px-lg py-md">
-											<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">{{ transaction.category ?? 'Sin categor\u00eda' }}</span>
+											<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">{{ transaction.category ?? 'Sin categoría' }}</span>
 										</td>
 										<td class="px-lg py-md font-data-mono text-data-mono text-right {{ transaction.type == 'income' ? 'text-secondary' : 'text-error' }}">
 											{{ transaction.type == 'income' ? '+' : '-' }}${{ transaction.amount|number_format(2, '.', ',') }}
@@ -103,7 +103,7 @@
 							{% else %}
 								<tr>
 									<td colspan="4" class="px-lg py-xl text-center text-on-surface-variant">
-										No hay transacciones registradas a\u00fan.
+										No hay transacciones registradas aún.
 									</td>
 								</tr>
 							{% endif %}
@@ -148,8 +148,8 @@
 						<span class="material-symbols-outlined text-[120px] text-primary">contact_support</span>
 					</div>
 					<div class="flex-1 z-10">
-						<h5 class="font-headline-sm text-headline-sm text-primary">\u00bfNecesita Ayuda?</h5>
-						<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Consulte nuestra documentaci\u00f3n o contacte al tesorero regional para dudas contables.</p>
+						<h5 class="font-headline-sm text-headline-sm text-primary">¿Necesita Ayuda?</h5>
+						<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Consulte nuestra documentación o contacte al tesorero regional para dudas contables.</p>
 						<button class="mt-md text-primary font-label-bold text-label-bold border-b-2 border-primary/20 hover:border-primary transition-all">Portal de Soporte</button>
 					</div>
 				</div>

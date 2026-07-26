@@ -93,4 +93,92 @@ class TransactionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getTotalByTypeAndDateRange(string $type, ?\DateTimeInterface $startDate = null, ?\DateTimeInterface $endDate = null): float
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as total')
+            ->where('t.type = :type')
+            ->setParameter('type', $type);
+
+        if ($startDate) {
+            $qb->andWhere('t.transactionDate >= :startDate')
+               ->setParameter('startDate', $startDate);
+        }
+        if ($endDate) {
+            $qb->andWhere('t.transactionDate <= :endDate')
+               ->setParameter('endDate', $endDate);
+        }
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return (float) ($result['total'] ?? 0);
+    }
+
+    public function getReportTransactions(
+        ?\DateTimeInterface $startDate = null,
+        ?\DateTimeInterface $endDate = null,
+        ?int $activityId = null,
+        ?string $category = null,
+        ?string $type = null,
+        int $page = 1,
+        int $limit = 10
+    ): array {
+        $qb = $this->createQueryBuilder('t')
+            ->leftJoin('t.activity', 'a')
+            ->addSelect('a')
+            ->leftJoin('t.createdBy', 'u')
+            ->addSelect('u');
+
+        if ($startDate) {
+            $qb->andWhere('t.transactionDate >= :startDate')
+               ->setParameter('startDate', $startDate);
+        }
+        if ($endDate) {
+            $qb->andWhere('t.transactionDate <= :endDate')
+               ->setParameter('endDate', $endDate);
+        }
+        if ($activityId) {
+            $qb->andWhere('a.id = :activityId')
+               ->setParameter('activityId', $activityId);
+        }
+        if ($category) {
+            $qb->andWhere('t.category = :category')
+               ->setParameter('category', $category);
+        }
+        if ($type) {
+            $qb->andWhere('t.type = :type')
+               ->setParameter('type', $type);
+        }
+
+        $qb->orderBy('t.transactionDate', 'DESC')
+           ->addOrderBy('t.id', 'DESC');
+
+        $totalQuery = clone $qb;
+        $total = (int) $totalQuery->select('COUNT(t.id)')->getQuery()->getSingleScalarResult();
+
+        $qb->setMaxResults($limit)
+           ->setFirstResult(($page - 1) * $limit);
+
+        $transactions = $qb->getQuery()->getResult();
+
+        return [
+            'transactions' => $transactions,
+            'total' => $total,
+            'page' => $page,
+            'limit' => $limit,
+            'pages' => (int) ceil($total / $limit),
+        ];
+    }
+
+    public function getTransactionCategories(): array
+    {
+        $result = $this->createQueryBuilder('t')
+            ->select('DISTINCT t.category')
+            ->where('t.category IS NOT NULL')
+            ->orderBy('t.category', 'ASC')
+            ->getQuery()
+            ->getScalarResult();
+
+        return array_column($result, 'category');
+    }
 }
