@@ -43,8 +43,9 @@
 					</div>
 					<span class="material-symbols-outlined text-primary text-3xl">person_add</span>
 				</div>
-				<a href="{{ path('app_directorio_nuevo') }}" class="block text-center bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
-				 Registrar Nuevo Miembro
+				<a href="{{ path('app_directorio_nuevo') }}" class="inline-flex items-center gap-sm bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
+					<span class="material-symbols-outlined text-[18px]">person_add</span>
+					Registrar Nuevo Miembro
 				</a>
 			</section>
 
@@ -129,7 +130,7 @@
 										{% if selected_member.joinDate %}
 											<div class="flex items-center gap-xs">
 												<span class="material-symbols-outlined text-[18px]">calendar_today</span>
-												Se unió en {{ selected_member.joinDate|date('M Y') }}
+												Se unió en {{ months[selected_member.joinDate|date('n') - 1]|capitalize }} de {{ selected_member.joinDate|date('Y') }}
 											</div>
 										{% endif %}
 									</div>

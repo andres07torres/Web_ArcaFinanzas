@@ -81,7 +81,7 @@
 									<div>
 										<span class="bg-secondary-container text-on-secondary-container text-[10px] px-sm py-[2px] rounded-full font-label-bold uppercase tracking-wider">Activa</span>
 										<h4 class="font-headline-sm text-headline-sm text-on-background mt-xs">{{ activity.name }}</h4>
-										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('M d') }} - {{ activity.endDate|date('M d, Y') }}</p>
+										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
 									</div>
 								</div>
 							</div>
@@ -126,7 +126,7 @@
 									<div>
 										<span class="bg-surface-variant text-on-surface-variant text-[10px] px-sm py-[2px] rounded-full font-label-bold uppercase tracking-wider">Finalizada</span>
 										<h4 class="font-headline-sm text-headline-sm text-on-background mt-xs">{{ activity.name }}</h4>
-										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('M d') }} - {{ activity.endDate|date('M d, Y') }}</p>
+										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
 									</div>
 								</div>
 							</div>
@@ -166,7 +166,7 @@
 									<div>
 										<span class="bg-error-container text-on-error-container text-[10px] px-sm py-[2px] rounded-full font-label-bold uppercase tracking-wider">Cancelada</span>
 										<h4 class="font-headline-sm text-headline-sm text-on-background mt-xs">{{ activity.name }}</h4>
-										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('M d') }} - {{ activity.endDate|date('M d, Y') }}</p>
+										<p class="text-on-surface-variant font-body-sm">{{ activity.startDate|date('d/m/Y') }} - {{ activity.endDate|date('d/m/Y') }}</p>
 									</div>
 								</div>
 							</div>

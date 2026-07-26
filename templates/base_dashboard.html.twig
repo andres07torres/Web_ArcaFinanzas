@@ -177,21 +177,42 @@
 				<a href="{{ path('app_caja_nueva') }}" class="hidden md:flex items-center bg-primary text-on-primary px-lg py-sm rounded-full font-label-bold text-label-bold cursor-pointer active:scale-95 hover:bg-primary-container transition-all">
 					Entrada Rápida
 				</a>
-				<a href="{{ path('app_reportes') }}" title="Notificaciones" class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative">
-					<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-					<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
-				</a>
-				<a href="{{ path('app_dashboard') }}" title="Configuración" class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
+				<div class="relative" id="notificationsDropdownWrapper">
+					<button id="notificationsToggleBtn" type="button" title="Notificaciones en tiempo real" class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative cursor-pointer focus:outline-none">
+						<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+						<span id="notifBadge" class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full ring-2 ring-surface"></span>
+					</button>
+					<div id="notificationsMenu" class="hidden absolute right-0 mt-2 w-80 md:w-96 bg-white border border-outline-variant rounded-xl shadow-xl z-50 overflow-hidden">
+						<div class="p-md bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+							<div class="flex items-center gap-xs">
+								<span class="material-symbols-outlined text-primary text-sm">notifications_active</span>
+								<span class="font-headline-sm text-sm font-bold text-primary">Notificaciones en Tiempo Real</span>
+							</div>
+							<span id="notifCountTag" class="px-2 py-0.5 bg-primary-container text-on-primary-container rounded-full text-[10px] font-bold">Cargando...</span>
+						</div>
+						<div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-outline-variant">
+							<div class="p-lg text-center text-body-sm text-on-surface-variant">
+								Cargando actividad reciente...
+							</div>
+						</div>
+						<div class="p-sm bg-surface-container-low border-t border-outline-variant text-center">
+							<a href="{{ path('app_reportes') }}" class="text-xs font-bold text-primary hover:underline flex items-center justify-center gap-xs">
+								Ver Registro de Auditoría Completo <span class="material-symbols-outlined text-xs">arrow_forward</span>
+							</a>
+						</div>
+					</div>
+				</div>
+				<a href="{{ path('app_configuracion') }}" title="Configuración de usuario" class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
 					<span class="material-symbols-outlined text-on-surface-variant">settings</span>
 				</a>
-				<div class="flex items-center gap-sm">
-					<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs border border-outline-variant shadow-sm" title="{{ app.user ? app.user.fullName : 'Usuario' }}">
+				<a href="{{ path('app_configuracion') }}" class="flex items-center gap-sm group">
+					<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs border border-outline-variant shadow-sm group-hover:ring-2 group-hover:ring-primary transition-all" title="{{ app.user ? app.user.fullName : 'Usuario' }}">
 						{{ app.user ? app.user.getInitials() : 'U' }}
 					</div>
 					{% if app.user and app.user.fullName %}
-						<span class="hidden xl:inline-block font-label-bold text-label-bold text-on-surface-variant">{{ app.user.fullName }}</span>
+						<span class="hidden xl:inline-block font-label-bold text-label-bold text-on-surface-variant group-hover:text-primary transition-colors">{{ app.user.fullName }}</span>
 					{% endif %}
-				</div>
+				</a>
 			</div>
 		</header>
 
@@ -225,4 +246,74 @@
 			<span class="text-[10px] font-label-bold">Gente</span>
 		</a>
 	</nav>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const toggleBtn = document.getElementById('notificationsToggleBtn');
+			const menu = document.getElementById('notificationsMenu');
+			const notifList = document.getElementById('notifList');
+			const notifCountTag = document.getElementById('notifCountTag');
+			const notifBadge = document.getElementById('notifBadge');
+
+			if (!toggleBtn || !menu) return;
+
+			function fetchNotifications() {
+				fetch('{{ path("app_notificaciones_api") }}')
+					.then(r => r.json())
+					.then(data => {
+						if (!data || !data.items) return;
+						if (notifCountTag) notifCountTag.textContent = data.count + ' recientes';
+						if (notifBadge) {
+							if (data.count > 0) {
+								notifBadge.classList.remove('hidden');
+							} else {
+								notifBadge.classList.add('hidden');
+							}
+						}
+
+						if (data.items.length === 0) {
+							notifList.innerHTML = '<div class="p-lg text-center text-body-sm text-on-surface-variant">No hay actividad reciente.</div>';
+							return;
+						}
+
+						notifList.innerHTML = data.items.map(item => `
+							<a href="${item.url}" class="p-md flex items-start gap-md hover:bg-surface-container-low transition-colors group block">
+								<div class="p-xs rounded-lg bg-surface-container ${item.color}">
+									<span class="material-symbols-outlined text-[20px]">${item.icon}</span>
+								</div>
+								<div class="flex-1 min-w-0">
+									<div class="flex justify-between items-center mb-xs">
+										<span class="font-label-bold text-xs text-on-background font-bold truncate">${item.title}</span>
+										<span class="text-[10px] text-on-surface-variant whitespace-nowrap ml-xs">${item.date}</span>
+									</div>
+									<p class="text-xs text-on-surface-variant truncate">${item.message}</p>
+								</div>
+							</a>
+						`).join('');
+					})
+					.catch(err => {
+						console.error('Error al cargar notificaciones:', err);
+					});
+			}
+
+			toggleBtn.addEventListener('click', function(e) {
+				e.stopPropagation();
+				const isHidden = menu.classList.contains('hidden');
+				if (isHidden) {
+					menu.classList.remove('hidden');
+					fetchNotifications();
+				} else {
+					menu.classList.add('hidden');
+				}
+			});
+
+			document.addEventListener('click', function(e) {
+				if (menu && !menu.contains(e.target) && !toggleBtn.contains(e.target)) {
+					menu.classList.add('hidden');
+				}
+			});
+
+			fetchNotifications();
+		});
+	</script>
 {% endblock %}

@@ -1,0 +1,125 @@
+{% extends 'base_dashboard.html.twig' %}
+
+{% set active_menu = 'configuracion' %}
+
+{% block title %}FaithFinance - Configuración de Usuario{% endblock %}
+
+{% block dashboard_content %}
+	<div class="p-lg max-w-container-max mx-auto w-full space-y-gutter">
+		<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+			<div>
+				<nav class="flex items-center gap-xs text-on-surface-variant font-label-bold text-label-bold mb-xs">
+					<span>Ajustes</span>
+					<span class="material-symbols-outlined text-xs">chevron_right</span>
+					<span class="text-primary">Configuración</span>
+				</nav>
+				<h1 class="font-headline-lg text-headline-lg text-on-background">Configuración del Perfil</h1>
+				<p class="text-on-surface-variant font-body-md mt-xs">Gestione la información personal, correo electrónico, rol de cuenta y seguridad de acceso.</p>
+			</div>
+			<a href="{{ path('app_dashboard') }}" class="flex items-center gap-sm text-on-surface-variant hover:text-primary font-label-bold text-label-bold transition-colors">
+				<span class="material-symbols-outlined text-base">arrow_back</span>
+				Volver al Tablero
+			</a>
+		</div>
+
+		{% for message in app.flashes('success') %}
+			<div class="p-lg rounded-xl bg-secondary-container/30 text-on-secondary-container border border-secondary/20 flex items-center gap-md shadow-sm">
+				<span class="material-symbols-outlined text-secondary">check_circle</span>
+				<span class="font-body-md">{{ message }}</span>
+			</div>
+		{% endfor %}
+
+		{% for message in app.flashes('error') %}
+			<div class="p-lg rounded-xl bg-error-container/30 text-on-error-container border border-error/20 flex items-center gap-md shadow-sm">
+				<span class="material-symbols-outlined text-error">error</span>
+				<span class="font-body-md">{{ message }}</span>
+			</div>
+		{% endfor %}
+
+		<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+			<div class="lg:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-xl shadow-sm flex flex-col items-center text-center">
+				<div class="w-24 h-24 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-3xl shadow-md mb-md">
+					{{ user ? user.getInitials() : 'U' }}
+				</div>
+				<h3 class="font-headline-sm text-headline-sm text-on-background">{{ user.fullName ?? 'Usuario' }}</h3>
+				<p class="font-body-sm text-on-surface-variant mt-xs">{{ user.email }}</p>
+				<div class="mt-md px-md py-xs bg-secondary-container/40 text-on-secondary-container rounded-full text-xs font-bold uppercase tracking-wider">
+					{{ user.registrationRole ? user.registrationRole : 'Tesorero' }}
+				</div>
+
+				<div class="mt-xl pt-xl border-t border-outline-variant w-full text-left space-y-sm">
+					<div class="flex items-center justify-between text-body-sm">
+						<span class="text-on-surface-variant">Estado de cuenta</span>
+						<span class="font-bold text-secondary flex items-center gap-xs">
+							<span class="w-2 h-2 rounded-full bg-secondary"></span> Activo
+						</span>
+					</div>
+					<div class="flex items-center justify-between text-body-sm pt-xs">
+						<span class="text-on-surface-variant">Rol de sistema</span>
+						<span class="font-bold text-on-background uppercase">{{ user.roles[0] ?? 'ROLE_USER' }}</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-xl shadow-sm">
+				<form method="post" action="{{ path('app_configuracion') }}" class="space-y-xl">
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('settings_profile') }}">
+
+					<div>
+						<h3 class="font-headline-sm text-headline-sm text-primary mb-md border-b border-outline-variant pb-xs flex items-center gap-sm">
+							<span class="material-symbols-outlined text-primary">person</span>
+							Información Personal
+						</h3>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+							<div class="flex flex-col gap-xs">
+								<label for="fullName" class="font-label-bold text-label-bold text-on-surface-variant">Nombre Completo</label>
+								<input type="text" id="fullName" name="fullName" value="{{ user.fullName }}" class="w-full px-md py-sm bg-surface-container-low border border-outline-variant rounded-xl font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder="Nombre completo"/>
+							</div>
+							<div class="flex flex-col gap-xs">
+								<label for="email" class="font-label-bold text-label-bold text-on-surface-variant">Correo Electrónico</label>
+								<input type="email" id="email" name="email" value="{{ user.email }}" required class="w-full px-md py-sm bg-surface-container-low border border-outline-variant rounded-xl font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder="ejemplo@grace.org"/>
+							</div>
+							<div class="flex flex-col gap-xs md:col-span-2">
+								<label for="role" class="font-label-bold text-label-bold text-on-surface-variant">Rol de Registro / Cargo</label>
+								<select id="role" name="role" class="w-full px-md py-sm bg-surface-container-low border border-outline-variant rounded-xl font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none">
+									<option value="tesorero" {{ user.registrationRole == 'tesorero' ? 'selected' : '' }}>Tesorero Principal</option>
+									<option value="administrador" {{ user.registrationRole == 'administrador' ? 'selected' : '' }}>Administrador General</option>
+									<option value="colaborador" {{ user.registrationRole == 'colaborador' ? 'selected' : '' }}>Colaborador Contable</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<h3 class="font-headline-sm text-headline-sm text-primary mb-md border-b border-outline-variant pb-xs flex items-center gap-sm">
+							<span class="material-symbols-outlined text-primary">lock</span>
+							Seguridad y Contraseña
+						</h3>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+							<div class="flex flex-col gap-xs">
+								<label for="currentPassword" class="font-label-bold text-label-bold text-on-surface-variant">Contraseña Actual</label>
+								<input type="password" id="currentPassword" name="currentPassword" class="w-full px-md py-sm bg-surface-container-low border border-outline-variant rounded-xl font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder="••••••••"/>
+								<span class="text-[11px] text-on-surface-variant opacity-70">Requerido solo si deseas cambiar tu contraseña.</span>
+							</div>
+							<div class="flex flex-col gap-xs">
+								<label for="newPassword" class="font-label-bold text-label-bold text-on-surface-variant">Nueva Contraseña</label>
+								<input type="password" id="newPassword" name="newPassword" class="w-full px-md py-sm bg-surface-container-low border border-outline-variant rounded-xl font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder="••••••••"/>
+								<span class="text-[11px] text-on-surface-variant opacity-70">Mínimo 8 caracteres.</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="flex justify-end gap-md pt-lg border-t border-outline-variant">
+						<a href="{{ path('app_dashboard') }}" class="px-xl py-md rounded-xl border border-outline text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-variant transition-all">
+							Cancelar
+						</a>
+						<button type="submit" class="px-xl py-md rounded-xl bg-primary text-on-primary font-label-bold text-label-bold shadow-md hover:bg-primary-container active:scale-95 transition-all flex items-center gap-sm">
+							<span class="material-symbols-outlined text-base">save</span>
+							Guardar Cambios
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -95,7 +95,7 @@
 							{% if recent_transactions|length > 0 %}
 								{% for transaction in recent_transactions %}
 									<tr class="hover:bg-surface-container-low transition-colors group">
-										<td class="px-lg py-md font-data-mono text-data-mono">{{ transaction.transactionDate|date('d M, Y') }}</td>
+										<td class="px-lg py-md font-data-mono text-data-mono">{{ transaction.transactionDate|date('d/m/Y') }}</td>
 										<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">{{ transaction.description }}</td>
 										<td class="px-lg py-md">
 											<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">{{ transaction.category ?? 'Sin categoría' }}</span>

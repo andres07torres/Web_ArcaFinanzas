@@ -142,7 +142,7 @@
 													<span class="font-label-bold text-label-bold text-error">GASTO</span>
 												{% endif %}
 											</div>
-											<span class="font-data-mono text-body-sm text-on-surface-variant">{{ transaction.transactionDate|date('d M, Y') }}</span>
+											<span class="font-data-mono text-body-sm text-on-surface-variant">{{ transaction.transactionDate|date('d/m/Y') }}</span>
 										</div>
 										<p class="font-headline-sm text-headline-sm mb-base {% if transaction.type == 'income' %}text-secondary{% else %}text-error{% endif %}">
 											{% if transaction.type == 'income' %}${{ transaction.amount|number_format(2, '.', ',') }}{% else %}-${{ transaction.amount|number_format(2, '.', ',') }}{% endif %}
