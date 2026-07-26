@@ -28,29 +28,9 @@ class ReportController extends AbstractController
             $tipo = $request->query->get('tipo');
             $page = max(1, $request->getInt('page', 1));
 
-            $now = new \DateTime();
-            $startDate = null;
-            $endDate = null;
-
-            if ($fechaInicio && $fechaFin && \DateTime::createFromFormat('Y-m-d', $fechaInicio) && \DateTime::createFromFormat('Y-m-d', $fechaFin)) {
-                $startDate = \DateTime::createFromFormat('Y-m-d', $fechaInicio);
-                $endDate = \DateTime::createFromFormat('Y-m-d', $fechaFin);
-                $endDate->setTime(23, 59, 59);
-            } else {
-                $endDate = (clone $now)->setTime(23, 59, 59);
-                switch ($periodo) {
-                    case 'dia':
-                        $startDate = (clone $now)->setTime(0, 0, 0);
-                        break;
-                    case 'semana':
-                        $startDate = (clone $now)->modify('monday this week')->setTime(0, 0, 0);
-                        break;
-                    case 'mes':
-                    default:
-                        $startDate = (clone $now)->modify('first day of this month')->setTime(0, 0, 0);
-                        break;
-                }
-            }
+            $dates = $this->parseDates($periodo, $fechaInicio, $fechaFin);
+            $startDate = $dates['start'];
+            $endDate = $dates['end'];
 
             $prevStartDate = null;
             $prevEndDate = null;
