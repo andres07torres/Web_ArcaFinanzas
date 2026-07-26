@@ -34,44 +34,43 @@
 			{% endfor %}
 		{% endfor %}
 
-		<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
-			<section class="md:col-span-8 bg-surface-container-lowest p-xl rounded-xl border border-outline-variant shadow-sm">
-				<div class="flex items-center justify-between mb-xl">
-					<div>
-						<h2 class="font-headline-sm text-headline-sm text-primary">Agregar Miembro</h2>
-						<p class="font-body-sm text-on-surface-variant">Registre un nuevo miembro en el directorio de Comunidad Grace.</p>
-					</div>
-					<span class="material-symbols-outlined text-primary text-3xl">person_add</span>
+		<div class="grid grid-cols-1 md:grid-cols-12 gap-lg mb-lg">
+			<section class="md:col-span-8 bg-surface p-lg rounded-xl border border-outline-variant shadow-sm flex items-center justify-between">
+				<div>
+					<h2 class="font-bold text-body-lg text-primary">Agregar Miembro</h2>
+					<p class="text-xs text-on-surface-variant mt-0.5">Registre un nuevo miembro en el directorio de Comunidad Grace.</p>
 				</div>
-				<a href="{{ path('app_directorio_nuevo') }}" class="inline-flex items-center gap-sm bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
-					<span class="material-symbols-outlined text-[18px]">person_add</span>
-					Registrar Nuevo Miembro
+				<a href="{{ path('app_directorio_nuevo') }}" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary-container transition-colors shadow-sm inline-flex items-center gap-xs">
+					<span class="material-symbols-outlined text-sm">person_add</span>
+					Registrar Miembro
 				</a>
 			</section>
 
-			<section class="md:col-span-4 bg-primary text-on-primary p-xl rounded-xl shadow-lg relative overflow-hidden flex flex-col justify-between">
-				<div class="relative z-10">
-					<h3 class="font-label-bold text-label-bold text-on-primary/70 uppercase">Directorio Total</h3>
-					<div class="text-[48px] font-bold leading-tight">{{ total_members }}</div>
-					<p class="font-body-sm text-on-primary/80 mt-xs">{{ active_members }} Miembros Activos</p>
+			<section class="md:col-span-4 bg-primary text-on-primary p-lg rounded-xl shadow-sm flex flex-col justify-between">
+				<div class="flex justify-between items-start">
+					<div>
+						<h3 class="font-label-bold text-xs uppercase opacity-70">Directorio Total</h3>
+						<div class="font-headline-md text-headline-md font-bold leading-tight text-white mt-xs">{{ total_members }} <span class="text-xs font-normal opacity-80">({{ active_members }} Activos)</span></div>
+					</div>
+					<span class="material-symbols-outlined text-secondary-fixed text-xl">groups</span>
 				</div>
-				<div class="relative z-10 pt-md">
-					<div class="h-1 bg-on-primary/20 rounded-full overflow-hidden">
+				<div class="pt-xs">
+					<div class="h-1 bg-on-primary/20 rounded-full overflow-hidden mb-1">
 						<div class="h-full bg-secondary-fixed" style="width: {{ active_pct }}%"></div>
 					</div>
-					<p class="font-label-bold text-label-bold mt-sm">{{ active_pct }}% Colaboradores Activos</p>
+					<p class="text-[10px] font-bold text-secondary-fixed">{{ active_pct }}% Colaboradores Activos</p>
 				</div>
 			</section>
 		</div>
 
 		{% if members is empty %}
-			<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl text-center py-24">
-				<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">group_off</span>
-				<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">No hay miembros registrados</h3>
-				<p class="font-body-sm text-on-surface-variant mb-xl">Comeienza agregando el primer miembro al directorio de Comunidad Grace.</p>
-				<a href="{{ path('app_directorio_nuevo') }}" class="inline-flex items-center gap-sm bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
-					<span class="material-symbols-outlined text-[20px]">person_add</span>
-				 Registrar Primer Miembro
+			<div class="bg-surface rounded-xl border border-outline-variant shadow-sm p-xl text-center py-12">
+				<span class="material-symbols-outlined text-on-surface-variant text-4xl mb-xs">group_off</span>
+				<h3 class="font-bold text-body-lg text-on-surface mb-xs">No hay miembros registrados</h3>
+				<p class="text-xs text-on-surface-variant mb-md">Comienza agregando el primer miembro al directorio de Comunidad Grace.</p>
+				<a href="{{ path('app_directorio_nuevo') }}" class="inline-flex items-center gap-xs bg-primary text-on-primary h-9 px-lg rounded-lg font-bold text-xs hover:bg-primary-container transition-colors shadow-sm">
+					<span class="material-symbols-outlined text-sm">person_add</span>
+					Registrar Primer Miembro
 				</a>
 			</div>
 		{% else %}
