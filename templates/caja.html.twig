@@ -195,108 +195,103 @@
 		</header>
 
 		<div class="p-lg md:px-xl md:py-lg max-w-container-max mx-auto w-full">
+			{% for message in app.flashes('success') %}
+				<div class="mb-xl p-xl rounded-xl bg-secondary-container text-on-secondary-container border border-secondary-container/30 flex items-center gap-md shadow-sm">
+					<span class="material-symbols-outlined text-secondary">check_circle</span>
+					<span class="font-body-md text-body-md">{{ message }}</span>
+				</div>
+			{% endfor %}
+			{% for message in app.flashes('error') %}
+				<div class="mb-xl p-xl rounded-xl bg-error-container text-on-error-container border border-error-container/30 flex items-center gap-md shadow-sm">
+					<span class="material-symbols-outlined text-error">error</span>
+					<span class="font-body-md text-body-md">{{ message }}</span>
+				</div>
+			{% endfor %}
+			{% for message in app.flashes('warning') %}
+				<div class="mb-xl p-xl rounded-xl bg-surface-variant text-on-surface-variant border border-outline-variant flex items-center gap-md shadow-sm">
+					<span class="material-symbols-outlined">warning</span>
+					<span class="font-body-md text-body-md">{{ message }}</span>
+				</div>
+			{% endfor %}
+
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
+				<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl">
+					<div class="flex items-center gap-md mb-sm">
+						<div class="h-10 w-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+							<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">add</span>
+						</div>
+						<span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Ingresos Totales</span>
+					</div>
+					<p class="font-headline-lg text-headline-lg text-secondary">$ {{ total_income|number_format(2, '.', ',') }}</p>
+				</div>
+				<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl">
+					<div class="flex items-center gap-md mb-sm">
+						<div class="h-10 w-10 rounded-full bg-error-container/30 flex items-center justify-center text-error">
+							<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">remove</span>
+						</div>
+						<span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Gastos Totales</span>
+					</div>
+					<p class="font-headline-lg text-headline-lg text-error">$ {{ total_expenses|number_format(2, '.', ',') }}</p>
+				</div>
+				<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl">
+					<div class="flex items-center gap-md mb-sm">
+						<div class="h-10 w-10 rounded-full bg-primary-container/30 flex items-center justify-center text-primary">
+							<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+						</div>
+						<span class="font-label-bold text-label-bold text-on-surface-variant uppercase">Balance</span>
+					</div>
+					<p class="font-headline-lg text-headline-lg {% if balance >= 0 %}text-secondary{% else %}text-error{% endif %}">$ {{ balance|number_format(2, '.', ',') }}</p>
+				</div>
+			</div>
+
 			<div class="grid grid-cols-12 gap-gutter">
 				<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
 					<div class="flex items-center justify-between">
 						<div>
 							<h1 class="font-headline-lg text-headline-lg text-on-background">Control de Caja</h1>
-							<p class="text-on-surface-variant">Rastree todos los flujos financieros con precisi\u00f3n.</p>
+							<p class="text-on-surface-variant">Rastree todos los flujos financieros con precisi\u00f3n. {{ transaction_count }} transacciones registradas.</p>
 						</div>
-						<button class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:shadow-lg active:scale-95 transition-all flex items-center gap-sm">
-							<span class="material-symbols-outlined text-[18px]">file_download</span>
-							EXPORTAR DATOS
-						</button>
+						<a href="{{ path('app_caja_nueva') }}" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:shadow-lg active:scale-95 transition-all flex items-center gap-sm">
+							<span class="material-symbols-outlined text-[18px]">add</span>
+							NUEVA TRANSACCI\u00d3N
+						</a>
 					</div>
 
-					<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+					<a href="{{ path('app_caja_nueva') }}" class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-all group cursor-pointer">
 						<div class="flex border-b border-outline-variant">
-							<button class="flex-1 py-xl font-label-bold text-label-bold flex justify-center items-center gap-sm transition-all tab-active" id="tab-income" onclick="switchTab('income')">
+							<div class="flex-1 py-xl font-label-bold text-label-bold flex justify-center items-center gap-sm transition-all tab-active">
 								<span class="material-symbols-outlined text-secondary">add_circle</span>
 								REGISTRAR INGRESO
-							</button>
-							<button class="flex-1 py-xl font-label-bold text-label-bold flex justify-center items-center gap-sm transition-all text-on-surface-variant hover:bg-surface-container-low" id="tab-expense" onclick="switchTab('expense')">
+							</div>
+							<div class="flex-1 py-xl font-label-bold text-label-bold flex justify-center items-center gap-sm transition-all text-on-surface-variant hover:bg-surface-container-low">
 								<span class="material-symbols-outlined text-error">remove_circle</span>
 								REGISTRAR GASTO
-							</button>
-						</div>
-						<div class="p-xl space-y-xl">
-							<div class="grid grid-cols-1 md:grid-cols-2 gap-xl">
-								<div class="flex flex-col gap-xs">
-									<label class="font-label-bold text-label-bold text-on-surface-variant">MONTO ($)</label>
-									<div class="relative">
-										<input class="w-full h-12 pl-md pr-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary text-headline-sm font-data-mono" placeholder="0.00" step="0.01" type="number"/>
-									</div>
-								</div>
-								<div class="flex flex-col gap-xs">
-									<label class="font-label-bold text-label-bold text-on-surface-variant">FECHA</label>
-									<input class="w-full h-12 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary" type="date"/>
-								</div>
-								<div class="flex flex-col gap-xs">
-									<label class="font-label-bold text-label-bold text-on-surface-variant">M\u00c9TODO DE PAGO</label>
-									<select class="w-full h-12 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary">
-										<option>Efectivo</option>
-										<option>Transferencia Bancaria</option>
-										<option>Cheque</option>
-										<option>Tarjeta de Cr\u00e9dito</option>
-									</select>
-								</div>
-								<div class="flex flex-col gap-xs">
-									<label class="font-label-bold text-label-bold text-on-surface-variant">ACTIVIDAD VINCULADA</label>
-									<div class="relative group">
-										<select class="w-full h-12 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary appearance-none" id="activity-select">
-											<option value="0">Fondo General</option>
-											<option value="1200">Retiro Juvenil 2024</option>
-											<option value="500">Programa de Despensa</option>
-											<option value="3500">Expansi\u00f3n del Edificio</option>
-											<option value="250">Suministros Escuela Dominical</option>
-										</select>
-										<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
-									</div>
-								</div>
-							</div>
-							<div class="flex flex-col gap-sm" id="contributor-section">
-								<div class="flex justify-between items-center">
-									<label class="font-label-bold text-label-bold text-on-surface-variant uppercase">V\u00ednculo con Colaborador</label>
-									<button class="text-primary text-body-sm font-semibold flex items-center gap-xs hover:underline transition-all">
-										<span class="material-symbols-outlined text-[16px]">person_add</span>
-										Agregar Nuevo
-									</button>
-								</div>
-								<div class="flex flex-wrap gap-sm">
-									<button class="px-md py-sm bg-surface-container-low border border-outline-variant rounded-full text-body-sm hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all">John Doe</button>
-									<button class="px-md py-sm bg-surface-container-low border border-outline-variant rounded-full text-body-sm hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all">Sarah Smith</button>
-									<button class="px-md py-sm bg-surface-container-low border border-outline-variant rounded-full text-body-sm hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all">Robert Johnson</button>
-									<button class="px-md py-sm border border-dashed border-outline rounded-full text-body-sm text-outline flex items-center gap-xs hover:border-primary hover:text-primary px-lg">
-										Ver Todo el Directorio
-									</button>
-								</div>
-							</div>
-							<div class="flex flex-col gap-xs">
-								<label class="font-label-bold text-label-bold text-on-surface-variant">DESCRIPCI\u00d3N / NOTAS</label>
-								<textarea class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Agregue detalles opcionales sobre esta transacci\u00f3n..." rows="3"></textarea>
-							</div>
-							<div class="pt-md">
-								<button class="w-full bg-primary text-on-primary h-14 rounded-xl font-headline-sm hover:shadow-xl active:scale-95 transition-all flex justify-center items-center gap-md">
-									<span class="material-symbols-outlined" id="submit-icon">save</span>
-									<span id="submit-text">Registrar Ingreso</span>
-								</button>
 							</div>
 						</div>
-					</div>
+						<div class="p-xl flex flex-col items-center justify-center py-2xl">
+							<span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-primary transition-colors mb-md">edit_note</span>
+							<p class="font-headline-sm text-headline-sm text-on-surface-variant mb-sm">Registrar nueva transacci\u00f3n</p>
+							<p class="text-body-sm text-on-surface-variant">Haz clic aqu\u00ed para registrar un ingreso o gasto</p>
+						</div>
+					</a>
 
 					<div class="bg-primary-container text-on-primary-container p-xl rounded-xl shadow-sm border border-primary-container/20 relative overflow-hidden">
 						<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-xl">
 							<div class="space-y-xs">
-								<p class="font-label-bold text-label-bold uppercase opacity-80">Salud Financiera de la Actividad</p>
-								<h3 class="font-headline-md text-headline-md" id="selected-activity-name">Fondo General</h3>
+								<p class="font-label-bold text-label-bold uppercase opacity-80">Salud Financiera General</p>
+								<h3 class="font-headline-md text-headline-md">Saldo General</h3>
 							</div>
 							<div class="flex items-center gap-xl">
 								<div class="text-center md:text-right">
-									<p class="font-label-bold text-label-bold uppercase opacity-80">Utilidad Neta</p>
-									<p class="font-headline-lg text-headline-lg text-white" id="net-profit-value">$14,250.00</p>
+									<p class="font-label-bold text-label-bold uppercase opacity-80">Balance Actual</p>
+									<p class="font-headline-lg text-headline-lg text-white">$ {{ balance|number_format(2, '.', ',') }}</p>
 								</div>
 								<div class="bg-secondary-container text-on-secondary-container p-md rounded-full">
-									<span class="material-symbols-outlined text-[32px]">trending_up</span>
+									{% if balance >= 0 %}
+										<span class="material-symbols-outlined text-[32px]">trending_up</span>
+									{% else %}
+										<span class="material-symbols-outlined text-[32px]">trending_down</span>
+									{% endif %}
 								</div>
 							</div>
 						</div>
@@ -314,81 +309,52 @@
 						</div>
 						<div class="flex-1 overflow-y-auto max-h-[600px] custom-scrollbar">
 							<div class="divide-y divide-outline-variant">
-								<div class="p-xl hover:bg-surface-container-low transition-colors group">
-									<div class="flex justify-between items-start mb-xs">
-										<div class="flex items-center gap-sm">
-											<div class="h-8 w-8 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
-												<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
+								{% if recent_transactions|length > 0 %}
+									{% for transaction in recent_transactions %}
+										<div class="p-xl hover:bg-surface-container-low transition-colors group">
+											<div class="flex justify-between items-start mb-xs">
+												<div class="flex items-center gap-sm">
+													{% if transaction.type == 'income' %}
+														<div class="h-8 w-8 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+															<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
+														</div>
+														<span class="font-label-bold text-label-bold text-secondary">INGRESO</span>
+													{% else %}
+														<div class="h-8 w-8 rounded-full bg-error-container/30 flex items-center justify-center text-error">
+															<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">remove</span>
+														</div>
+														<span class="font-label-bold text-label-bold text-error">GASTO</span>
+													{% endif %}
+												</div>
+												<span class="font-data-mono text-body-sm text-on-surface-variant">{{ transaction.transactionDate|date('d M, Y') }}</span>
 											</div>
-											<span class="font-label-bold text-label-bold text-secondary">INGRESO</span>
-										</div>
-										<span class="font-data-mono text-body-sm text-on-surface-variant">10:45 AM</span>
-									</div>
-									<p class="font-headline-sm text-headline-sm mb-base">$1,200.00</p>
-									<p class="text-body-sm font-semibold text-on-background">Diezmos - Servicio Dominical</p>
-									<div class="mt-sm flex flex-wrap gap-xs">
-										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Fondo General</span>
-										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Efectivo</span>
-									</div>
-								</div>
-								<div class="p-xl hover:bg-surface-container-low transition-colors group">
-									<div class="flex justify-between items-start mb-xs">
-										<div class="flex items-center gap-sm">
-											<div class="h-8 w-8 rounded-full bg-error-container/30 flex items-center justify-center text-error">
-												<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">remove</span>
+											<p class="font-headline-sm text-headline-sm mb-base {% if transaction.type == 'income' %}text-secondary{% else %}text-error{% endif %}">
+												{% if transaction.type == 'income' %}${{ transaction.amount|number_format(2, '.', ',') }}{% else %}-${{ transaction.amount|number_format(2, '.', ',') }}{% endif %}
+											</p>
+											<p class="text-body-sm font-semibold text-on-background">{{ transaction.description }}</p>
+											<div class="mt-sm flex flex-wrap gap-xs">
+												{% if transaction.category %}
+													<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">{{ transaction.category }}</span>
+												{% endif %}
+												{% if transaction.paymentMethod %}
+													<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">{{ transaction.paymentMethod }}</span>
+												{% endif %}
 											</div>
-											<span class="font-label-bold text-label-bold text-error">GASTO</span>
 										</div>
-										<span class="font-data-mono text-body-sm text-on-surface-variant">09:15 AM</span>
+									{% endfor %}
+								{% else %}
+									<div class="p-2xl flex flex-col items-center justify-center text-center">
+										<span class="material-symbols-outlined text-[48px] text-outline mb-md">receipt_long</span>
+										<p class="font-body-md text-body-md text-on-surface-variant">No hay transacciones registradas</p>
 									</div>
-									<p class="font-headline-sm text-headline-sm mb-base text-error">-$450.00</p>
-									<p class="text-body-sm font-semibold text-on-background">Mantenimiento - Reparaci\u00f3n Aire Acondicionado</p>
-									<div class="mt-sm flex flex-wrap gap-xs">
-										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Edificio</span>
-										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Transferencia</span>
-									</div>
-								</div>
-								<div class="p-xl hover:bg-surface-container-low transition-colors group">
-									<div class="flex justify-between items-start mb-xs">
-										<div class="flex items-center gap-sm">
-											<div class="h-8 w-8 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
-												<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
-											</div>
-											<span class="font-label-bold text-label-bold text-secondary">INGRESO</span>
-										</div>
-										<span class="font-data-mono text-body-sm text-on-surface-variant">Ayer</span>
-									</div>
-									<p class="font-headline-sm text-headline-sm mb-base">$3,500.00</p>
-									<p class="text-body-sm font-semibold text-on-background">Donaci\u00f3n para Expansi\u00f3n</p>
-									<div class="mt-sm flex flex-wrap gap-xs">
-										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Edificio</span>
-										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Cheque</span>
-									</div>
-								</div>
-								<div class="p-xl hover:bg-surface-container-low transition-colors group">
-									<div class="flex justify-between items-start mb-xs">
-										<div class="flex items-center gap-sm">
-											<div class="h-8 w-8 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
-												<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">add</span>
-											</div>
-											<span class="font-label-bold text-label-bold text-secondary">INGRESO</span>
-										</div>
-										<span class="font-data-mono text-body-sm text-on-surface-variant">24 Oct</span>
-									</div>
-									<p class="font-headline-sm text-headline-sm mb-base">$85.00</p>
-									<p class="text-body-sm font-semibold text-on-background">Venta de Recursos</p>
-									<div class="mt-sm flex flex-wrap gap-xs">
-										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Centro de Recursos</span>
-										<span class="px-sm py-base bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">Efectivo</span>
-									</div>
-								</div>
+								{% endif %}
 							</div>
 						</div>
 						<div class="p-xl bg-surface-container-low border-t border-outline-variant">
-							<button class="w-full text-primary font-label-bold text-label-bold flex justify-center items-center gap-sm hover:gap-md transition-all">
+							<a href="{{ path('app_reportes') }}" class="w-full text-primary font-label-bold text-label-bold flex justify-center items-center gap-sm hover:gap-md transition-all">
 								VER REGISTRO DE AUDITOR\u00cdA COMPLETO
 								<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-							</button>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -414,62 +380,4 @@
 			<span class="text-[10px] font-label-bold">Gente</span>
 		</a>
 	</nav>
-{% endblock %}
-
-{% block javascripts %}
-	{{ parent() }}
-	<script>
-		function switchTab(type) {
-			const incomeTab = document.getElementById('tab-income');
-			const expenseTab = document.getElementById('tab-expense');
-			const submitBtn = document.getElementById('submit-text');
-			const submitIcon = document.getElementById('submit-icon');
-			const contributorSection = document.getElementById('contributor-section');
-
-			if (type === 'income') {
-				incomeTab.classList.add('tab-active');
-				incomeTab.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-low');
-				expenseTab.classList.remove('tab-active');
-				expenseTab.classList.add('text-on-surface-variant', 'hover:bg-surface-container-low');
-				submitBtn.innerText = 'Registrar Ingreso';
-				submitIcon.innerText = 'save';
-				contributorSection.classList.remove('hidden');
-			} else {
-				expenseTab.classList.add('tab-active');
-				expenseTab.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-low');
-				incomeTab.classList.remove('tab-active');
-				incomeTab.classList.add('text-on-surface-variant', 'hover:bg-surface-container-low');
-				submitBtn.innerText = 'Registrar Gasto';
-				submitIcon.innerText = 'receipt_long';
-				contributorSection.classList.add('hidden');
-			}
-		}
-
-		const activitySelect = document.getElementById('activity-select');
-		const netProfitDisplay = document.getElementById('net-profit-value');
-		const activityNameDisplay = document.getElementById('selected-activity-name');
-
-		activitySelect.addEventListener('change', (e) => {
-			const value = e.target.value;
-			const text = e.target.options[e.target.selectedIndex].text;
-			netProfitDisplay.classList.add('opacity-50');
-			setTimeout(() => {
-				activityNameDisplay.innerText = text;
-				if (value === '0') {
-					netProfitDisplay.innerText = '$14,250.00';
-				} else {
-					const randomValue = (Math.random() * 5000 + parseInt(value)).toFixed(2);
-					netProfitDisplay.innerText = '$' + parseFloat(randomValue).toLocaleString();
-				}
-				netProfitDisplay.classList.remove('opacity-50');
-			}, 300);
-		});
-
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'n' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-				e.preventDefault();
-				document.querySelector('input[type="number"]').focus();
-			}
-		});
-	</script>
 {% endblock %}
