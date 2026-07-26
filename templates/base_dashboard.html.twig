@@ -164,9 +164,12 @@
 		</div>
 	</aside>
 
-	<main class="lg:ml-64 min-h-screen flex flex-col">
+	<main class="lg:ml-64 min-h-screen flex flex-col pb-20 lg:pb-0">
 		<header class="sticky top-0 w-full z-40 flex justify-between items-center px-lg h-16 bg-surface border-b border-outline-variant shadow-sm">
 			<div class="flex items-center gap-md">
+				<button type="button" id="mobileSidebarToggle" class="lg:hidden p-xs text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer" title="Menú">
+					<span class="material-symbols-outlined text-2xl">menu</span>
+				</button>
 				<span class="font-headline-sm text-headline-sm font-bold text-primary">Arca Finanzas</span>
 				<div class="hidden md:flex items-center bg-surface-container-low rounded-full px-md py-1 border border-outline-variant ml-xl">
 					<span class="material-symbols-outlined text-on-surface-variant text-sm mr-xs">search</span>
@@ -174,7 +177,7 @@
 				</div>
 			</div>
 			<div class="flex items-center gap-md">
-				<a href="{{ path('app_caja_nueva') }}" class="hidden md:flex items-center bg-primary text-on-primary px-lg py-sm rounded-full font-label-bold text-label-bold cursor-pointer active:scale-95 hover:bg-primary-container transition-all">
+				<a href="{{ path('app_caja_nueva') }}" class="hidden sm:flex items-center bg-primary text-on-primary px-lg py-sm rounded-full font-label-bold text-label-bold cursor-pointer active:scale-95 hover:bg-primary-container transition-all">
 					Entrada Rápida
 				</a>
 				<div class="relative" id="notificationsDropdownWrapper">
@@ -228,7 +231,7 @@
 		{% block dashboard_content %}{% endblock %}
 	</main>
 
-	<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-highest flex justify-around items-center h-16 z-50">
+	<nav class="lg:hidden fixed bottom-0 left-0 w-full bg-surface-container-highest border-t border-outline-variant flex justify-around items-center h-16 z-50 shadow-lg">
 		<a class="flex flex-col items-center gap-1 {{ active_menu == 'dashboard' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_dashboard') }}">
 			<span class="material-symbols-outlined" {{ active_menu == 'dashboard' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>dashboard</span>
 			<span class="text-[10px] font-label-bold">Inicio</span>
@@ -243,7 +246,11 @@
 		</a>
 		<a class="flex flex-col items-center gap-1 {{ active_menu == 'directorio' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_directorio') }}">
 			<span class="material-symbols-outlined" {{ active_menu == 'directorio' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>group</span>
-			<span class="text-[10px] font-label-bold">Gente</span>
+			<span class="text-[10px] font-label-bold">Directorio</span>
+		</a>
+		<a class="flex flex-col items-center gap-1 {{ active_menu == 'reportes' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_reportes') }}">
+			<span class="material-symbols-outlined" {{ active_menu == 'reportes' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>assessment</span>
+			<span class="text-[10px] font-label-bold">Informes</span>
 		</a>
 	</nav>
 
@@ -312,6 +319,16 @@
 					menu.classList.add('hidden');
 				}
 			});
+
+			const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+			const sidebar = document.querySelector('aside');
+			if (mobileSidebarToggle && sidebar) {
+				mobileSidebarToggle.addEventListener('click', function(e) {
+					e.stopPropagation();
+					sidebar.classList.toggle('hidden');
+					sidebar.classList.toggle('flex');
+				});
+			}
 
 			fetchNotifications();
 		});
