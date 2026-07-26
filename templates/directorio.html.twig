@@ -2,7 +2,7 @@
 
 {% set active_menu = 'directorio' %}
 
-{% block title %}FaithFinance | Directorio{% endblock %}
+{% block title %}Arca Finanzas | Directorio{% endblock %}
 
 {% block dashboard_content %}
 	{% set months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'] %}
@@ -17,7 +17,7 @@
 					<span class="text-primary">Directorio</span>
 				</nav>
 				<h1 class="font-headline-lg text-headline-lg text-on-background">Directorio de Miembros</h1>
-				<p class="text-on-surface-variant font-body-md mt-xs">Gestione la información, roles y contribuciones de los miembros de Grace Community.</p>
+				<p class="text-on-surface-variant font-body-md mt-xs">Gestione la información, roles y contribuciones de los miembros de Comunidad Grace.</p>
 			</div>
 			<a href="{{ path('app_directorio_nuevo') }}" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-sm active:scale-95">
 				<span class="material-symbols-outlined text-base">person_add</span>
@@ -39,7 +39,7 @@
 				<div class="flex items-center justify-between mb-xl">
 					<div>
 						<h2 class="font-headline-sm text-headline-sm text-primary">Agregar Miembro</h2>
-						<p class="font-body-sm text-on-surface-variant">Registre un nuevo miembro en el directorio de Grace Community.</p>
+						<p class="font-body-sm text-on-surface-variant">Registre un nuevo miembro en el directorio de Comunidad Grace.</p>
 					</div>
 					<span class="material-symbols-outlined text-primary text-3xl">person_add</span>
 				</div>
@@ -68,7 +68,7 @@
 			<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl text-center py-24">
 				<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">group_off</span>
 				<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">No hay miembros registrados</h3>
-				<p class="font-body-sm text-on-surface-variant mb-xl">Comeienza agregando el primer miembro al directorio de Grace Community.</p>
+				<p class="font-body-sm text-on-surface-variant mb-xl">Comeienza agregando el primer miembro al directorio de Comunidad Grace.</p>
 				<a href="{{ path('app_directorio_nuevo') }}" class="inline-flex items-center gap-sm bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
 					<span class="material-symbols-outlined text-[20px]">person_add</span>
 				 Registrar Primer Miembro
