@@ -114,83 +114,81 @@
 	{{ parent() }}
 {% endblock %}
 
+{% block body_class %}min-h-screen w-full bg-surface p-0 m-0 overflow-x-hidden{% endblock %}
+
 {% block body %}
-	<main class="relative z-10 w-full max-w-[440px]">
-		<div class="flex flex-col items-center mb-xl text-center">
-			<div class="flex items-center gap-xs mb-sm">
-				<span class="material-symbols-outlined text-primary text-4xl" data-icon="account_balance">account_balance</span>
-				<span class="font-headline-lg text-headline-lg text-primary tracking-tight">Arca Finanzas</span>
-			</div>
-			<div class="flex items-center gap-xs px-md py-xs bg-surface-container-high rounded-full">
-				<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="church">church</span>
-				<p class="font-label-bold text-label-bold text-on-surface-variant uppercase tracking-widest">Comunidad</p>
-			</div>
+	<div class="min-h-screen w-full flex flex-col lg:flex-row">
+		<!-- Columna Izquierda: Imagen Arca_home (Solo visible en Escritorio/Web, Oculta en Móvil) -->
+		<div class="hidden lg:block relative lg:w-1/2 min-h-screen overflow-hidden bg-surface-container-high">
+			<img src="{{ asset('images/Arca_home.png') }}" alt="Arca Finanzas" class="absolute inset-0 w-full h-full object-cover object-center"/>
 		</div>
-		<section class="glass-card border border-outline-variant rounded-xl shadow-sm p-md md:p-xl w-full">
-			<div class="mb-md md:mb-lg">
-				<h1 class="font-headline-md text-headline-md text-on-surface mb-xs">Bienvenido de nuevo</h1>
-				<p class="font-body-md text-body-md text-on-surface-variant">Gestione sus finanzas ministeriales con claridad y propósito.</p>
+
+		<!-- Columna Derecha: Tarjeta Login Centrada (50% pantalla en web) -->
+		<div class="w-full lg:w-1/2 min-h-screen flex flex-col justify-start lg:justify-center items-center px-4 sm:px-6 lg:px-12 py-2 sm:py-4 lg:py-12 bg-surface">
+			<!-- Logo Móvil (visible solo en móvil) -->
+			<div class="flex lg:hidden">
+				<img src="{{ asset('images/logo_movil.png') }}" alt="Arca Finanzas" class="h-56 w-auto object-contain"/>
 			</div>
-			<form class="space-y-md" method="post" autocomplete="off">
-				{% for flash in app.flashes('success') %}
-					<div class="bg-tertiary-container text-on-tertiary-container text-body-sm px-md py-sm rounded-xl">{{ flash }}</div>
-				{% endfor %}
-				{% for flash in app.flashes('error') %}
-					<div class="bg-error-container text-on-error-container text-body-sm px-md py-sm rounded-xl">{{ flash }}</div>
-				{% endfor %}
-				{% if error %}
-					<div class="bg-error-container text-on-error-container text-body-sm px-md py-sm rounded-xl">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-				{% endif %}
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-				<div class="flex flex-col gap-xs">
-					<label class="font-label-bold text-label-bold text-on-surface-variant ml-xs" for="email">Correo Electrónico</label>
-					<div class="relative group">
-						<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary" data-icon="mail">mail</span>
-						<input class="w-full pl-[52px] pr-md py-[12px] md:py-md bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-body-md outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10" id="email" name="email" placeholder="ejemplo@grace.org" type="email" value="{{ last_username }}"/>
+			<main class="w-full max-w-[420px] mt-[-4vh]">
+				<section class="glass-card border border-outline-variant rounded-2xl shadow-sm p-5 sm:p-6 w-full">
+					<div class="mb-4">
+						<h1 class="font-headline-md text-headline-md text-on-surface mb-2">Bienvenido de nuevo</h1>
+						<p class="font-body-md text-body-md text-on-surface-variant">Gestione sus finanzas ministeriales con claridad y propósito.</p>
 					</div>
-				</div>
-				<div class="flex flex-col gap-xs">
-					<div class="flex justify-between items-center ml-xs">
-						<label class="font-label-bold text-label-bold text-on-surface-variant" for="password">Contraseña</label>
-						<a class="font-label-bold text-label-bold text-primary hover:underline transition-all" href="#">¿Olvidó su contraseña?</a>
-					</div>
-					<div class="relative group">
-						<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary" data-icon="lock">lock</span>
-						<input class="w-full pl-[52px] pr-xl py-[12px] md:py-md bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-body-md outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10" id="password" name="password" placeholder="••••••••" type="password" autocomplete="off"/>
-						{# Botón ojo: toggle visibilidad de contraseña. La lógica JS está en assets/app.js #}
-						<button class="absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors" id="togglePassword" type="button">
-							<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+					<form class="space-y-4" method="post" autocomplete="off">
+						{% for flash in app.flashes('success') %}
+							<div class="bg-tertiary-container text-on-tertiary-container text-body-sm px-md py-sm rounded-xl">{{ flash }}</div>
+						{% endfor %}
+						{% for flash in app.flashes('error') %}
+							<div class="bg-error-container text-on-error-container text-body-sm px-md py-sm rounded-xl">{{ flash }}</div>
+						{% endfor %}
+						{% if error %}
+							<div class="bg-error-container text-on-error-container text-body-sm px-md py-sm rounded-xl">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+						{% endif %}
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+						<div class="flex flex-col gap-xs">
+							<label class="font-label-bold text-label-bold text-on-surface-variant ml-xs" for="email">Correo Electrónico</label>
+							<div class="relative group">
+								<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary" data-icon="mail">mail</span>
+								<input class="w-full pl-[52px] pr-md py-[12px] md:py-md bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-body-md outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10" id="email" name="email" placeholder="ejemplo@grace.org" type="email" value="{{ last_username }}"/>
+							</div>
+						</div>
+						<div class="flex flex-col gap-xs">
+							<div class="flex justify-between items-center ml-xs">
+								<label class="font-label-bold text-label-bold text-on-surface-variant" for="password">Contraseña</label>
+								<a class="font-label-bold text-label-bold text-primary hover:underline transition-all" href="#">¿Olvidó su contraseña?</a>
+							</div>
+							<div class="relative group">
+								<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary" data-icon="lock">lock</span>
+								<input class="w-full pl-[52px] pr-xl py-[12px] md:py-md bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-body-md outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10" id="password" name="password" placeholder="••••••••" type="password" autocomplete="off"/>
+								{# Botón ojo: toggle visibilidad de contraseña. La lógica JS está en assets/app.js #}
+								<button class="absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors" id="togglePassword" type="button">
+									<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+								</button>
+							</div>
+						</div>
+						<div class="flex items-center gap-sm">
+							<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer" id="remember" name="_remember_me" type="checkbox"/>
+							<label class="font-body-sm text-body-sm text-on-surface-variant cursor-pointer select-none" for="remember">Mantener sesión iniciada (Recordar sesión)</label>
+						</div>
+						<button class="bg-primary text-on-primary font-label-bold text-label-bold px-lg py-sm rounded-xl shadow-sm hover:bg-primary-container active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-sm mx-auto" type="submit">
+							<span>Iniciar Sesión</span>
+							<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
 						</button>
+					</form>
+					<div class="mt-5 pt-4 border-t border-outline-variant flex flex-col items-center gap-3">
+						<p class="font-body-sm text-body-sm text-on-surface-variant">¿No tiene una cuenta administrativa?</p>
+						<a class="px-lg py-sm border border-secondary text-on-secondary-container font-label-bold text-label-bold rounded-full hover:bg-secondary-container transition-colors inline-block" href="{{ path('app_registro') }}">
+							Solicitar Acceso
+						</a>
 					</div>
-				</div>
-				<div class="flex items-center gap-sm py-xs md:py-sm">
-					<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer" id="remember" name="_remember_me" type="checkbox"/>
-					<label class="font-body-sm text-body-sm text-on-surface-variant cursor-pointer select-none" for="remember">Mantener sesión iniciada (Recordar sesión)</label>
-				</div>
-				<button class="bg-primary text-on-primary font-label-bold text-label-bold px-lg py-sm rounded-xl shadow-sm hover:bg-primary-container active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-sm mx-auto" type="submit">
-					<span>Iniciar Sesión</span>
-					<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
-				</button>
-			</form>
-			<div class="mt-lg pt-md md:mt-xl md:pt-lg border-t border-outline-variant flex flex-col items-center gap-md">
-				<p class="font-body-sm text-body-sm text-on-surface-variant">¿No tiene una cuenta administrativa?</p>
-				<a class="px-lg py-sm border border-secondary text-on-secondary-container font-label-bold text-label-bold rounded-full hover:bg-secondary-container transition-colors inline-block" href="{{ path('app_registro') }}">
-					Solicitar Acceso
-				</a>
-			</div>
-		</section>
-		<div class="mt-lg md:mt-xl rounded-xl overflow-hidden h-24 md:h-32 relative border border-outline-variant">
-			<div class="absolute inset-0 bg-cover bg-center grayscale opacity-40 mix-blend-overlay" data-alt="A serene, wide-angle shot of a modern, sunlit church interior with minimalist wooden pews and high white ceilings. The lighting is soft and ethereal, capturing a sense of peace and stewardship. The color palette is composed of soft whites, light grays, and deep navy blue accents, reflecting a clean corporate and spiritual aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4sj3AZNjYszQTA1cIxL21KX4haG6_m8WMk79qR_IZw2Nh1HZwYvr-y5MaVCeD_qCwtbQP_CZUGFvCjvh8ygtYfSfoxujY1QetrprB5K6aJIsnQXty4P5JW-6aGZBIbkk54npz9nMEA9LYKcWFZXFzX9sw73Qh62KZrdmIHYNe_ggiOeVzNqpUorT3WSmD9fyf-HLco8LxcPBBhcYgq7z7BcYoIgDBupSqwnTdO59qNz33EVxrQBx-6FbY-NRudn74nG-gbkoRL10')"></div>
-			<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent flex items-center px-lg">
-				<p class="text-on-primary font-body-sm text-body-sm italic max-w-[200px]">
-					"Honra al Señor con tus bienes y con las primicias de todos tus frutos."
-				</p>
-			</div>
+				</section>
+				<footer class="mt-5 flex justify-center gap-lg">
+					<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Términos</a>
+					<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Privacidad</a>
+					<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Ayuda</a>
+				</footer>
+			</main>
 		</div>
-		<footer class="mt-lg flex justify-center gap-lg">
-			<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Términos</a>
-			<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Privacidad</a>
-			<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Ayuda</a>
-		</footer>
-	</main>
+	</div>
 {% endblock %}

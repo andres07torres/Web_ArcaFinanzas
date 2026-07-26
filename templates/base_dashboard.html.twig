@@ -270,11 +270,15 @@
 			<span class="material-symbols-outlined" {{ active_menu == 'directorio' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>group</span>
 			<span class="text-[10px] font-label-bold">Directorio</span>
 		</a>
-		<a class="flex flex-col items-center gap-1 {{ active_menu == 'reportes' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_reportes') }}">
-			<span class="material-symbols-outlined" {{ active_menu == 'reportes' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>assessment</span>
-			<span class="text-[10px] font-label-bold">Informes</span>
-		</a>
-	</nav>
+				<a class="flex flex-col items-center gap-1 {{ active_menu == 'reportes' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_reportes') }}">
+					<span class="material-symbols-outlined" {{ active_menu == 'reportes' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>assessment</span>
+					<span class="text-[10px] font-label-bold">Informes</span>
+				</a>
+				<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="{{ path('app_logout') }}">
+					<span class="material-symbols-outlined">logout</span>
+					<span class="text-[10px] font-label-bold">Salir</span>
+				</a>
+			</nav>
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
