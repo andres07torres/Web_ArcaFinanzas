@@ -155,6 +155,12 @@
 											{% if transaction.paymentMethod %}
 												<span class="px-xs py-0.5 bg-surface-container rounded text-[10px] uppercase font-bold text-on-surface-variant">{{ transaction.paymentMethod }}</span>
 											{% endif %}
+											{% if transaction.createdBy %}
+												<span class="px-xs py-0.5 bg-primary-container/20 text-primary rounded text-[10px] uppercase font-bold flex items-center gap-[2px]">
+													<span class="material-symbols-outlined text-[12px]">person</span>
+													{{ transaction.createdBy.fullName|default(transaction.createdBy.email) }}
+												</span>
+											{% endif %}
 										</div>
 									</div>
 								{% endfor %}

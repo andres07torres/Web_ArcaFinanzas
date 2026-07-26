@@ -96,6 +96,20 @@ class HomeController extends AbstractController
             $user->setPassword($passwordHasher->hashPassword($user, $password));
 
             $em->persist($user);
+
+            // Crear el miembro para el directorio
+            $member = new \App\Entity\Member();
+            $member->setEmail($email);
+            
+            $nameParts = explode(' ', trim($fullName), 2);
+            $member->setFirstName($nameParts[0] ?: 'Desconocido');
+            $member->setLastName(isset($nameParts[1]) ? $nameParts[1] : 'Desconocido');
+            
+            $member->setRole($user->getDisplayRole());
+            $member->setStatus('active');
+            
+            $em->persist($member);
+
             $em->flush();
 
             $this->addFlash('success', 'Solicitud enviada. Un administrador revisará tu registro.');

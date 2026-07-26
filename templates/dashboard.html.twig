@@ -82,6 +82,7 @@
 								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Fecha</th>
 								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Descripción</th>
 								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Categoría</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Registrado por</th>
 								<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant text-right">Monto</th>
 							</tr>
 						</thead>
@@ -93,6 +94,12 @@
 										<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">{{ transaction.description }}</td>
 										<td class="px-lg py-md">
 											<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">{{ transaction.category ?? 'Sin categoría' }}</span>
+										</td>
+										<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">
+											<div class="flex items-center gap-[4px]">
+												<span class="material-symbols-outlined text-[14px] text-on-surface-variant">person</span>
+												{{ transaction.createdBy ? transaction.createdBy.fullName|default(transaction.createdBy.email) : '---' }}
+											</div>
 										</td>
 										<td class="px-lg py-md font-data-mono text-data-mono text-right {{ transaction.type == 'income' ? 'text-secondary' : 'text-error' }}">
 											{{ transaction.type == 'income' ? '+' : '-' }}${{ transaction.amount|number_format(2, '.', ',') }}
