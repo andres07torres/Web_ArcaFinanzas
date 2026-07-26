@@ -9,6 +9,7 @@ RUN apk add --no-cache \
         unzip \
     && docker-php-ext-install -j$(nproc) \
         pdo_pgsql \
+        pgsql \
         intl \
         opcache
 
@@ -29,6 +30,7 @@ RUN apk add --no-cache \
         unzip \
     && docker-php-ext-install -j$(nproc) \
         pdo_pgsql \
+        pgsql \
         intl \
         opcache
 
