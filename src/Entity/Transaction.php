@@ -50,6 +50,9 @@ class Transaction
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $receiptFilename = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -170,6 +173,17 @@ class Transaction
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getReceiptFilename(): ?string
+    {
+        return $this->receiptFilename;
+    }
+
+    public function setReceiptFilename(?string $receiptFilename): static
+    {
+        $this->receiptFilename = $receiptFilename;
         return $this;
     }
 

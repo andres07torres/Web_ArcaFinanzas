@@ -8,10 +8,12 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class TransactionType extends AbstractType
 {
@@ -97,6 +99,28 @@ class TransactionType extends AbstractType
                 ],
                 'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant'],
                 'required' => false,
+            ])
+            ->add('receipt', FileType::class, [
+                'label' => 'Comprobante de Pago (Imagen o PDF)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '10M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                            'application/pdf',
+                        ],
+                        'mimeTypesMessage' => 'Por favor sube un comprobante válido (JPG, PNG, WEBP o PDF).',
+                    ]),
+                ],
+                'attr' => [
+                    'class' => 'w-full p-sm rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary',
+                    'accept' => 'image/*,.pdf',
+                ],
+                'label_attr' => ['class' => 'font-label-bold text-label-bold text-on-surface-variant'],
             ]);
     }
 

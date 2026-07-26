@@ -46,6 +46,20 @@ class CashController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var \Symfony\Component\HttpFoundation\File\UploadedFile|null $receiptFile */
+            $receiptFile = $form->get('receipt')->getData();
+            if ($receiptFile) {
+                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/receipts';
+                $newFilename = uniqid('receipt_', true) . '.' . $receiptFile->guessExtension();
+
+                try {
+                    $receiptFile->move($uploadsDir, $newFilename);
+                    $transaction->setReceiptFilename($newFilename);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Error al guardar el archivo del comprobante.');
+                }
+            }
+
             $transactionRepo->save($transaction, true);
 
             $this->addFlash('success', 'Transacción registrada exitosamente.');
@@ -58,6 +72,37 @@ class CashController extends AbstractController
             'title' => 'Registrar Transacción',
             'user' => $this->getUser(),
         ]);
+    }
+
+    #[Route('/transaccion/{id}/subir-comprobante', name: 'app_caja_subir_comprobante', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function uploadReceipt(Transaction $transaction, Request $request, TransactionRepository $transactionRepo): Response
+    {
+        $csrf = (string) $request->request->get('_csrf_token');
+        if (!$this->isCsrfTokenValid('upload_receipt_' . $transaction->getId(), $csrf)) {
+            $this->addFlash('error', 'Token CSRF inválido.');
+            return $this->redirectToRoute('app_reportes');
+        }
+
+        /** @var \Symfony\Component\HttpFoundation\File\UploadedFile|null $receiptFile */
+        $receiptFile = $request->files->get('receipt_file');
+        if ($receiptFile) {
+            $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/receipts';
+            $newFilename = uniqid('receipt_', true) . '.' . $receiptFile->guessExtension();
+
+            try {
+                $receiptFile->move($uploadsDir, $newFilename);
+                $transaction->setReceiptFilename($newFilename);
+                $transactionRepo->save($transaction, true);
+                $this->addFlash('success', 'Comprobante adjuntado correctamente.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Ocurrió un error al subir el comprobante.');
+            }
+        } else {
+            $this->addFlash('error', 'Por favor selecciona un archivo de comprobante válido.');
+        }
+
+        $redirect = $request->headers->get('referer') ?? $this->generateUrl('app_reportes');
+        return $this->redirect($redirect);
     }
 
     #[Route('/{id}/eliminar', name: 'app_caja_eliminar', requirements: ['id' => '\d+'], methods: ['POST'])]
