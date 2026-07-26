@@ -1,0 +1,430 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reportes y Auditor\u00eda | FaithFinance{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+	<script id="tailwind-config">
+		tailwind.config = {
+			darkMode: "class",
+			theme: {
+				extend: {
+					"colors": {
+						"surface-variant": "#e0e3e5",
+						"on-surface-variant": "#444651",
+						"on-primary": "#ffffff",
+						"surface-dim": "#d8dadc",
+						"on-secondary-fixed-variant": "#005049",
+						"on-primary-fixed-variant": "#264191",
+						"outline-variant": "#c5c5d3",
+						"secondary": "#006a61",
+						"background": "#f7f9fb",
+						"on-tertiary-container": "#a1a4ff",
+						"tertiary-fixed-dim": "#c0c1ff",
+						"on-background": "#191c1e",
+						"secondary-fixed": "#89f5e7",
+						"primary-fixed-dim": "#b6c4ff",
+						"surface-container-lowest": "#ffffff",
+						"on-primary-container": "#90a8ff",
+						"on-tertiary-fixed": "#07006c",
+						"on-tertiary-fixed-variant": "#2f2ebe",
+						"surface-bright": "#f7f9fb",
+						"surface-container-highest": "#e0e3e5",
+						"inverse-surface": "#2d3133",
+						"error-container": "#ffdad6",
+						"inverse-on-surface": "#eff1f3",
+						"on-secondary": "#ffffff",
+						"outline": "#757682",
+						"on-tertiary": "#ffffff",
+						"surface-container-high": "#e6e8ea",
+						"primary": "#00236f",
+						"inverse-primary": "#b6c4ff",
+						"primary-container": "#1e3a8a",
+						"surface-tint": "#4059aa",
+						"surface-container-low": "#f2f4f6",
+						"on-error-container": "#93000a",
+						"on-secondary-fixed": "#00201d",
+						"on-primary-fixed": "#00164e",
+						"on-secondary-container": "#006f66",
+						"tertiary-fixed": "#e1e0ff",
+						"surface-container": "#eceef0",
+						"secondary-fixed-dim": "#6bd8cb",
+						"surface": "#f7f9fb",
+						"secondary-container": "#86f2e4",
+						"primary-fixed": "#dce1ff",
+						"on-error": "#ffffff",
+						"on-surface": "#191c1e",
+						"tertiary": "#0d0097",
+						"tertiary-container": "#2724b8",
+						"error": "#ba1a1a"
+					},
+					"borderRadius": {
+						"DEFAULT": "0.125rem",
+						"lg": "0.25rem",
+						"xl": "0.5rem",
+						"full": "0.75rem"
+					},
+					"spacing": {
+						"md": "16px",
+						"xs": "4px",
+						"gutter": "24px",
+						"lg": "24px",
+						"xl": "32px",
+						"sm": "8px",
+						"base": "4px",
+						"container-max": "1280px"
+					},
+					"fontFamily": {
+						"body-lg": ["Inter"],
+						"headline-lg-mobile": ["Inter"],
+						"headline-md": ["Inter"],
+						"body-md": ["Inter"],
+						"data-mono": ["Inter"],
+						"body-sm": ["Inter"],
+						"headline-lg": ["Inter"],
+						"headline-sm": ["Inter"],
+						"label-bold": ["Inter"]
+					},
+					"fontSize": {
+						"body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+						"headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+						"headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+						"body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+						"data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+						"body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+						"headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+						"headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+						"label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+					}
+				},
+			},
+		}
+	</script>
+	<style>
+		.material-symbols-outlined {
+			font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+		}
+		.bento-grid {
+			display: grid;
+			grid-template-columns: repeat(12, 1fr);
+			gap: 24px;
+		}
+		.corte-card {
+			background: white;
+			border: 1px solid #E2E8F0;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+			transition: transform 0.2s, box-shadow 0.2s;
+		}
+		.corte-card:hover {
+			box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<aside class="hidden lg:flex fixed left-0 top-0 h-full w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant z-50">
+		<div class="px-lg mb-xl">
+			<h2 class="font-headline-md text-headline-md text-primary">Grace Community</h2>
+			<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del Tesorero</p>
+		</div>
+		<nav class="flex-1 space-y-1">
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">dashboard</span>
+				<span class="font-label-bold text-label-bold">Tablero</span>
+			</a>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">event_available</span>
+				<span class="font-label-bold text-label-bold">Actividades</span>
+			</a>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">account_balance_wallet</span>
+				<span class="font-label-bold text-label-bold">Control de Caja</span>
+			</a>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_directorio') }}">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">group</span>
+				<span class="font-label-bold text-label-bold">Directorio</span>
+			</a>
+			<a class="flex items-center bg-secondary-container text-on-secondary-container rounded-xl mx-md p-md transition-all group" href="{{ path('app_reportes') }}">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">assessment</span>
+				<span class="font-label-bold text-label-bold">Informes</span>
+			</a>
+		</nav>
+		<div class="px-md mt-auto pt-lg border-t border-outline-variant space-y-1">
+			<button class="w-full mb-md bg-primary text-on-primary py-md rounded-xl font-label-bold text-label-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">
+				Exportar Datos
+			</button>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="#">
+				<span class="material-symbols-outlined mr-md">help</span>
+				<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
+			</a>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="{{ path('app_logout') }}">
+				<span class="material-symbols-outlined mr-md">logout</span>
+				<span class="font-label-bold text-label-bold">Cerrar Sesi\u00f3n</span>
+			</a>
+		</div>
+	</aside>
+
+	<main class="lg:ml-64 min-h-screen flex flex-col">
+		<header class="sticky top-0 w-full z-40 flex justify-between items-center px-lg h-16 bg-surface border-b border-outline-variant shadow-sm">
+			<div class="flex items-center gap-md">
+				<span class="font-headline-sm text-headline-sm font-bold text-primary">FaithFinance</span>
+				<div class="hidden md:flex items-center bg-surface-container-low rounded-full px-md py-1 border border-outline-variant ml-xl">
+					<span class="material-symbols-outlined text-on-surface-variant text-sm mr-xs">search</span>
+					<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48" placeholder="Buscar registros..." type="text"/>
+				</div>
+			</div>
+			<div class="flex items-center gap-md">
+				<button class="hidden md:flex items-center bg-primary text-on-primary px-lg py-sm rounded-full font-label-bold text-label-bold cursor-pointer active:scale-95 transition-all">
+					Entrada R\u00e1pida
+				</button>
+				<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative">
+					<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+					<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+				</button>
+				<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
+					<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+				</button>
+				<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant">
+					<img alt="Perfil" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQvJ2EbpVF8wcyJuhEUE2pe93psv8LpTE5ukr34M-UrR755jxm08a7E6z7BJMat37kFwBPbKu441Z9Ta8Y01dCum6op_oroDZzmIUvLl5I8xth7YOj2dKcfxlt0W7g9XC9qoruVs5tQlkT_xvSUexyXaJ-Pzh0CRCk8mKyS9EyWhpBF4-5MD065NaAevYKiZoYMMlGBbjRZbmkAN-POlZ4ohFyFFvT-CijdV-pC8WjFvQXa5kjrAAcufKXkxlVfEXO0gsSuwOgEoc"/>
+				</div>
+			</div>
+		</header>
+
+		<div class="p-lg md:px-xl md:py-lg max-w-container-max mx-auto w-full">
+			<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md mb-xl">
+				<div>
+					<h2 class="font-headline-lg text-headline-lg text-primary">Informe de Transparencia Financiera</h2>
+					<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Auditor\u00eda A\u00f1o Fiscal 2024 | Iglesia Grace Community</p>
+				</div>
+				<div class="flex items-center gap-sm">
+					<button class="flex items-center gap-xs px-md py-sm bg-white border border-outline-variant rounded-lg text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-container-low transition-colors">
+						<span class="material-symbols-outlined text-[18px]">table_view</span>
+						Exportar a Excel
+					</button>
+					<button class="flex items-center gap-xs px-md py-sm bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-opacity">
+						<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+						Exportar a PDF
+					</button>
+				</div>
+			</div>
+
+			<div class="bg-white border border-outline-variant rounded-xl p-md mb-lg flex flex-wrap items-center gap-lg">
+				<div class="flex flex-col gap-xs">
+					<label class="font-label-bold text-[11px] text-outline uppercase">Rango de Fechas</label>
+					<div class="flex bg-surface-container-low p-1 rounded-lg">
+						<button class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors">D\u00eda</button>
+						<button class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors">Semana</button>
+						<button class="px-md py-xs text-body-sm font-medium rounded-md bg-white shadow-sm">Mes</button>
+					</div>
+				</div>
+				<div class="flex flex-col gap-xs">
+					<label class="font-label-bold text-[11px] text-outline uppercase">Filtro de Actividad</label>
+					<select class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[200px]">
+						<option>Todas las Actividades</option>
+						<option>Diezmos Generales</option>
+						<option>Fondo Misionero</option>
+						<option>Proyecto de Construcci\u00f3n</option>
+						<option>Alcance Comunitario</option>
+					</select>
+				</div>
+				<div class="flex flex-col gap-xs">
+					<label class="font-label-bold text-[11px] text-outline uppercase">Estado de Auditor\u00eda</label>
+					<div class="flex items-center gap-sm">
+						<span class="flex items-center gap-xs text-secondary font-label-bold text-label-bold">
+							<span class="w-2 h-2 rounded-full bg-secondary"></span> Verificado
+						</span>
+					</div>
+				</div>
+				<button class="ml-auto flex items-center gap-xs text-primary font-label-bold text-label-bold hover:underline">
+					<span class="material-symbols-outlined">filter_list</span>
+					Filtros Avanzados
+				</button>
+			</div>
+
+			<div class="bento-grid mb-lg">
+				<div class="col-span-12 md:col-span-8 corte-card rounded-xl p-xl flex flex-col justify-between relative overflow-hidden">
+					<div class="relative z-10">
+						<div class="flex justify-between items-start mb-md">
+							<div>
+								<h3 class="font-label-bold text-label-bold text-outline uppercase">Posici\u00f3n Neta de Caja</h3>
+								<p class="font-headline-lg text-headline-lg text-primary">$142,580.00</p>
+							</div>
+							<div class="bg-secondary-container text-on-secondary-container px-sm py-xs rounded text-[10px] font-bold">
+								+12.4% vs MES ANTERIOR
+							</div>
+						</div>
+						<div class="grid grid-cols-3 gap-lg border-t border-outline-variant pt-lg mt-md">
+							<div>
+								<p class="text-[11px] font-label-bold text-outline uppercase">Saldo Inicial</p>
+								<p class="text-body-lg font-bold">$124,900.00</p>
+							</div>
+							<div>
+								<p class="text-[11px] font-label-bold text-outline uppercase">Ingresos Totales</p>
+								<p class="text-body-lg font-bold text-secondary">+$24,680.00</p>
+							</div>
+							<div>
+								<p class="text-[11px] font-label-bold text-outline uppercase">Egresos Totales</p>
+								<p class="text-body-lg font-bold text-error">-$7,000.00</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-span-12 md:col-span-4 corte-card rounded-xl p-lg border-l-4 border-l-secondary">
+					<h3 class="font-label-bold text-label-bold text-outline uppercase mb-sm">Puntaje de Verificaci\u00f3n</h3>
+					<div class="flex items-center gap-md">
+						<div class="w-16 h-16 rounded-full border-4 border-secondary flex items-center justify-center">
+							<span class="font-headline-sm text-secondary">98%</span>
+						</div>
+						<div>
+							<p class="text-body-sm text-on-surface-variant">426/430 transacciones verificadas por auditores este mes.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+				<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+					<h3 class="font-headline-sm text-headline-sm text-primary">Auditor\u00eda Detallada de Transacciones</h3>
+					<div class="flex gap-sm">
+						<div class="relative">
+							<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+							<input class="pl-9 pr-md py-1.5 border border-outline-variant rounded-lg text-body-sm w-64 focus:ring-1 focus:ring-primary" placeholder="Buscar entradas..." type="text"/>
+						</div>
+					</div>
+				</div>
+				<div class="overflow-x-auto">
+					<table class="w-full text-left border-collapse">
+						<thead>
+							<tr class="bg-surface-container-low border-b border-outline-variant">
+								<th class="px-lg py-md font-label-bold text-label-bold text-outline uppercase">Fecha y Hora</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-outline uppercase">Referencia</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-outline uppercase">Actividad</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-outline uppercase">Categor\u00eda</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-outline uppercase text-right">Monto</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-outline uppercase">Estado</th>
+								<th class="px-lg py-md font-label-bold text-label-bold text-outline uppercase">Auditor</th>
+							</tr>
+						</thead>
+						<tbody class="divide-y divide-outline-variant">
+							<tr class="hover:bg-surface-container-lowest transition-colors">
+								<td class="px-lg py-sm font-data-mono text-data-mono">Oct 24, 10:15 AM</td>
+								<td class="px-lg py-sm font-body-sm font-semibold text-primary">TRX-94820</td>
+								<td class="px-lg py-sm font-body-sm">Ofrenda Dominical</td>
+								<td class="px-lg py-sm">
+									<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold">INGRESO</span>
+								</td>
+								<td class="px-lg py-sm font-data-mono text-right font-bold text-secondary">+$1,450.00</td>
+								<td class="px-lg py-sm">
+									<div class="flex items-center gap-xs">
+										<span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+										<span class="text-body-sm">Verificado</span>
+									</div>
+								</td>
+								<td class="px-lg py-sm font-body-sm text-on-surface-variant">Elder John D.</td>
+							</tr>
+							<tr class="bg-surface-container-lowest/30 hover:bg-surface-container-lowest transition-colors">
+								<td class="px-lg py-sm font-data-mono text-data-mono">Oct 23, 02:30 PM</td>
+								<td class="px-lg py-sm font-body-sm font-semibold text-primary">TRX-94819</td>
+								<td class="px-lg py-sm">Pago de Servicios</td>
+								<td class="px-lg py-sm">
+									<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-[10px] font-bold">EGRESO</span>
+								</td>
+								<td class="px-lg py-sm font-data-mono text-right font-bold text-error">-$820.00</td>
+								<td class="px-lg py-sm">
+									<div class="flex items-center gap-xs">
+										<span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+										<span class="text-body-sm">Verificado</span>
+									</div>
+								</td>
+								<td class="px-lg py-sm font-body-sm text-on-surface-variant">Elder John D.</td>
+							</tr>
+							<tr class="hover:bg-surface-container-lowest transition-colors">
+								<td class="px-lg py-sm font-data-mono text-data-mono">Oct 23, 11:00 AM</td>
+								<td class="px-lg py-sm font-body-sm font-semibold text-primary">TRX-94818</td>
+								<td class="px-lg py-sm">Retiro Juvenil</td>
+								<td class="px-lg py-sm">
+									<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold">INGRESO</span>
+								</td>
+								<td class="px-lg py-sm font-data-mono text-right font-bold text-secondary">+$3,200.00</td>
+								<td class="px-lg py-sm">
+									<div class="flex items-center gap-xs">
+										<span class="material-symbols-outlined text-[16px] text-outline">pending</span>
+										<span class="text-body-sm text-on-surface-variant">Pendiente de Aprobaci\u00f3n</span>
+									</div>
+								</td>
+								<td class="px-lg py-sm font-body-sm text-on-surface-variant">---</td>
+							</tr>
+							<tr class="bg-surface-container-lowest/30 hover:bg-surface-container-lowest transition-colors">
+								<td class="px-lg py-sm font-data-mono text-data-mono">Oct 22, 09:15 AM</td>
+								<td class="px-lg py-sm font-body-sm font-semibold text-primary">TRX-94817</td>
+								<td class="px-lg py-sm">Mantenimiento de Edificio</td>
+								<td class="px-lg py-sm">
+									<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-[10px] font-bold">EGRESO</span>
+								</td>
+								<td class="px-lg py-sm font-data-mono text-right font-bold text-error">-$1,250.00</td>
+								<td class="px-lg py-sm">
+									<div class="flex items-center gap-xs">
+										<span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+										<span class="text-body-sm">Verificado</span>
+									</div>
+								</td>
+								<td class="px-lg py-sm font-body-sm text-on-surface-variant">Elder John D.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="px-lg py-md bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+					<p class="font-body-sm text-on-surface-variant">Mostrando 1 a 10 de 432 resultados</p>
+					<div class="flex gap-xs">
+						<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded bg-white text-on-surface-variant hover:bg-surface-container-high transition-colors">
+							<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+						</button>
+						<button class="w-8 h-8 flex items-center justify-center border border-primary rounded bg-primary text-on-primary font-label-bold text-label-bold">1</button>
+						<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded bg-white text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-bold text-label-bold">2</button>
+						<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded bg-white text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-bold text-label-bold">3</button>
+						<button class="w-8 h-8 flex items-center justify-center border border-outline-variant rounded bg-white text-on-surface-variant hover:bg-surface-container-high transition-colors">
+							<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="mt-xl p-lg bg-surface-variant/20 border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center text-center">
+				<span class="material-symbols-outlined text-primary mb-sm text-[32px]">security</span>
+				<h4 class="font-headline-sm text-headline-sm text-primary mb-xs">Escudo de Responsabilidad de Liderazgo</h4>
+				<p class="max-w-2xl font-body-md text-body-md text-on-surface-variant">Este informe fue generado utilizando protocolos de contabilidad por partida doble. Todos los datos presentados han sido cotejados con estados de cuenta bancarios y recibos f\u00edsicos al 25 de octubre de 2024. Ante cualquier discrepancia, por favor contacte al Comit\u00e9 de Auditor\u00eda Interna.</p>
+				<div class="mt-md flex gap-lg">
+					<div class="flex items-center gap-xs">
+						<span class="w-3 h-3 rounded-full bg-secondary"></span>
+						<span class="text-body-sm font-semibold">Registro Inmutable Bloqueado</span>
+					</div>
+					<div class="flex items-center gap-xs">
+						<span class="w-3 h-3 rounded-full bg-secondary"></span>
+						<span class="text-body-sm font-semibold">Firma de Auditor Verificada</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-highest flex justify-around items-center h-16 z-50">
+		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_dashboard') }}">
+			<span class="material-symbols-outlined">dashboard</span>
+			<span class="text-[10px] font-label-bold">Inicio</span>
+		</a>
+		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_actividades') }}">
+			<span class="material-symbols-outlined">event_available</span>
+			<span class="text-[10px] font-label-bold">Eventos</span>
+		</a>
+		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_caja') }}">
+			<span class="material-symbols-outlined">account_balance_wallet</span>
+			<span class="text-[10px] font-label-bold">Caja</span>
+		</a>
+		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_directorio') }}">
+			<span class="material-symbols-outlined">group</span>
+			<span class="text-[10px] font-label-bold">Gente</span>
+		</a>
+	</nav>
+{% endblock %}
