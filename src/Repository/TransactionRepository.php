@@ -94,21 +94,23 @@ class TransactionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getTotalByTypeAndDateRange(string $type, ?\DateTimeInterface $startDate = null, ?\DateTimeInterface $endDate = null): float
-    {
+    public function getTotalByTypeAndDateRange(
+        string $type,
+        ?\DateTimeInterface $startDate = null,
+        ?\DateTimeInterface $endDate = null,
+        ?int $activityId = null,
+        ?string $category = null
+    ): float {
         $qb = $this->createQueryBuilder('t')
             ->select('SUM(t.amount) as total')
             ->where('t.type = :type')
             ->setParameter('type', $type);
 
-        if ($startDate) {
-            $qb->andWhere('t.transactionDate >= :startDate')
-               ->setParameter('startDate', $startDate);
+        if ($activityId) {
+            $qb->leftJoin('t.activity', 'a');
         }
-        if ($endDate) {
-            $qb->andWhere('t.transactionDate <= :endDate')
-               ->setParameter('endDate', $endDate);
-        }
+
+        $this->applyReportFilters($qb, $startDate, $endDate, $activityId, $category, null);
 
         $result = $qb->getQuery()->getOneOrNullResult();
         return (float) ($result['total'] ?? 0);

@@ -30,14 +30,14 @@
 					</p>
 				</div>
 				<div class="flex items-center gap-sm">
-					<button class="flex items-center gap-xs px-md py-sm bg-white border border-outline-variant rounded-lg text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-container-low transition-colors">
+					<a href="{{ path('app_reportes_exportar_excel', app.request.query.all) }}" class="flex items-center gap-xs px-md py-sm bg-white border border-outline-variant rounded-lg text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-container-low transition-colors shadow-xs">
 						<span class="material-symbols-outlined text-[18px]">table_view</span>
 						Exportar a Excel
-					</button>
-					<button class="flex items-center gap-xs px-md py-sm bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-opacity">
+					</a>
+					<a href="{{ path('app_reportes_exportar_pdf', app.request.query.all) }}" target="_blank" class="flex items-center gap-xs px-md py-sm bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:opacity-90 transition-opacity shadow-sm">
 						<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
 						Exportar a PDF
-					</button>
+					</a>
 				</div>
 			</div>
 
@@ -46,22 +46,24 @@
 					<div class="flex flex-col gap-xs">
 						<label class="font-label-bold text-[11px] text-outline uppercase">Rango de Fechas</label>
 						<div class="flex bg-surface-container-low p-1 rounded-lg">
-							<button type="submit" name="periodo" value="dia" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'dia' ? 'bg-white shadow-sm' : '' }}">Día</button>
-							<button type="submit" name="periodo" value="semana" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'semana' ? 'bg-white shadow-sm' : '' }}">Semana</button>
-							<button type="submit" name="periodo" value="mes" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'mes' ? 'bg-white shadow-sm' : '' }}">Mes</button>
+							<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'dia', 'fechaInicio': '', 'fechaFin': ''})) }}" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'dia' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Día</a>
+							<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'semana', 'fechaInicio': '', 'fechaFin': ''})) }}" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'semana' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Semana</a>
+							<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'mes', 'fechaInicio': '', 'fechaFin': ''})) }}" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'mes' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Mes</a>
+							<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'todos', 'fechaInicio': '', 'fechaFin': ''})) }}" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'todos' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Todos</a>
 						</div>
 					</div>
+					<input type="hidden" name="periodo" value="{{ filters.periodo }}" />
 					<div class="flex flex-col gap-xs">
 						<label class="font-label-bold text-[11px] text-outline uppercase">Fecha Inicio</label>
-						<input type="date" name="fechaInicio" value="{{ filters.fechaInicio ?? '' }}" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]"/>
+						<input type="date" name="fechaInicio" value="{{ filters.fechaInicio ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]"/>
 					</div>
 					<div class="flex flex-col gap-xs">
 						<label class="font-label-bold text-[11px] text-outline uppercase">Fecha Fin</label>
-						<input type="date" name="fechaFin" value="{{ filters.fechaFin ?? '' }}" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]"/>
+						<input type="date" name="fechaFin" value="{{ filters.fechaFin ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]"/>
 					</div>
 					<div class="flex flex-col gap-xs">
 						<label class="font-label-bold text-[11px] text-outline uppercase">Filtro de Actividad</label>
-						<select name="actividad" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[200px]">
+						<select name="actividad" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[200px]">
 							<option value="">Todas las Actividades</option>
 							{% for activity in activities %}
 								<option value="{{ activity.id }}" {{ filters.actividad == activity.id ? 'selected' : '' }}>{{ activity.name }}</option>
@@ -70,7 +72,7 @@
 					</div>
 					<div class="flex flex-col gap-xs">
 						<label class="font-label-bold text-[11px] text-outline uppercase">Categoría</label>
-						<select name="categoria" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[200px]">
+						<select name="categoria" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[200px]">
 							<option value="">Todas las Categorías</option>
 							{% for cat in categories %}
 								<option value="{{ cat }}" {{ filters.categoria == cat ? 'selected' : '' }}>{{ cat }}</option>
@@ -79,22 +81,24 @@
 					</div>
 					<div class="flex flex-col gap-xs">
 						<label class="font-label-bold text-[11px] text-outline uppercase">Tipo</label>
-						<select name="tipo" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]">
+						<select name="tipo" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]">
 							<option value="">Todos</option>
 							<option value="income" {{ filters.tipo == 'income' ? 'selected' : '' }}>Ingresos</option>
 							<option value="expense" {{ filters.tipo == 'expense' ? 'selected' : '' }}>Egresos</option>
 						</select>
 					</div>
-					<button type="submit" class="ml-auto flex items-center gap-xs text-primary font-label-bold text-label-bold hover:underline">
-						<span class="material-symbols-outlined">filter_list</span>
-						Aplicar Filtros
-					</button>
-					{% if filters.periodo != 'mes' or filters.fechaInicio or filters.actividad or filters.categoria or filters.tipo %}
-						<a href="{{ path('app_reportes') }}" class="flex items-center gap-xs text-error font-label-bold text-label-bold hover:underline">
-							<span class="material-symbols-outlined">close</span>
-							Limpiar
-						</a>
-					{% endif %}
+					<div class="ml-auto flex items-center gap-md">
+						<button type="submit" class="flex items-center gap-xs text-primary font-label-bold text-label-bold hover:underline cursor-pointer">
+							<span class="material-symbols-outlined">filter_list</span>
+							Aplicar Filtros
+						</button>
+						{% if filters.periodo != 'mes' or filters.fechaInicio or filters.fechaFin or filters.actividad or filters.categoria or filters.tipo %}
+							<a href="{{ path('app_reportes') }}" class="flex items-center gap-xs text-error font-label-bold text-label-bold hover:underline">
+								<span class="material-symbols-outlined">close</span>
+								Limpiar
+							</a>
+						{% endif %}
+					</div>
 				</div>
 			</form>
 

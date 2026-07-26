@@ -121,6 +121,37 @@ class ActivityController extends AbstractController
         return $this->redirectToRoute('app_actividades');
     }
 
+    #[Route('/{id}/detalle', name: 'app_actividades_detalle', requirements: ['id' => '\d+'])]
+    public function showDetail(Activity $activity, TransactionRepository $transactionRepo): Response
+    {
+        $transactions = $transactionRepo->findBy(['activity' => $activity], ['transactionDate' => 'DESC']);
+
+        $totalIncome = 0.0;
+        $totalExpenses = 0.0;
+
+        foreach ($transactions as $tx) {
+            if ($tx->getType() === 'income') {
+                $totalIncome += (float) $tx->getAmount();
+            } else {
+                $totalExpenses += (float) $tx->getAmount();
+            }
+        }
+
+        $balance = $totalIncome - $totalExpenses;
+        $goal = (float) $activity->getGoalAmount();
+        $progress = $goal > 0 ? min(100, round(($totalIncome / $goal) * 100, 1)) : 0;
+
+        return $this->render('actividad_detalle.html.twig', [
+            'user' => $this->getUser(),
+            'activity' => $activity,
+            'transactions' => $transactions,
+            'total_income' => $totalIncome,
+            'total_expenses' => $totalExpenses,
+            'balance' => $balance,
+            'progress' => $progress,
+        ]);
+    }
+
     #[Route('/{id}/eliminar', name: 'app_actividades_eliminar', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Activity $activity, ActivityRepository $activityRepo): Response
     {

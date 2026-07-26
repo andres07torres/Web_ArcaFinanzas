@@ -157,9 +157,9 @@
 			</a>
 		</nav>
 		<div class="px-md mt-auto pt-lg border-t border-outline-variant space-y-1">
-			<button class="w-full mb-md bg-primary text-on-primary py-md rounded-xl font-label-bold text-label-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">
+			<a href="{{ path('app_reportes_exportar_excel') }}" class="w-full mb-md bg-primary text-on-primary py-md rounded-xl font-label-bold text-label-bold shadow-sm hover:opacity-90 active:scale-95 transition-all text-center block">
 				Exportar Datos
-			</button>
+			</a>
 			<a class="flex items-center {{ active_menu == 'ayuda' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_ayuda') }}">
 				<span class="material-symbols-outlined mr-md">help</span>
 				<span class="font-label-bold text-label-bold">Centro de Ayuda</span>

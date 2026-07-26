@@ -105,11 +105,14 @@
 								</div>
 							</div>
 							<div class="mt-xl flex items-center gap-sm">
-								<a href="{{ path('app_actividades_editar', {id: activity.id}) }}" class="flex-1 flex items-center justify-center gap-xs py-md px-md rounded-xl border border-secondary text-secondary font-label-bold text-label-bold hover:bg-secondary hover:text-on-secondary transition-all">
+								<a href="{{ path('app_actividades_detalle', {id: activity.id}) }}" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+									<span class="material-symbols-outlined text-base">visibility</span> Ver Detalles
+								</a>
+								<a href="{{ path('app_actividades_editar', {id: activity.id}) }}" class="h-9 px-lg border border-secondary text-secondary rounded-lg font-label-bold text-label-bold hover:bg-secondary hover:text-on-secondary transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
 									<span class="material-symbols-outlined text-base">edit</span> Editar
 								</a>
-								<form method="post" action="{{ path('app_actividades_cerrar', {id: activity.id}) }}" class="flex-1">
-									<button type="submit" class="w-full flex items-center justify-center gap-xs py-md px-lg rounded-xl bg-primary text-on-primary font-label-bold text-label-bold hover:bg-primary-container transition-all">
+								<form method="post" action="{{ path('app_actividades_cerrar', {id: activity.id}) }}" class="inline-block">
+									<button type="submit" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-label-bold text-label-bold hover:bg-primary-container transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
 										Cerrar
 									</button>
 								</form>
@@ -150,9 +153,9 @@
 								</div>
 							</div>
 							<div class="mt-xl flex items-center gap-sm">
-								<button class="flex-1 flex items-center justify-center gap-xs py-md px-md rounded-xl border border-outline text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-variant transition-all">
+								<a href="{{ path('app_actividades_detalle', {id: activity.id}) }}" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
 									<span class="material-symbols-outlined text-base">visibility</span> Ver Detalles
-								</button>
+								</a>
 							</div>
 						</div>
 
@@ -176,13 +179,13 @@
 								</p>
 							</div>
 							<div class="mt-xl flex items-center gap-sm">
-								<form method="post" action="{{ path('app_actividades_reactivar', {id: activity.id}) }}" class="flex-1">
-									<button type="submit" class="w-full flex items-center justify-center gap-xs py-md px-md rounded-xl border border-outline text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-variant transition-all">
+								<form method="post" action="{{ path('app_actividades_reactivar', {id: activity.id}) }}" class="inline-block">
+									<button type="submit" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
 										<span class="material-symbols-outlined text-base">restart_alt</span> Reactivar
 									</button>
 								</form>
-								<form method="post" action="{{ path('app_actividades_eliminar', {id: activity.id}) }}" class="flex-1" onsubmit="return confirm('¿Estás seguro de eliminar esta actividad?')">
-									<button type="submit" class="w-full flex items-center justify-center gap-xs py-md px-md rounded-xl border border-outline text-on-surface-variant font-label-bold text-label-bold hover:bg-surface-variant transition-all">
+								<form method="post" action="{{ path('app_actividades_eliminar', {id: activity.id}) }}" class="inline-block" onsubmit="return confirm('¿Estás seguro de eliminar esta actividad?')">
+									<button type="submit" class="h-9 px-lg border border-error/40 text-error rounded-lg font-label-bold text-label-bold hover:bg-error-container/30 transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
 										<span class="material-symbols-outlined text-base">delete</span> Eliminar
 									</button>
 								</form>

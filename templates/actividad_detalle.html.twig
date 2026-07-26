@@ -1,0 +1,213 @@
+{% extends 'base_dashboard.html.twig' %}
+
+{% set active_menu = 'actividades' %}
+
+{% block title %}Arca Finanzas - Detalle de Actividad: {{ activity.name }}{% endblock %}
+
+{% block dashboard_content %}
+	<div class="p-lg max-w-container-max mx-auto w-full space-y-gutter">
+		<!-- Header & Breadcrumb -->
+		<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-lg">
+			<div>
+				<nav class="flex items-center gap-xs text-on-surface-variant font-label-bold text-label-bold mb-xs">
+					<a href="{{ path('app_actividades') }}" class="hover:text-primary transition-colors">Eventos y Actividades</a>
+					<span class="material-symbols-outlined text-xs">chevron_right</span>
+					<span class="text-primary">Detalle de Actividad</span>
+				</nav>
+				<div class="flex items-center gap-md">
+					<h1 class="font-headline-lg text-headline-lg text-on-background font-bold">{{ activity.name }}</h1>
+					{% if activity.status == 'active' %}
+						<span class="bg-secondary-container text-on-secondary-container text-xs px-md py-xs rounded-full font-label-bold uppercase">En Proceso</span>
+					{% elseif activity.status == 'finished' %}
+						<span class="bg-primary-container text-on-primary-container text-xs px-md py-xs rounded-full font-label-bold uppercase">Finalizada</span>
+					{% else %}
+						<span class="bg-error-container text-on-error-container text-xs px-md py-xs rounded-full font-label-bold uppercase">Cancelada</span>
+					{% endif %}
+				</div>
+				<p class="font-body-md text-body-md text-on-surface-variant mt-xs">
+					<span class="material-symbols-outlined text-sm align-middle mr-xs">calendar_today</span>
+					{{ activity.startDate|date('d/m/Y') }} — {{ activity.endDate|date('d/m/Y') }}
+				</p>
+			</div>
+
+			<div class="flex flex-wrap items-center gap-sm">
+				<a href="{{ path('app_actividades') }}" class="h-11 px-lg border border-outline text-on-surface-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-variant transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+					<span class="material-symbols-outlined text-base">arrow_back</span> Volver
+				</a>
+				<a href="{{ path('app_actividades_editar', {id: activity.id}) }}" class="h-11 px-lg border border-secondary text-secondary rounded-lg font-label-bold text-label-bold hover:bg-secondary hover:text-on-secondary transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+					<span class="material-symbols-outlined text-base">edit</span> Editar
+				</a>
+				<a href="{{ path('app_caja_nueva') }}?actividad={{ activity.id }}" class="h-11 px-lg bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm hover:bg-primary-container active:scale-95 transition-all inline-flex items-center justify-center gap-xs cursor-pointer">
+					<span class="material-symbols-outlined text-base">add</span> Registrar Movimiento
+				</a>
+			</div>
+		</div>
+
+		<!-- Resumen de Meta y Métricas -->
+		<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+			<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-2xl shadow-xs">
+				<p class="font-label-bold text-xs text-on-surface-variant uppercase">Meta Propuesta</p>
+				<p class="text-headline-md font-bold text-on-background mt-xs">${{ activity.goalAmount|number_format(2, '.', ',') }}</p>
+				<span class="text-[11px] text-on-surface-variant">Presupuesto original</span>
+			</div>
+			<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-2xl shadow-xs">
+				<p class="font-label-bold text-xs text-on-surface-variant uppercase">Total Recaudado (Ingresos)</p>
+				<p class="text-headline-md font-bold text-secondary mt-xs">+${{ total_income|number_format(2, '.', ',') }}</p>
+				<span class="text-[11px] text-secondary font-semibold">{{ progress }}% de la meta alcanzada</span>
+			</div>
+			<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-2xl shadow-xs">
+				<p class="font-label-bold text-xs text-on-surface-variant uppercase">Egresos Incurridos</p>
+				<p class="text-headline-md font-bold text-error mt-xs">-${{ total_expenses|number_format(2, '.', ',') }}</p>
+				<span class="text-[11px] text-on-surface-variant">Gastos logísticos</span>
+			</div>
+			<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-2xl shadow-xs">
+				<p class="font-label-bold text-xs text-on-surface-variant uppercase">Balance Neto de la Actividad</p>
+				<p class="text-headline-md font-bold text-primary mt-xs">${{ balance|number_format(2, '.', ',') }}</p>
+				<span class="text-[11px] text-primary font-semibold">Fondo resultante</span>
+			</div>
+		</div>
+
+		<!-- Barra de Progreso -->
+		<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-2xl shadow-xs space-y-xs">
+			<div class="flex justify-between items-center text-body-sm font-bold">
+				<span class="text-on-surface">Progreso hacia la Meta</span>
+				<span class="text-secondary">{{ progress }}% Completado</span>
+			</div>
+			<div class="w-full h-3 bg-surface-variant rounded-full overflow-hidden">
+				<div class="h-full bg-secondary transition-all duration-500 rounded-full" style="width: {{ progress }}%;"></div>
+			</div>
+		</div>
+
+		<!-- Descripción -->
+		{% if activity.description %}
+			<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-2xl shadow-xs">
+				<h3 class="font-headline-sm text-headline-sm text-primary font-bold mb-xs">Descripción y Detalles</h3>
+				<p class="font-body-md text-on-surface-variant leading-relaxed">{{ activity.description }}</p>
+			</div>
+		{% endif %}
+
+		<!-- Tabla de Transacciones Relacionadas -->
+		<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-xl shadow-xs">
+			<div class="flex items-center justify-between mb-lg">
+				<div>
+					<h3 class="font-headline-sm text-headline-sm text-primary font-bold">Movimientos y Recaudación</h3>
+					<p class="font-body-sm text-on-surface-variant">Historial de entradas y salidas asociadas a esta actividad.</p>
+				</div>
+				<span class="px-md py-xs bg-surface-container-low rounded-full text-xs font-bold text-on-surface-variant">
+					{{ transactions|length }} Transacción(es)
+				</span>
+			</div>
+
+			<div class="overflow-x-auto">
+				<table class="w-full text-left">
+					<thead class="bg-surface-container-low text-on-surface-variant font-label-bold text-xs uppercase border-b border-outline-variant">
+						<tr>
+							<th class="p-md">Fecha</th>
+							<th class="p-md">Descripción</th>
+							<th class="p-md">Categoría</th>
+							<th class="p-md">Tipo</th>
+							<th class="p-md text-right">Monto</th>
+							<th class="p-md">Registrado por</th>
+							<th class="p-md text-center">Comprobante</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-outline-variant text-body-sm">
+						{% for tx in transactions %}
+							<tr class="hover:bg-surface-container-low transition-colors">
+								<td class="p-md font-mono">{{ tx.transactionDate|date('d/m/Y') }}</td>
+								<td class="p-md font-bold text-on-background">{{ tx.description }}</td>
+								<td class="p-md">{{ tx.category ?? 'Sin categoría' }}</td>
+								<td class="p-md">
+									{% if tx.type == 'income' %}
+										<span class="px-sm py-[2px] bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full uppercase">Ingreso</span>
+									{% else %}
+										<span class="px-sm py-[2px] bg-error-container text-on-error-container text-[10px] font-bold rounded-full uppercase">Egreso</span>
+									{% endif %}
+								</td>
+								<td class="p-md text-right font-bold {{ tx.type == 'income' ? 'text-secondary' : 'text-error' }}">
+									{{ tx.type == 'income' ? '+' : '-' }}${{ tx.amount|number_format(2, '.', ',') }}
+								</td>
+								<td class="p-md">{{ tx.createdBy ? tx.createdBy.fullName : '---' }}</td>
+								<td class="p-md text-center">
+									{% if tx.receiptFilename %}
+										<button onclick="previewReceipt('{{ asset('uploads/receipts/' ~ tx.receiptFilename) }}', '{{ tx.receiptFilename }}')" class="inline-flex items-center gap-xs px-sm py-xs bg-secondary-container/30 text-secondary border border-secondary/20 rounded-md text-xs font-bold hover:bg-secondary hover:text-white transition-all cursor-pointer">
+											<span class="material-symbols-outlined text-sm">visibility</span> Ver
+										</button>
+									{% else %}
+										<span class="text-xs text-on-surface-variant italic">Sin comprobante</span>
+									{% endif %}
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="7" class="p-xl text-center text-on-surface-variant">
+									<span class="material-symbols-outlined text-4xl block mb-xs">receipt_long</span>
+									No hay transacciones registradas para esta actividad aún.
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- Lightbox Modal de Comprobante -->
+	<div id="receiptModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-md">
+		<div class="bg-white rounded-2xl max-w-3xl w-full p-lg overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh]">
+			<div class="flex items-center justify-between pb-md border-b border-outline-variant mb-md">
+				<h3 class="font-headline-sm text-sm font-bold text-primary flex items-center gap-xs">
+					<span class="material-symbols-outlined">receipt</span> Previsualización del Comprobante
+				</h3>
+				<button onclick="closeReceiptModal()" class="p-xs hover:bg-surface-container-low rounded-full transition-colors cursor-pointer text-on-surface-variant">
+					<span class="material-symbols-outlined">close</span>
+				</button>
+			</div>
+			<div class="flex-1 overflow-auto flex items-center justify-center bg-surface-container-low rounded-xl p-md">
+				<img id="receiptImage" src="" alt="Comprobante" class="max-w-full max-h-[65vh] object-contain rounded-lg shadow-sm hidden"/>
+				<iframe id="receiptPdf" src="" class="w-full h-[65vh] rounded-lg hidden border-0"></iframe>
+			</div>
+			<div class="pt-md mt-md border-t border-outline-variant flex justify-between items-center">
+				<a id="receiptDownloadLink" href="#" download class="px-md py-xs bg-primary text-on-primary rounded-lg text-xs font-bold inline-flex items-center gap-xs hover:bg-primary-container transition-all">
+					<span class="material-symbols-outlined text-sm">download</span> Descargar Archivo
+				</a>
+				<button onclick="closeReceiptModal()" class="px-md py-xs border border-outline text-on-surface-variant rounded-lg text-xs font-bold hover:bg-surface-variant transition-all cursor-pointer">
+					Cerrar
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function previewReceipt(url, filename) {
+			const modal = document.getElementById('receiptModal');
+			const img = document.getElementById('receiptImage');
+			const pdf = document.getElementById('receiptPdf');
+			const downloadLink = document.getElementById('receiptDownloadLink');
+
+			downloadLink.href = url;
+
+			if (filename.toLowerCase().endsWith('.pdf')) {
+				pdf.src = url;
+				pdf.classList.remove('hidden');
+				img.classList.add('hidden');
+			} else {
+				img.src = url;
+				img.classList.remove('hidden');
+				pdf.classList.add('hidden');
+			}
+
+			modal.classList.remove('hidden');
+		}
+
+		function closeReceiptModal() {
+			const modal = document.getElementById('receiptModal');
+			const img = document.getElementById('receiptImage');
+			const pdf = document.getElementById('receiptPdf');
+
+			modal.classList.add('hidden');
+			img.src = '';
+			pdf.src = '';
+		}
+	</script>
+{% endblock %}
