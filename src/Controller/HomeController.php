@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class HomeController extends AbstractController
 {
-    private const ALLOWED_ROLES = ['tesorero', 'administrador', 'colaborador'];
+    private const ALLOWED_ROLES = ['tesorero', 'coordinador', 'subcoordinador', 'sub-coordinador', 'miembro'];
 
     private const MAX_EMAIL_LENGTH = 180;
     private const MAX_NAME_LENGTH = 255;
