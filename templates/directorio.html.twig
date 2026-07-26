@@ -1,394 +1,194 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_dashboard.html.twig' %}
+
+{% set active_menu = 'directorio' %}
 
 {% block title %}FaithFinance | Directorio{% endblock %}
 
-{% block stylesheets %}
-	{{ parent() }}
-	<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-	<script id="tailwind-config">
-		tailwind.config = {
-			darkMode: "class",
-			theme: {
-				extend: {
-					"colors": {
-						"surface-variant": "#e0e3e5",
-						"on-surface-variant": "#444651",
-						"on-primary": "#ffffff",
-						"surface-dim": "#d8dadc",
-						"on-secondary-fixed-variant": "#005049",
-						"on-primary-fixed-variant": "#264191",
-						"outline-variant": "#c5c5d3",
-						"secondary": "#006a61",
-						"background": "#f7f9fb",
-						"on-tertiary-container": "#a1a4ff",
-						"tertiary-fixed-dim": "#c0c1ff",
-						"on-background": "#191c1e",
-						"secondary-fixed": "#89f5e7",
-						"primary-fixed-dim": "#b6c4ff",
-						"surface-container-lowest": "#ffffff",
-						"on-primary-container": "#90a8ff",
-						"on-tertiary-fixed": "#07006c",
-						"on-tertiary-fixed-variant": "#2f2ebe",
-						"surface-bright": "#f7f9fb",
-						"surface-container-highest": "#e0e3e5",
-						"inverse-surface": "#2d3133",
-						"error-container": "#ffdad6",
-						"inverse-on-surface": "#eff1f3",
-						"on-secondary": "#ffffff",
-						"outline": "#757682",
-						"on-tertiary": "#ffffff",
-						"surface-container-high": "#e6e8ea",
-						"primary": "#00236f",
-						"inverse-primary": "#b6c4ff",
-						"primary-container": "#1e3a8a",
-						"surface-tint": "#4059aa",
-						"surface-container-low": "#f2f4f6",
-						"on-error-container": "#93000a",
-						"on-secondary-fixed": "#00201d",
-						"on-primary-fixed": "#00164e",
-						"on-secondary-container": "#006f66",
-						"tertiary-fixed": "#e1e0ff",
-						"surface-container": "#eceef0",
-						"secondary-fixed-dim": "#6bd8cb",
-						"surface": "#f7f9fb",
-						"secondary-container": "#86f2e4",
-						"primary-fixed": "#dce1ff",
-						"on-error": "#ffffff",
-						"on-surface": "#191c1e",
-						"tertiary": "#0d0097",
-						"tertiary-container": "#2724b8",
-						"error": "#ba1a1a"
-					},
-					"borderRadius": {
-						"DEFAULT": "0.125rem",
-						"lg": "0.25rem",
-						"xl": "0.5rem",
-						"full": "0.75rem"
-					},
-					"spacing": {
-						"md": "16px",
-						"xs": "4px",
-						"gutter": "24px",
-						"lg": "24px",
-						"xl": "32px",
-						"sm": "8px",
-						"base": "4px",
-						"container-max": "1280px"
-					},
-					"fontFamily": {
-						"body-lg": ["Inter"],
-						"headline-lg-mobile": ["Inter"],
-						"headline-md": ["Inter"],
-						"body-md": ["Inter"],
-						"data-mono": ["Inter"],
-						"body-sm": ["Inter"],
-						"headline-lg": ["Inter"],
-						"headline-sm": ["Inter"],
-						"label-bold": ["Inter"]
-					},
-					"fontSize": {
-						"body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-						"headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
-						"headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-						"body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-						"data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
-						"body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-						"headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-						"headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
-						"label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
-					}
-				},
-			},
-		}
-	</script>
-	<style>
-		.material-symbols-outlined {
-			font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-		}
-		.hide-scrollbar::-webkit-scrollbar {
-			display: none;
-		}
-		.hide-scrollbar {
-			-ms-overflow-style: none;
-			scrollbar-width: none;
-		}
-	</style>
-{% endblock %}
-
-{% block body %}
+{% block dashboard_content %}
 	{% set months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'] %}
 	{% set active_pct = total_members > 0 ? ((active_members / total_members) * 100)|round : 0 %}
 
-	<aside class="hidden lg:flex fixed left-0 top-0 h-full w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant z-50">
-		<div class="px-lg mb-xl">
-			<h2 class="font-headline-md text-headline-md text-primary">Grace Community</h2>
-			<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del Tesorero</p>
-		</div>
-		<nav class="flex-1 space-y-1">
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
-				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">dashboard</span>
-				<span class="font-label-bold text-label-bold">Tablero</span>
-			</a>
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
-				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">event_available</span>
-				<span class="font-label-bold text-label-bold">Actividades</span>
-			</a>
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
-				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">account_balance_wallet</span>
-				<span class="font-label-bold text-label-bold">Control de Caja</span>
-			</a>
-			<a class="flex items-center bg-secondary-container text-on-secondary-container rounded-xl mx-md p-md transition-all group" href="{{ path('app_directorio') }}">
-				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">group</span>
-				<span class="font-label-bold text-label-bold">Directorio</span>
-			</a>
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_reportes') }}">
-				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">assessment</span>
-				<span class="font-label-bold text-label-bold">Informes</span>
-			</a>
-		</nav>
-		<div class="px-md mt-auto pt-lg border-t border-outline-variant space-y-1">
-			<button class="w-full mb-md bg-primary text-on-primary py-md rounded-xl font-label-bold text-label-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">
-				Exportar Datos
-			</button>
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="#">
-				<span class="material-symbols-outlined mr-md">help</span>
-				<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
-			</a>
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="{{ path('app_logout') }}">
-				<span class="material-symbols-outlined mr-md">logout</span>
-				<span class="font-label-bold text-label-bold">Cerrar Sesi\u00f3n</span>
-			</a>
-		</div>
-	</aside>
+	<div class="p-lg md:px-xl md:py-lg max-w-container-max mx-auto w-full space-y-gutter">
 
-	<main class="lg:ml-64 min-h-screen flex flex-col">
-		<header class="sticky top-0 w-full z-40 flex justify-between items-center px-lg h-16 bg-surface border-b border-outline-variant shadow-sm">
-			<div class="flex items-center gap-md">
-				<span class="font-headline-sm text-headline-sm font-bold text-primary">FaithFinance</span>
-				<form method="get" action="{{ path('app_directorio') }}" class="hidden md:flex items-center bg-surface-container-low rounded-full px-md py-1 border border-outline-variant ml-xl">
-					<span class="material-symbols-outlined text-on-surface-variant text-sm mr-xs">search</span>
-					<input name="search" value="{{ search }}" class="bg-transparent border-none focus:ring-0 text-body-sm w-48" placeholder="Buscar en el Directorio..." type="text"/>
-				</form>
-			</div>
-			<div class="flex items-center gap-md">
-				<a href="{{ path('app_directorio_nuevo') }}" class="hidden md:flex items-center bg-primary text-on-primary px-lg py-sm rounded-full font-label-bold text-label-bold cursor-pointer active:scale-95 transition-all">
-					Entrada R\u00e1pida
-				</a>
-				<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative">
-					<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-					<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
-				</button>
-				<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
-					<span class="material-symbols-outlined text-on-surface-variant">settings</span>
-				</button>
-				<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant">
-					<img alt="Perfil" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQvJ2EbpVF8wcyJuhEUE2pe93psv8LpTE5ukr34M-UrR755jxm08a7E6z7BJMat37kFwBPbKu441Z9Ta8Y01dCum6op_oroDZzmIUvLl5I8xth7YOj2dKcfxlt0W7g9XC9qoruVs5tQlkT_xvSUexyXaJ-Pzh0CRCk8mKyS9EyWhpBF4-5MD065NaAevYKiZoYMMlGBbjRZbmkAN-POlZ4ohFyFFvT-CijdV-pC8WjFvQXa5kjrAAcufKXkxlVfEXO0gsSuwOgEoc"/>
+		{% for label, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="flex items-center gap-md p-md rounded-xl border shadow-sm {% if label == 'success' %}bg-secondary-container/20 border-secondary/30 text-on-secondary-container{% elseif label == 'error' %}bg-error-container/30 border-error/30 text-on-error-container{% else %}bg-surface-container-low border-outline-variant text-on-surface{% endif %}">
+					<span class="material-symbols-outlined text-[20px]">{% if label == 'success' %}check_circle{% elseif label == 'error' %}error{% else %}info{% endif %}</span>
+					<span class="font-body-sm flex-1">{{ message }}</span>
 				</div>
-			</div>
-		</header>
-
-		<div class="p-lg md:px-xl md:py-lg max-w-container-max mx-auto w-full space-y-gutter">
-
-			{% for label, messages in app.flashes %}
-				{% for message in messages %}
-					<div class="flex items-center gap-md p-md rounded-xl border shadow-sm {% if label == 'success' %}bg-secondary-container/20 border-secondary/30 text-on-secondary-container{% elseif label == 'error' %}bg-error-container/30 border-error/30 text-on-error-container{% else %}bg-surface-container-low border-outline-variant text-on-surface{% endif %}">
-						<span class="material-symbols-outlined text-[20px]">{% if label == 'success' %}check_circle{% elseif label == 'error' %}error{% else %}info{% endif %}</span>
-						<span class="font-body-sm flex-1">{{ message }}</span>
-					</div>
-				{% endfor %}
 			{% endfor %}
+		{% endfor %}
 
-			<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
-				<section class="md:col-span-8 bg-surface-container-lowest p-xl rounded-xl border border-outline-variant shadow-sm">
-					<div class="flex items-center justify-between mb-xl">
-						<div>
-							<h2 class="font-headline-sm text-headline-sm text-primary">Agregar Miembro</h2>
-							<p class="font-body-sm text-on-surface-variant">Registre un nuevo miembro en el directorio de Grace Community.</p>
-						</div>
-						<span class="material-symbols-outlined text-primary text-3xl">person_add</span>
+		<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+			<section class="md:col-span-8 bg-surface-container-lowest p-xl rounded-xl border border-outline-variant shadow-sm">
+				<div class="flex items-center justify-between mb-xl">
+					<div>
+						<h2 class="font-headline-sm text-headline-sm text-primary">Agregar Miembro</h2>
+						<p class="font-body-sm text-on-surface-variant">Registre un nuevo miembro en el directorio de Grace Community.</p>
 					</div>
-					<a href="{{ path('app_directorio_nuevo') }}" class="block text-center bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
-					 Registrar Nuevo Miembro
-					</a>
-				</section>
-
-				<section class="md:col-span-4 bg-primary text-on-primary p-xl rounded-xl shadow-lg relative overflow-hidden flex flex-col justify-between">
-					<div class="relative z-10">
-						<h3 class="font-label-bold text-label-bold text-on-primary/70 uppercase">Directorio Total</h3>
-						<div class="text-[48px] font-bold leading-tight">{{ total_members }}</div>
-						<p class="font-body-sm text-on-primary/80 mt-xs">{{ active_members }} Miembros Activos</p>
-					</div>
-					<div class="relative z-10 pt-md">
-						<div class="h-1 bg-on-primary/20 rounded-full overflow-hidden">
-							<div class="h-full bg-secondary-fixed" style="width: {{ active_pct }}%"></div>
-						</div>
-						<p class="font-label-bold text-label-bold mt-sm">{{ active_pct }}% Colaboradores Activos</p>
-					</div>
-				</section>
-			</div>
-
-			{% if members is empty %}
-				<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl text-center py-24">
-					<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">group_off</span>
-					<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">No hay miembros registrados</h3>
-					<p class="font-body-sm text-on-surface-variant mb-xl">Comeienza agregando el primer miembro al directorio de Grace Community.</p>
-					<a href="{{ path('app_directorio_nuevo') }}" class="inline-flex items-center gap-sm bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
-						<span class="material-symbols-outlined text-[20px]">person_add</span>
-					 Registrar Primer Miembro
-					</a>
+					<span class="material-symbols-outlined text-primary text-3xl">person_add</span>
 				</div>
-			{% else %}
-				<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
-					<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-[600px] flex flex-col">
-						<div class="p-md border-b border-outline-variant bg-surface-container-low">
-							<form method="get" action="{{ path('app_directorio') }}" class="relative">
-								<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
-								<input name="search" value="{{ search }}" class="w-full pl-10 pr-md py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary" placeholder="Buscar miembros..." type="text"/>
-							</form>
-						</div>
-						<div class="flex-1 overflow-y-auto hide-scrollbar divide-y divide-outline-variant">
-							{% for member in members %}
-								{% set is_selected = selected_member and member.id == selected_member.id %}
-								<a href="{{ path('app_directorio', {id: member.id}) }}" class="p-md flex items-center gap-md hover:bg-surface-container-low cursor-pointer transition-colors {% if is_selected %}bg-secondary-container/20 border-l-4 border-secondary{% else %}group{% endif %}">
-									<div class="w-10 h-10 rounded-full {% if is_selected %}bg-primary-container text-on-primary-container{% else %}bg-surface-variant text-on-surface{% endif %} flex items-center justify-center font-bold text-sm">{{ member.getInitials() }}</div>
-									<div class="flex-1 min-w-0">
-										<h4 class="font-label-bold text-body-sm truncate">{{ member.getFullName() }}</h4>
-										<p class="text-xs text-on-surface-variant truncate">{{ member.role }}</p>
-									</div>
-									<span class="material-symbols-outlined {% if is_selected %}text-secondary{% else %}text-outline-variant group-hover:text-primary transition-colors{% endif %} text-[20px]">chevron_right</span>
-								</a>
-							{% endfor %}
-						</div>
-					</div>
+				<a href="{{ path('app_directorio_nuevo') }}" class="block text-center bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
+				 Registrar Nuevo Miembro
+				</a>
+			</section>
 
-					{% if selected_member %}
-						<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-fit lg:h-[600px] flex flex-col">
-							<div class="p-xl bg-gradient-to-r from-surface-container-low to-surface-container-lowest border-b border-outline-variant">
-								<div class="flex flex-col md:flex-row gap-xl items-start md:items-center">
-									<div class="w-24 h-24 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-3xl shadow-sm">
-										{{ selected_member.getInitials() }}
-									</div>
-									<div class="flex-1">
-										<div class="flex flex-wrap items-center gap-md mb-xs">
-											<h2 class="font-headline-md text-headline-md text-on-background">{{ selected_member.getFullName() }}</h2>
-											{% if selected_member.status == 'active' %}
-												<span class="px-md py-xs bg-success/10 text-secondary border border-secondary/20 rounded-full font-label-bold text-[10px] uppercase">Miembro Activo</span>
-											{% else %}
-												<span class="px-md py-xs bg-surface-variant text-on-surface-variant border border-outline-variant rounded-full font-label-bold text-[10px] uppercase">Miembro Inactivo</span>
-											{% endif %}
-										</div>
-										<div class="flex flex-wrap gap-xl text-on-surface-variant font-body-sm">
-											{% if selected_member.email %}
-												<div class="flex items-center gap-xs">
-													<span class="material-symbols-outlined text-[18px]">mail</span>
-													{{ selected_member.email }}
-												</div>
-											{% endif %}
-											{% if selected_member.phone %}
-												<div class="flex items-center gap-xs">
-													<span class="material-symbols-outlined text-[18px]">call</span>
-													{{ selected_member.phone }}
-												</div>
-											{% endif %}
-											{% if selected_member.joinDate %}
-												<div class="flex items-center gap-xs">
-													<span class="material-symbols-outlined text-[18px]">calendar_today</span>
-													Se unió en {{ selected_member.joinDate|date('M Y') }}
-												</div>
-											{% endif %}
-										</div>
-									</div>
-									<div class="flex gap-sm w-full md:w-auto">
-										<a href="{{ path('app_directorio_editar', {id: selected_member.id}) }}" class="flex-1 md:flex-none px-md py-sm border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors text-center">Editar Perfil</a>
-										<button class="flex-1 md:flex-none px-md py-sm bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm">Mensaje</button>
-									</div>
-								</div>
-							</div>
-							<div class="flex-1 flex flex-col min-h-0">
-								<div class="px-xl flex border-b border-outline-variant">
-									<button class="py-md px-md border-b-2 border-primary text-primary font-label-bold text-label-bold">Historial de Contribuciones</button>
-									<button class="py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors">Tickets y Eventos</button>
-									<button class="py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors">Notas</button>
-								</div>
-								<div class="flex-1 overflow-y-auto p-xl space-y-md">
-									{% if member_transactions is empty %}
-										<div class="text-center py-xl">
-											<span class="material-symbols-outlined text-on-surface-variant text-5xl">receipt_long</span>
-											<p class="font-body-sm text-on-surface-variant mt-md">No hay transacciones registradas</p>
-										</div>
-									{% else %}
-										<table class="w-full text-left">
-											<thead class="text-on-surface-variant font-label-bold text-label-bold uppercase border-b border-outline-variant">
-												<tr>
-													<th class="pb-md">Fecha</th>
-													<th class="pb-md">Categor\u00eda</th>
-													<th class="pb-md text-right">Monto</th>
-													<th class="pb-md text-center">Estado</th>
-												</tr>
-											</thead>
-											<tbody class="divide-y divide-outline-variant">
-												{% for transaction in member_transactions %}
-													<tr class="hover:bg-surface-container-low transition-colors">
-														<td class="py-md font-data-mono text-body-sm">{{ transaction.transactionDate|date('d') }} de {{ months[transaction.transactionDate|date('n') - 1] }}, {{ transaction.transactionDate|date('Y') }}</td>
-														<td class="py-md">
-															<div class="flex items-center gap-sm">
-																{% if transaction.type == 'income' %}
-																	<span class="material-symbols-outlined text-secondary text-[18px]">volunteer_activism</span>
-																{% else %}
-																	<span class="material-symbols-outlined text-error text-[18px]">payments</span>
-																{% endif %}
-																{{ transaction.category }}
-															</div>
-														</td>
-														<td class="py-md text-right font-bold">${{ transaction.amount|number_format(2, '.', ',') }}</td>
-														<td class="py-md text-center">
-															{% if transaction.type == 'income' %}
-																<span class="px-sm py-1 bg-secondary-container/30 text-on-secondary-container rounded text-[10px] font-bold uppercase">Ingreso</span>
-															{% else %}
-																<span class="px-sm py-1 bg-error-container/40 text-on-error-container rounded text-[10px] font-bold uppercase">Gasto</span>
-															{% endif %}
-														</td>
-													</tr>
-												{% endfor %}
-											</tbody>
-										</table>
-										<div class="pt-xl flex justify-center">
-											<button class="text-body-sm font-label-bold text-primary flex items-center gap-xs">
-												Descargar Historial Completo <span class="material-symbols-outlined text-[18px]">download</span>
-											</button>
-										</div>
-									{% endif %}
-								</div>
-							</div>
-						</div>
-					{% else %}
-						<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-[600px] flex flex-col items-center justify-center">
-							<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">person_search</span>
-							<p class="font-body-sm text-on-surface-variant">Seleccione un miembro para ver su informaci\u00f3n</p>
-						</div>
-					{% endif %}
+			<section class="md:col-span-4 bg-primary text-on-primary p-xl rounded-xl shadow-lg relative overflow-hidden flex flex-col justify-between">
+				<div class="relative z-10">
+					<h3 class="font-label-bold text-label-bold text-on-primary/70 uppercase">Directorio Total</h3>
+					<div class="text-[48px] font-bold leading-tight">{{ total_members }}</div>
+					<p class="font-body-sm text-on-primary/80 mt-xs">{{ active_members }} Miembros Activos</p>
 				</div>
-			{% endif %}
+				<div class="relative z-10 pt-md">
+					<div class="h-1 bg-on-primary/20 rounded-full overflow-hidden">
+						<div class="h-full bg-secondary-fixed" style="width: {{ active_pct }}%"></div>
+					</div>
+					<p class="font-label-bold text-label-bold mt-sm">{{ active_pct }}% Colaboradores Activos</p>
+				</div>
+			</section>
 		</div>
-	</main>
 
-	<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-highest flex justify-around items-center h-16 z-50">
-		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_dashboard') }}">
-			<span class="material-symbols-outlined">dashboard</span>
-			<span class="text-[10px] font-label-bold">Inicio</span>
-		</a>
-		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_actividades') }}">
-			<span class="material-symbols-outlined">event_available</span>
-			<span class="text-[10px] font-label-bold">Eventos</span>
-		</a>
-		<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="{{ path('app_caja') }}">
-			<span class="material-symbols-outlined">account_balance_wallet</span>
-			<span class="text-[10px] font-label-bold">Caja</span>
-		</a>
-		<a class="flex flex-col items-center gap-1 text-primary" href="{{ path('app_directorio') }}">
-			<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
-			<span class="text-[10px] font-label-bold">Gente</span>
-		</a>
-	</nav>
+		{% if members is empty %}
+			<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-xl text-center py-24">
+				<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">group_off</span>
+				<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">No hay miembros registrados</h3>
+				<p class="font-body-sm text-on-surface-variant mb-xl">Comeienza agregando el primer miembro al directorio de Grace Community.</p>
+				<a href="{{ path('app_directorio_nuevo') }}" class="inline-flex items-center gap-sm bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold hover:bg-primary-container transition-colors shadow-md active:scale-[0.98]">
+					<span class="material-symbols-outlined text-[20px]">person_add</span>
+				 Registrar Primer Miembro
+				</a>
+			</div>
+		{% else %}
+			<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+				<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-[600px] flex flex-col">
+					<div class="p-md border-b border-outline-variant bg-surface-container-low">
+						<form method="get" action="{{ path('app_directorio') }}" class="relative">
+							<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+							<input name="search" value="{{ search }}" class="w-full pl-10 pr-md py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary" placeholder="Buscar miembros..." type="text"/>
+						</form>
+					</div>
+					<div class="flex-1 overflow-y-auto hide-scrollbar divide-y divide-outline-variant">
+						{% for member in members %}
+							{% set is_selected = selected_member and member.id == selected_member.id %}
+							<a href="{{ path('app_directorio', {id: member.id}) }}" class="p-md flex items-center gap-md hover:bg-surface-container-low cursor-pointer transition-colors {% if is_selected %}bg-secondary-container/20 border-l-4 border-secondary{% else %}group{% endif %}">
+								<div class="w-10 h-10 rounded-full {% if is_selected %}bg-primary-container text-on-primary-container{% else %}bg-surface-variant text-on-surface{% endif %} flex items-center justify-center font-bold text-sm">{{ member.getInitials() }}</div>
+								<div class="flex-1 min-w-0">
+									<h4 class="font-label-bold text-body-sm truncate">{{ member.getFullName() }}</h4>
+									<p class="text-xs text-on-surface-variant truncate">{{ member.role }}</p>
+								</div>
+								<span class="material-symbols-outlined {% if is_selected %}text-secondary{% else %}text-outline-variant group-hover:text-primary transition-colors{% endif %} text-[20px]">chevron_right</span>
+							</a>
+						{% endfor %}
+					</div>
+				</div>
+
+				{% if selected_member %}
+					<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-fit lg:h-[600px] flex flex-col">
+						<div class="p-xl bg-gradient-to-r from-surface-container-low to-surface-container-lowest border-b border-outline-variant">
+							<div class="flex flex-col md:flex-row gap-xl items-start md:items-center">
+								<div class="w-24 h-24 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-3xl shadow-sm">
+									{{ selected_member.getInitials() }}
+								</div>
+								<div class="flex-1">
+									<div class="flex flex-wrap items-center gap-md mb-xs">
+										<h2 class="font-headline-md text-headline-md text-on-background">{{ selected_member.getFullName() }}</h2>
+										{% if selected_member.status == 'active' %}
+											<span class="px-md py-xs bg-success/10 text-secondary border border-secondary/20 rounded-full font-label-bold text-[10px] uppercase">Miembro Activo</span>
+										{% else %}
+											<span class="px-md py-xs bg-surface-variant text-on-surface-variant border border-outline-variant rounded-full font-label-bold text-[10px] uppercase">Miembro Inactivo</span>
+										{% endif %}
+									</div>
+									<div class="flex flex-wrap gap-xl text-on-surface-variant font-body-sm">
+										{% if selected_member.email %}
+											<div class="flex items-center gap-xs">
+												<span class="material-symbols-outlined text-[18px]">mail</span>
+												{{ selected_member.email }}
+											</div>
+										{% endif %}
+										{% if selected_member.phone %}
+											<div class="flex items-center gap-xs">
+												<span class="material-symbols-outlined text-[18px]">call</span>
+												{{ selected_member.phone }}
+											</div>
+										{% endif %}
+										{% if selected_member.joinDate %}
+											<div class="flex items-center gap-xs">
+												<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+												Se unió en {{ selected_member.joinDate|date('M Y') }}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+								<div class="flex gap-sm w-full md:w-auto">
+									<a href="{{ path('app_directorio_editar', {id: selected_member.id}) }}" class="flex-1 md:flex-none px-md py-sm border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors text-center">Editar Perfil</a>
+									<button class="flex-1 md:flex-none px-md py-sm bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm">Mensaje</button>
+								</div>
+							</div>
+						</div>
+						<div class="flex-1 flex flex-col min-h-0">
+							<div class="px-xl flex border-b border-outline-variant">
+								<button class="py-md px-md border-b-2 border-primary text-primary font-label-bold text-label-bold">Historial de Contribuciones</button>
+								<button class="py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors">Tickets y Eventos</button>
+								<button class="py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors">Notas</button>
+							</div>
+							<div class="flex-1 overflow-y-auto p-xl space-y-md">
+								{% if member_transactions is empty %}
+									<div class="text-center py-xl">
+										<span class="material-symbols-outlined text-on-surface-variant text-5xl">receipt_long</span>
+										<p class="font-body-sm text-on-surface-variant mt-md">No hay transacciones registradas</p>
+									</div>
+								{% else %}
+									<table class="w-full text-left">
+										<thead class="text-on-surface-variant font-label-bold text-label-bold uppercase border-b border-outline-variant">
+											<tr>
+												<th class="pb-md">Fecha</th>
+												<th class="pb-md">Categoría</th>
+												<th class="pb-md text-right">Monto</th>
+												<th class="pb-md text-center">Estado</th>
+											</tr>
+										</thead>
+										<tbody class="divide-y divide-outline-variant">
+											{% for transaction in member_transactions %}
+												<tr class="hover:bg-surface-container-low transition-colors">
+													<td class="py-md font-data-mono text-body-sm">{{ transaction.transactionDate|date('d') }} de {{ months[transaction.transactionDate|date('n') - 1] }}, {{ transaction.transactionDate|date('Y') }}</td>
+													<td class="py-md">
+														<div class="flex items-center gap-sm">
+															{% if transaction.type == 'income' %}
+																<span class="material-symbols-outlined text-secondary text-[18px]">volunteer_activism</span>
+															{% else %}
+																<span class="material-symbols-outlined text-error text-[18px]">payments</span>
+															{% endif %}
+															{{ transaction.category }}
+														</div>
+													</td>
+													<td class="py-md text-right font-bold">${{ transaction.amount|number_format(2, '.', ',') }}</td>
+													<td class="py-md text-center">
+														{% if transaction.type == 'income' %}
+															<span class="px-sm py-1 bg-secondary-container/30 text-on-secondary-container rounded text-[10px] font-bold uppercase">Ingreso</span>
+														{% else %}
+															<span class="px-sm py-1 bg-error-container/40 text-on-error-container rounded text-[10px] font-bold uppercase">Gasto</span>
+														{% endif %}
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+									<div class="pt-xl flex justify-center">
+										<button class="text-body-sm font-label-bold text-primary flex items-center gap-xs">
+											Descargar Historial Completo <span class="material-symbols-outlined text-[18px]">download</span>
+										</button>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-[600px] flex flex-col items-center justify-center">
+						<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">person_search</span>
+						<p class="font-body-sm text-on-surface-variant">Seleccione un miembro para ver su información</p>
+					</div>
+				{% endif %}
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}
