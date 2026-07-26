@@ -1,0 +1,389 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FaithFinance - Tablero{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+	<script id="tailwind-config">
+		tailwind.config = {
+			darkMode: "class",
+			theme: {
+				extend: {
+					"colors": {
+						"surface-variant": "#e0e3e5",
+						"on-surface-variant": "#444651",
+						"on-primary": "#ffffff",
+						"surface-dim": "#d8dadc",
+						"on-secondary-fixed-variant": "#005049",
+						"on-primary-fixed-variant": "#264191",
+						"outline-variant": "#c5c5d3",
+						"secondary": "#006a61",
+						"background": "#f7f9fb",
+						"on-tertiary-container": "#a1a4ff",
+						"tertiary-fixed-dim": "#c0c1ff",
+						"on-background": "#191c1e",
+						"secondary-fixed": "#89f5e7",
+						"primary-fixed-dim": "#b6c4ff",
+						"surface-container-lowest": "#ffffff",
+						"on-primary-container": "#90a8ff",
+						"on-tertiary-fixed": "#07006c",
+						"on-tertiary-fixed-variant": "#2f2ebe",
+						"surface-bright": "#f7f9fb",
+						"surface-container-highest": "#e0e3e5",
+						"inverse-surface": "#2d3133",
+						"error-container": "#ffdad6",
+						"inverse-on-surface": "#eff1f3",
+						"on-secondary": "#ffffff",
+						"outline": "#757682",
+						"on-tertiary": "#ffffff",
+						"surface-container-high": "#e6e8ea",
+						"primary": "#00236f",
+						"inverse-primary": "#b6c4ff",
+						"primary-container": "#1e3a8a",
+						"surface-tint": "#4059aa",
+						"surface-container-low": "#f2f4f6",
+						"on-error-container": "#93000a",
+						"on-secondary-fixed": "#00201d",
+						"on-primary-fixed": "#00164e",
+						"on-secondary-container": "#006f66",
+						"tertiary-fixed": "#e1e0ff",
+						"surface-container": "#eceef0",
+						"secondary-fixed-dim": "#6bd8cb",
+						"surface": "#f7f9fb",
+						"secondary-container": "#86f2e4",
+						"primary-fixed": "#dce1ff",
+						"on-error": "#ffffff",
+						"on-surface": "#191c1e",
+						"tertiary": "#0d0097",
+						"tertiary-container": "#2724b8",
+						"error": "#ba1a1a"
+					},
+					"borderRadius": {
+						"DEFAULT": "0.125rem",
+						"lg": "0.25rem",
+						"xl": "0.5rem",
+						"full": "0.75rem"
+					},
+					"spacing": {
+						"md": "16px",
+						"xs": "4px",
+						"gutter": "24px",
+						"lg": "24px",
+						"xl": "32px",
+						"sm": "8px",
+						"base": "4px",
+						"container-max": "1280px"
+					},
+					"fontFamily": {
+						"body-lg": ["Inter"],
+						"headline-lg-mobile": ["Inter"],
+						"headline-md": ["Inter"],
+						"body-md": ["Inter"],
+						"data-mono": ["Inter"],
+						"body-sm": ["Inter"],
+						"headline-lg": ["Inter"],
+						"headline-sm": ["Inter"],
+						"label-bold": ["Inter"]
+					},
+					"fontSize": {
+						"body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+						"headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+						"headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+						"body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+						"data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+						"body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+						"headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+						"headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+						"label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+					}
+				},
+			},
+		}
+	</script>
+	<style>
+		body { font-family: 'Inter', sans-serif; }
+		.material-symbols-outlined {
+			font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+		}
+		.card-elevation {
+			background-color: #FFFFFF;
+			border: 1px solid #E2E8F0;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+			transition: box-shadow 0.2s ease-in-out;
+		}
+		.card-elevation:hover {
+			box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+	<aside class="hidden lg:flex fixed left-0 top-0 h-full flex-col py-lg bg-surface-container-low border-r border-outline-variant w-64 z-50">
+		<div class="px-lg mb-xl">
+			<h1 class="font-headline-md text-headline-md text-primary">Grace Community</h1>
+			<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del Tesorero</p>
+		</div>
+		<nav class="flex-1 space-y-base">
+			<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container rounded-xl mx-md p-md font-label-bold text-label-bold group transition-all" href="{{ path('app_dashboard') }}">
+				<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">dashboard</span>
+				<span>Tablero</span>
+			</a>
+			<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md font-label-bold text-label-bold group transition-all" href="#">
+				<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">event_available</span>
+				<span>Actividades</span>
+			</a>
+			<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md font-label-bold text-label-bold group transition-all" href="#">
+				<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">account_balance_wallet</span>
+				<span>Control de Caja</span>
+			</a>
+			<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md font-label-bold text-label-bold group transition-all" href="#">
+				<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">group</span>
+				<span>Directorio</span>
+			</a>
+			<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md font-label-bold text-label-bold group transition-all" href="#">
+				<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">assessment</span>
+				<span>Reportes</span>
+			</a>
+		</nav>
+		<div class="mt-auto px-md space-y-base">
+			<button class="w-full mb-md py-md bg-primary text-on-primary rounded-xl font-label-bold text-label-bold shadow-sm hover:opacity-90 transition-opacity">
+				Exportar Datos
+			</button>
+			<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl p-md font-label-bold text-label-bold" href="#">
+				<span class="material-symbols-outlined">help</span>
+				<span>Centro de Ayuda</span>
+			</a>
+			<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl p-md font-label-bold text-label-bold" href="{{ path('app_logout') }}">
+				<span class="material-symbols-outlined">logout</span>
+				<span>Cerrar Sesi\u00f3n</span>
+			</a>
+		</div>
+	</aside>
+
+	<main class="lg:ml-64 min-h-screen flex flex-col">
+		<header class="sticky top-0 w-full z-40 flex justify-between items-center px-lg h-16 bg-surface border-b border-outline-variant shadow-sm">
+			<div class="flex items-center gap-md">
+				<div class="relative">
+					<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant material-symbols-outlined text-[20px]">search</span>
+					<input class="bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-body-sm font-body-sm w-64 focus:ring-2 focus:ring-primary/20" placeholder="Buscar registros..." type="text"/>
+				</div>
+			</div>
+			<div class="flex items-center gap-lg">
+				<div class="flex flex-col items-end">
+					<span class="font-label-bold text-label-bold text-primary">{{ user.fullName ?? user.email }}</span>
+					<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Sesi\u00f3n Activa</span>
+				</div>
+				<div class="flex items-center gap-md border-l border-outline-variant pl-lg">
+					<button class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-colors active:scale-95">
+						<span class="material-symbols-outlined">notifications</span>
+					</button>
+					<button class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant transition-colors active:scale-95">
+						<span class="material-symbols-outlined">settings</span>
+					</button>
+					<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high ml-sm cursor-pointer active:scale-95">
+						<img alt="Perfil del Administrador" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa5GbdObPCsTalntXRRT1a8N07OJobljzwdtElwWhTCvi99fw3_L-PQJ_RVgAXXojrxoJcpLJHgkzxU5us8ubJ8Vf0yeQX4GsuEKg4RKsftlLDfPrYVx4TkWoab6buf9yJQ11MXYOstLxT5fNFjS3hGhQnxJ3Yg9YFZ4qeb78uFetM7xj9y1EXPZ3nKKqCuvqgjMDpOAq-uf4HHBs2Xyv3_9hm1bYNxdF63uc53nGi-BYQhhbhaRK1fGKmsgG-TKENa5J6WgJZ4P8"/>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<div class="p-lg max-w-container-max mx-auto w-full">
+			<div class="mb-xl flex justify-between items-end">
+				<div>
+					<h2 class="font-headline-lg text-headline-lg text-primary">Vista General del Tablero</h2>
+					<p class="font-body-md text-body-md text-on-surface-variant">Bienvenido de nuevo. Aqu\u00ed est\u00e1 el estado financiero m\u00e1s reciente para Grace Community.</p>
+				</div>
+				<button class="flex items-center gap-sm bg-primary text-on-primary px-lg py-md rounded-lg font-label-bold text-label-bold active:scale-95 transition-transform">
+					<span class="material-symbols-outlined text-[18px]">add_circle</span>
+					Entrada R\u00e1pida
+				</button>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-xl">
+				<div class="card-elevation rounded-xl p-lg flex flex-col justify-between">
+					<div class="flex justify-between items-start">
+						<div class="bg-secondary-container p-sm rounded-lg text-on-secondary-container">
+							<span class="material-symbols-outlined">trending_up</span>
+						</div>
+						<span class="font-label-bold text-label-bold text-secondary">+12.4% vs mes ant.</span>
+					</div>
+					<div class="mt-md">
+						<p class="font-label-bold text-label-bold text-on-surface-variant uppercase opacity-70">Ingresos Totales</p>
+						<h3 class="font-headline-lg text-headline-lg text-primary">$42,850.00</h3>
+					</div>
+				</div>
+				<div class="card-elevation rounded-xl p-lg flex flex-col justify-between">
+					<div class="flex justify-between items-start">
+						<div class="bg-error-container p-sm rounded-lg text-on-error-container">
+							<span class="material-symbols-outlined">trending_down</span>
+						</div>
+						<span class="font-label-bold text-label-bold text-error">+4.1% vs mes ant.</span>
+					</div>
+					<div class="mt-md">
+						<p class="font-label-bold text-label-bold text-on-surface-variant uppercase opacity-70">Egresos Totales</p>
+						<h3 class="font-headline-lg text-headline-lg text-primary">$18,240.50</h3>
+					</div>
+				</div>
+				<div class="card-elevation rounded-xl p-lg flex flex-col justify-between bg-primary-container text-on-primary">
+					<div class="flex justify-between items-start">
+						<div class="bg-white/20 p-sm rounded-lg text-white">
+							<span class="material-symbols-outlined">account_balance</span>
+						</div>
+						<span class="font-label-bold text-label-bold text-secondary-fixed">Estado Saludable</span>
+					</div>
+					<div class="mt-md">
+						<p class="font-label-bold text-label-bold text-on-primary-container uppercase opacity-90">Saldo Neto</p>
+						<h3 class="font-headline-lg text-headline-lg text-white">$24,609.50</h3>
+					</div>
+				</div>
+			</div>
+
+			<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+				<div class="lg:col-span-8 card-elevation rounded-xl overflow-hidden flex flex-col">
+					<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-white">
+						<h4 class="font-headline-sm text-headline-sm text-primary">Transacciones Recientes</h4>
+						<button class="text-primary font-label-bold text-label-bold hover:underline">Ver Todo</button>
+					</div>
+					<div class="overflow-x-auto">
+						<table class="w-full text-left">
+							<thead class="bg-surface-container-low">
+								<tr>
+									<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Fecha</th>
+									<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Descripci\u00f3n</th>
+									<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant">Categor\u00eda</th>
+									<th class="px-lg py-md font-label-bold text-label-bold text-on-surface-variant text-right">Monto</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-outline-variant">
+								<tr class="hover:bg-surface-container-low transition-colors group">
+									<td class="px-lg py-md font-data-mono text-data-mono">24 Oct, 2023</td>
+									<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">Colecci\u00f3n Semanal de Diezmos</td>
+									<td class="px-lg py-md">
+										<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">Fondo General</span>
+									</td>
+									<td class="px-lg py-md font-data-mono text-data-mono text-right text-secondary">+$4,200.00</td>
+								</tr>
+								<tr class="hover:bg-surface-container-low transition-colors group">
+									<td class="px-lg py-md font-data-mono text-data-mono">22 Oct, 2023</td>
+									<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">Factura de Electricidad - Sal\u00f3n Principal</td>
+									<td class="px-lg py-md">
+										<span class="bg-surface-variant text-on-surface-variant px-sm py-xs rounded text-[11px] font-bold uppercase">Servicios</span>
+									</td>
+									<td class="px-lg py-md font-data-mono text-data-mono text-right text-error">-$845.20</td>
+								</tr>
+								<tr class="hover:bg-surface-container-low transition-colors group">
+									<td class="px-lg py-md font-data-mono text-data-mono">21 Oct, 2023</td>
+									<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">Donaci\u00f3n Banco de Alimentos</td>
+									<td class="px-lg py-md">
+										<span class="bg-tertiary-container/20 text-tertiary px-sm py-xs rounded text-[11px] font-bold uppercase">Misi\u00f3n</span>
+									</td>
+									<td class="px-lg py-md font-data-mono text-data-mono text-right text-error">-$1,200.00</td>
+								</tr>
+								<tr class="hover:bg-surface-container-low transition-colors group">
+									<td class="px-lg py-md font-data-mono text-data-mono">20 Oct, 2023</td>
+									<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">Ofrenda Especial: Campamento Juvenil</td>
+									<td class="px-lg py-md">
+										<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">Actividades</span>
+									</td>
+									<td class="px-lg py-md font-data-mono text-data-mono text-right text-secondary">+$2,850.00</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="lg:col-span-4 flex flex-col gap-lg">
+					<div class="card-elevation rounded-xl p-lg flex-1">
+						<h4 class="font-headline-sm text-headline-sm text-primary mb-xl">Metas de Actividad</h4>
+						<div class="space-y-xl">
+							<div>
+								<div class="flex justify-between items-end mb-sm">
+									<div>
+										<p class="font-body-md text-body-md text-on-surface font-semibold">Rifa Pro-Templo</p>
+										<p class="text-[12px] text-on-surface-variant">Recaudaci\u00f3n anual para construcci\u00f3n</p>
+									</div>
+									<span class="font-data-mono text-data-mono text-secondary">65%</span>
+								</div>
+								<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+									<div class="bg-secondary h-full rounded-full transition-all duration-1000" style="width: 65%"></div>
+								</div>
+								<div class="flex justify-between mt-xs">
+									<span class="text-[10px] text-on-surface-variant">$13,000 recaudados</span>
+									<span class="text-[10px] text-on-surface-variant">Meta: $20,000</span>
+								</div>
+							</div>
+							<div>
+								<div class="flex justify-between items-end mb-sm">
+									<div>
+										<p class="font-body-md text-body-md text-on-surface font-semibold">Misi\u00f3n 2024</p>
+										<p class="text-[12px] text-on-surface-variant">Proyecto de alcance regional</p>
+									</div>
+									<span class="font-data-mono text-data-mono text-secondary">42%</span>
+								</div>
+								<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+									<div class="bg-secondary h-full rounded-full transition-all duration-1000" style="width: 42%"></div>
+								</div>
+								<div class="flex justify-between mt-xs">
+									<span class="text-[10px] text-on-surface-variant">$4,200 recaudados</span>
+									<span class="text-[10px] text-on-surface-variant">Meta: $10,000</span>
+								</div>
+							</div>
+							<div>
+								<div class="flex justify-between items-end mb-sm">
+									<div>
+										<p class="font-body-md text-body-md text-on-surface font-semibold">Fondo para Despensa</p>
+										<p class="text-[12px] text-on-surface-variant">Apoyo comunitario continuo</p>
+									</div>
+									<span class="font-data-mono text-data-mono text-secondary">92%</span>
+								</div>
+								<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
+									<div class="bg-secondary h-full rounded-full transition-all duration-1000" style="width: 92%"></div>
+								</div>
+								<div class="flex justify-between mt-xs">
+									<span class="text-[10px] text-on-surface-variant">$2,760 recaudados</span>
+									<span class="text-[10px] text-on-surface-variant">Meta: $3,000</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-elevation rounded-xl p-lg bg-surface-container flex items-center gap-md relative overflow-hidden group">
+						<div class="absolute right-[-10%] bottom-[-20%] opacity-10 group-hover:rotate-12 transition-transform duration-500">
+							<span class="material-symbols-outlined text-[120px] text-primary">contact_support</span>
+						</div>
+						<div class="flex-1 z-10">
+							<h5 class="font-headline-sm text-headline-sm text-primary">\u00bfNecesita Ayuda?</h5>
+							<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Consulte nuestra documentaci\u00f3n o contacte al tesorero regional para dudas contables.</p>
+							<button class="mt-md text-primary font-label-bold text-label-bold border-b-2 border-primary/20 hover:border-primary transition-all">Portal de Soporte</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest h-16 flex justify-around items-center px-md border-t border-outline-variant z-50">
+		<a class="flex flex-col items-center gap-xs text-primary" href="{{ path('app_dashboard') }}">
+			<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+			<span class="text-[10px] font-label-bold uppercase">Tabl.</span>
+		</a>
+		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+			<span class="material-symbols-outlined">event_available</span>
+			<span class="text-[10px] font-label-bold uppercase">Activ.</span>
+		</a>
+		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+			<span class="material-symbols-outlined">account_balance_wallet</span>
+			<span class="text-[10px] font-label-bold uppercase">Caja</span>
+		</a>
+		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+			<span class="material-symbols-outlined">group</span>
+			<span class="text-[10px] font-label-bold uppercase">Direc.</span>
+		</a>
+		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="#">
+			<span class="material-symbols-outlined">assessment</span>
+			<span class="text-[10px] font-label-bold uppercase">Repor.</span>
+		</a>
+	</nav>
+{% endblock %}
