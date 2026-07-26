@@ -126,66 +126,75 @@
 {% endblock %}
 
 {% block body %}
-	<header class="sticky top-0 w-full z-40 flex justify-between items-center px-lg h-16 bg-surface border-b border-outline-variant shadow-sm">
-		<div class="flex items-center gap-xl">
-			<span class="font-headline-sm text-headline-sm font-bold text-primary">FaithFinance</span>
-			<nav class="hidden md:flex gap-md">
-				<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="{{ path('app_dashboard') }}">Tablero</a>
-				<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="{{ path('app_actividades') }}">Actividades</a>
-				<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary" href="{{ path('app_caja') }}">Control de Caja</a>
-				<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Directorio</a>
-			</nav>
+	<aside class="hidden lg:flex fixed left-0 top-0 h-full w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant z-50">
+		<div class="px-lg mb-xl">
+			<h2 class="font-headline-md text-headline-md text-primary">Grace Community</h2>
+			<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del Tesorero</p>
 		</div>
-		<div class="flex items-center gap-md">
-			<button class="material-symbols-outlined p-sm hover:bg-surface-container-low rounded-full transition-colors cursor-pointer">notifications</button>
-			<button class="material-symbols-outlined p-sm hover:bg-surface-container-low rounded-full transition-colors cursor-pointer">settings</button>
-			<div class="h-10 w-10 rounded-full overflow-hidden border border-outline-variant">
-				<img alt="Perfil" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM7woA1tCUKlfd71ZnhVIolPzCKw6JRz9AJA0yMHUwoyDle9j21cDdOs0wn6gslf4oj71cFTLSZCaNWDYbAeGifnIgJ2qAJ20OiXPiiaC9ORpYtRc0aTc4-8uJALrF-miNnjfSXXLO4QFafbVyzjrPzCNJmhwANdDHP-r2Bt-jqBmBy0offI7DyscA0kk7j8uV8NVW62HOngRECzHq3DWxKGGQEvQnCU-lGWxMxjLoYFYgUopjaG4zYYofV8J23N02vwtHtLWav-4"/>
-			</div>
+		<nav class="flex-1 space-y-1">
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">dashboard</span>
+				<span class="font-label-bold text-label-bold">Tablero</span>
+			</a>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">event_available</span>
+				<span class="font-label-bold text-label-bold">Actividades</span>
+			</a>
+			<a class="flex items-center bg-secondary-container text-on-secondary-container rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+				<span class="font-label-bold text-label-bold">Control de Caja</span>
+			</a>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="#">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">group</span>
+				<span class="font-label-bold text-label-bold">Directorio</span>
+			</a>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="#">
+				<span class="material-symbols-outlined mr-md group-hover:translate-x-1 duration-300">assessment</span>
+				<span class="font-label-bold text-label-bold">Informes</span>
+			</a>
+		</nav>
+		<div class="px-md mt-auto pt-lg border-t border-outline-variant space-y-1">
+			<button class="w-full mb-md bg-primary text-on-primary py-md rounded-xl font-label-bold text-label-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">
+				Exportar Datos
+			</button>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="#">
+				<span class="material-symbols-outlined mr-md">help</span>
+				<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
+			</a>
+			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="{{ path('app_logout') }}">
+				<span class="material-symbols-outlined mr-md">logout</span>
+				<span class="font-label-bold text-label-bold">Cerrar Sesi\u00f3n</span>
+			</a>
 		</div>
-	</header>
+	</aside>
 
-	<div class="flex">
-		<aside class="hidden lg:flex sticky left-0 top-16 h-[calc(100vh-64px)] w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant">
-			<div class="px-md mb-xl">
-				<h2 class="font-headline-sm text-headline-sm text-primary">Grace Community</h2>
-				<p class="font-label-bold text-label-bold text-on-surface-variant uppercase">Portal del Tesorero</p>
+	<main class="lg:ml-64 min-h-screen flex flex-col">
+		<header class="sticky top-0 w-full z-40 flex justify-between items-center px-lg h-16 bg-surface border-b border-outline-variant shadow-sm">
+			<div class="flex items-center gap-md">
+				<span class="font-headline-sm text-headline-sm font-bold text-primary">FaithFinance</span>
+				<div class="hidden md:flex items-center bg-surface-container-low rounded-full px-md py-1 border border-outline-variant ml-xl">
+					<span class="material-symbols-outlined text-on-surface-variant text-sm mr-xs">search</span>
+					<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48" placeholder="Buscar registros..." type="text"/>
+				</div>
 			</div>
-			<nav class="flex-1 space-y-xs">
-				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
-					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">dashboard</span>
-					<span class="font-label-bold text-label-bold">Tablero</span>
-				</a>
-				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
-					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">event_available</span>
-					<span class="font-label-bold text-label-bold">Actividades</span>
-				</a>
-				<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
-					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
-					<span class="font-label-bold text-label-bold">Control de Caja</span>
-				</a>
-				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="#">
-					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">group</span>
-					<span class="font-label-bold text-label-bold">Directorio</span>
-				</a>
-				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl mx-md p-md transition-all group" href="#">
-					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">assessment</span>
-					<span class="font-label-bold text-label-bold">Informes</span>
-				</a>
-			</nav>
-			<div class="px-md mt-auto pt-md space-y-xs">
-				<button class="w-full flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all group">
-					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">help</span>
-					<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
+			<div class="flex items-center gap-md">
+				<button class="hidden md:flex items-center bg-primary text-on-primary px-lg py-sm rounded-full font-label-bold text-label-bold cursor-pointer active:scale-95 transition-all">
+					Entrada R\u00e1pida
 				</button>
-				<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all group" href="{{ path('app_logout') }}">
-					<span class="material-symbols-outlined group-hover:translate-x-1 duration-300">logout</span>
-					<span class="font-label-bold text-label-bold">Cerrar Sesi\u00f3n</span>
-				</a>
+				<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative">
+					<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+					<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+				</button>
+				<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
+					<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+				</button>
+				<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant">
+					<img alt="Perfil" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQvJ2EbpVF8wcyJuhEUE2pe93psv8LpTE5ukr34M-UrR755jxm08a7E6z7BJMat37kFwBPbKu441Z9Ta8Y01dCum6op_oroDZzmIUvLl5I8xth7YOj2dKcfxlt0W7g9XC9qoruVs5tQlkT_xvSUexyXaJ-Pzh0CRCk8mKyS9EyWhpBF4-5MD065NaAevYKiZoYMMlGBbjRZbmkAN-POlZ4ohFyFFvT-CijdV-pC8WjFvQXa5kjrAAcufKXkxlVfEXO0gsSuwOgEoc"/>
+				</div>
 			</div>
-		</aside>
+		</header>
 
-		<main class="flex-1 max-w-container-max mx-auto p-lg md:p-xl bg-background">
+		<div class="p-lg md:px-xl md:py-lg max-w-container-max mx-auto w-full">
 			<div class="grid grid-cols-12 gap-gutter">
 				<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
 					<div class="flex items-center justify-between">
@@ -384,10 +393,10 @@
 					</div>
 				</div>
 			</div>
-		</main>
-	</div>
+		</div>
+	</main>
 
-	<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant flex justify-around items-center h-16 z-50">
+	<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-highest flex justify-around items-center h-16 z-50">
 		<a class="flex flex-col items-center gap-xs text-on-surface-variant" href="{{ path('app_dashboard') }}">
 			<span class="material-symbols-outlined">dashboard</span>
 			<span class="text-[10px] font-bold">INICIO</span>
