@@ -307,11 +307,9 @@
 				})
 				.then(r => r.json())
 				.then(data => {
-					if (notifCountTag) notifCountTag.textContent = '0 leídas';
+					if (notifCountTag) notifCountTag.textContent = '0 nuevas';
 					if (notifBadge) notifBadge.classList.add('hidden');
-					if (notifList) {
-						notifList.innerHTML = '<div class="p-lg text-center text-body-sm text-on-surface-variant flex flex-col items-center justify-center gap-xs py-xl"><span class="material-symbols-outlined text-secondary text-3xl">task_alt</span> <span class="font-bold text-on-background mt-xs">Todas las notificaciones marcadas como leídas.</span></div>';
-					}
+					// Ya no eliminamos la lista, la mantenemos visible para consultas
 				})
 				.catch(err => console.error('Error al limpiar notificaciones:', err));
 			}

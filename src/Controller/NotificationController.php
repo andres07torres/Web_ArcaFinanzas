@@ -19,16 +19,44 @@ class NotificationController extends AbstractController
         ActivityRepository $activityRepo,
         MemberRepository $memberRepo
     ): JsonResponse {
+        $notifications = $this->buildNotifications($transactionRepo, $activityRepo, $memberRepo);
+        
         $session = $request->getSession();
-        $isCleared = $session->get('notifications_cleared', false);
+        $clearedHash = $session->get('notifications_cleared_hash', '');
+        $currentHash = md5(json_encode(array_slice($notifications, 0, 8)));
 
-        if ($isCleared) {
-            return $this->json([
-                'count' => 0,
-                'items' => [],
-            ]);
-        }
+        $count = ($currentHash === $clearedHash) ? 0 : count($notifications);
 
+        return $this->json([
+            'count' => $count,
+            'items' => array_slice($notifications, 0, 8),
+        ]);
+    }
+
+    #[Route('/api/notificaciones/limpiar', name: 'app_notificaciones_limpiar', methods: ['POST'])]
+    public function clearNotifications(
+        Request $request,
+        TransactionRepository $transactionRepo,
+        ActivityRepository $activityRepo,
+        MemberRepository $memberRepo
+    ): JsonResponse {
+        $notifications = $this->buildNotifications($transactionRepo, $activityRepo, $memberRepo);
+        $currentHash = md5(json_encode(array_slice($notifications, 0, 8)));
+
+        $session = $request->getSession();
+        $session->set('notifications_cleared_hash', $currentHash);
+
+        return $this->json([
+            'success' => true,
+            'message' => 'Todas las notificaciones han sido marcadas como leídas.',
+        ]);
+    }
+
+    private function buildNotifications(
+        TransactionRepository $transactionRepo,
+        ActivityRepository $activityRepo,
+        MemberRepository $memberRepo
+    ): array {
         $notifications = [];
 
         $recentTransactions = $transactionRepo->findBy([], ['id' => 'DESC'], 5);
@@ -71,21 +99,6 @@ class NotificationController extends AbstractController
             ];
         }
 
-        return $this->json([
-            'count' => count($notifications),
-            'items' => array_slice($notifications, 0, 8),
-        ]);
-    }
-
-    #[Route('/api/notificaciones/limpiar', name: 'app_notificaciones_limpiar', methods: ['POST'])]
-    public function clearNotifications(Request $request): JsonResponse
-    {
-        $session = $request->getSession();
-        $session->set('notifications_cleared', true);
-
-        return $this->json([
-            'success' => true,
-            'message' => 'Todas las notificaciones han sido marcadas como leídas y limpiadas.',
-        ]);
+        return $notifications;
     }
 }
