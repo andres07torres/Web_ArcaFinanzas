@@ -8,7 +8,7 @@
 	{% set months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'] %}
 	{% set active_pct = total_members > 0 ? ((active_members / total_members) * 100)|round : 0 %}
 
-	<div class="p-lg md:px-xl md:py-lg max-w-container-max mx-auto w-full space-y-gutter">
+	<div class="p-lg max-w-container-max mx-auto w-full space-y-gutter">
 
 		{% for label, messages in app.flashes %}
 			{% for message in messages %}

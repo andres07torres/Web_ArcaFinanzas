@@ -16,7 +16,7 @@
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
     </head>
-    <body class="bg-surface text-on-surface min-h-screen flex flex-col items-center justify-center p-sm md:p-md">
+    <body class="bg-surface text-on-surface min-h-screen {% block body_class %}flex flex-col items-center justify-center p-sm md:p-md{% endblock %}">
         {% block body %}{% endblock %}
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
