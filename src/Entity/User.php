@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -17,18 +18,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: 'El correo electrónico es requerido.')]
+    #[Assert\Email(message: 'El correo electrónico no tiene un formato válido.')]
+    #[Assert\Length(max: 180, maxMessage: 'El correo electrónico no puede exceder {{ limit }} caracteres.')]
     private ?string $email = null;
 
     #[ORM\Column]
     private array $roles = [];
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'La contraseña es requerida.')]
+    #[Assert\Length(min: 8, minMessage: 'La contraseña debe tener al menos {{ limit }} caracteres.', max: 128, maxMessage: 'La contraseña no puede exceder {{ limit }} caracteres.')]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255, maxMessage: 'El nombre no puede exceder {{ limit }} caracteres.')]
     private ?string $fullName = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Choice(choices: ['tesorero', 'administrador', 'colaborador'], message: 'El rol seleccionado no es válido.')]
     private ?string $registrationRole = null;
 
     public function getId(): ?int
