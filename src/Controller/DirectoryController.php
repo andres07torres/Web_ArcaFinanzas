@@ -32,7 +32,22 @@ class DirectoryController extends AbstractController
         $memberTransactions = [];
         
         if ($members && count($members) > 0) {
-            $selectedMember = $members[0];
+            $selectedId = $request->query->get('id');
+            if ($selectedId) {
+                // Buscar el miembro en la lista actual
+                foreach ($members as $m) {
+                    if ($m->getId() == $selectedId) {
+                        $selectedMember = $m;
+                        break;
+                    }
+                }
+            }
+            
+            // Si no se encontró o no se pasó ID, seleccionar el primero
+            if (!$selectedMember) {
+                $selectedMember = $members[0];
+            }
+
             $memberTransactions = $transactionRepo->createQueryBuilder('t')
                 ->where('t.createdBy = :member')
                 ->setParameter('member', $selectedMember)
@@ -79,6 +94,13 @@ class DirectoryController extends AbstractController
     #[Route('/{id}/editar', name: 'app_directorio_editar', requirements: ['id' => '\d+'])]
     public function edit(Member $member, Request $request, MemberRepository $memberRepo): Response
     {
+        /** @var \App\Entity\User|null $user */
+        $user = $this->getUser();
+        if (!$user || ($user->getEmail() !== $member->getEmail() && !in_array($user->getRegistrationRole(), ['tesorero', 'administrador']))) {
+            $this->addFlash('error', 'No tienes permiso para editar el perfil de este miembro.');
+            return $this->redirectToRoute('app_directorio');
+        }
+
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
 

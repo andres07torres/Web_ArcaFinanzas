@@ -157,8 +157,10 @@
 			</a>
 		</nav>
 		<div class="px-md mt-auto pt-lg border-t border-outline-variant space-y-1">
-			<a href="{{ path('app_reportes_exportar_excel') }}" class="w-full mb-md bg-primary text-on-primary py-md rounded-xl font-label-bold text-label-bold shadow-sm hover:opacity-90 active:scale-95 transition-all text-center block">
-				Exportar Datos
+
+			<a class="flex items-center {{ active_menu == 'configuracion' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_configuracion') }}">
+				<span class="material-symbols-outlined mr-md">person</span>
+				<span class="font-label-bold text-label-bold">Mi Perfil</span>
 			</a>
 			<a class="flex items-center {{ active_menu == 'ayuda' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_ayuda') }}">
 				<span class="material-symbols-outlined mr-md">help</span>
@@ -273,6 +275,10 @@
 				<a class="flex flex-col items-center gap-1 {{ active_menu == 'reportes' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_reportes') }}">
 					<span class="material-symbols-outlined" {{ active_menu == 'reportes' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>assessment</span>
 					<span class="text-[10px] font-label-bold">Informes</span>
+				</a>
+				<a class="flex flex-col items-center gap-1 {{ active_menu == 'configuracion' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_configuracion') }}">
+					<span class="material-symbols-outlined" {{ active_menu == 'configuracion' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>person</span>
+					<span class="text-[10px] font-label-bold">Perfil</span>
 				</a>
 				<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="{{ path('app_logout') }}">
 					<span class="material-symbols-outlined">logout</span>

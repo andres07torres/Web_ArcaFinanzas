@@ -135,17 +135,19 @@
 									</div>
 								</div>
 								<div class="flex gap-sm w-full md:w-auto">
-									<a href="{{ path('app_directorio_editar', {id: selected_member.id}) }}"
-									   data-edit-member="true"
-									   data-id="{{ selected_member.id }}"
-									   data-firstname="{{ selected_member.firstName|e('html_attr') }}"
-									   data-lastname="{{ selected_member.lastName|e('html_attr') }}"
-									   data-phone="{{ selected_member.phone|e('html_attr') }}"
-									   data-email="{{ selected_member.email|e('html_attr') }}"
-									   data-role="{{ selected_member.role|e('html_attr') }}"
-									   data-birthdate="{{ selected_member.joinDate ? selected_member.joinDate|date('Y-m-d') : '' }}"
-									   data-address="{{ selected_member.address|e('html_attr') }}"
-									   class="h-9 px-lg border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors inline-flex items-center justify-center cursor-pointer">Editar Perfil</a>
+									{% if app.user and (app.user.email == selected_member.email or app.user.registrationRole in ['tesorero', 'administrador']) %}
+										<a href="{{ path('app_directorio_editar', {id: selected_member.id}) }}"
+										   data-edit-member="true"
+										   data-id="{{ selected_member.id }}"
+										   data-firstname="{{ selected_member.firstName|e('html_attr') }}"
+										   data-lastname="{{ selected_member.lastName|e('html_attr') }}"
+										   data-phone="{{ selected_member.phone|e('html_attr') }}"
+										   data-email="{{ selected_member.email|e('html_attr') }}"
+										   data-role="{{ selected_member.role|e('html_attr') }}"
+										   data-birthdate="{{ selected_member.joinDate ? selected_member.joinDate|date('Y-m-d') : '' }}"
+										   data-address="{{ selected_member.address|e('html_attr') }}"
+										   class="h-9 px-lg border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors inline-flex items-center justify-center cursor-pointer">Editar Perfil</a>
+									{% endif %}
 									<button class="h-9 px-lg bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm inline-flex items-center justify-center cursor-pointer">Mensaje</button>
 								</div>
 							</div>
