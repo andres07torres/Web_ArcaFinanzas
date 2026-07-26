@@ -285,7 +285,7 @@
 						<span class="material-symbols-outlined">close</span>
 					</button>
 				</div>
-				<div id="receiptModalBody" class="p-lg flex-1 overflow-auto flex items-center justify-center bg-surface-container-lowest min-h-[320px]">
+				<div id="receiptModalBody" class="p-lg flex-1 overflow-auto flex items-center justify-center bg-surface-container-lowest min-h-[200px]">
 				</div>
 				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
 					<span class="text-xs text-on-surface-variant font-medium">ArcaFinanzas - Verificación Contable</span>
@@ -314,9 +314,9 @@
 
 				const ext = fileUrl.split('.').pop().toLowerCase();
 				if (ext === 'pdf') {
-					modalBody.innerHTML = `<iframe src="${fileUrl}" class="w-full h-[520px] border-none rounded-lg"></iframe>`;
+					modalBody.innerHTML = `<iframe src="${fileUrl}" class="w-full h-[300px] border-none rounded-lg"></iframe>`;
 				} else {
-					modalBody.innerHTML = `<img src="${fileUrl}" alt="Comprobante" class="max-w-full max-h-[520px] object-contain rounded-lg shadow-sm border border-outline-variant"/>`;
+					modalBody.innerHTML = `<img src="${fileUrl}" alt="Comprobante" class="max-w-full max-h-[300px] object-contain rounded-lg shadow-sm border border-outline-variant"/>`;
 				}
 
 				modal.classList.remove('hidden');

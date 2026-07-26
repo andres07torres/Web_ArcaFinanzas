@@ -136,11 +136,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
         $map = [
             'tesorero' => 'Tesorero',
+            'treasurer' => 'Tesorero',
             'coordinador' => 'Coordinador',
             'subcoordinador' => 'Sub-Coordinador',
             'sub-coordinador' => 'Sub-Coordinador',
             'miembro' => 'Miembro',
             'administrador' => 'Administrador',
+            'admin' => 'Administrador',
             'colaborador' => 'Colaborador',
         ];
         return $map[strtolower($this->registrationRole)] ?? ucfirst($this->registrationRole);
