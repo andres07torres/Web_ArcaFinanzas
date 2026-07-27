@@ -2,7 +2,6 @@
 flysystem:
     storages:
         supabase.storage:
-            adapter: 'aws'
-            options:
+            aws:
                 client: 'supabase_s3_client'
                 bucket: '%env(SUPABASE_BUCKET)%'
