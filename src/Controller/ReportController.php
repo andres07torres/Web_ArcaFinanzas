@@ -100,6 +100,8 @@ class ReportController extends AbstractController
                 'categoria' => $categoria ?? null,
                 'tipo' => $tipo ?? null,
             ],
+            'startDate' => $startDate,
+            'endDate' => $endDate,
         ]);
     }
 

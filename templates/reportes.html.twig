@@ -16,16 +16,16 @@
 					</nav>
 					<h1 class="font-headline-lg text-headline-lg text-on-background">Informe de Transparencia Financiera</h1>
 					<p class="font-body-md text-body-md text-on-surface-variant mt-xs">
-						{% if filters.fechaInicio and filters.fechaFin %}
-							{{ filters.fechaInicio|date('d/m/Y') }} - {{ filters.fechaFin|date('d/m/Y') }}
+						{% if filters.fechaInicio or filters.fechaFin %}
+							{{ startDate ? startDate|date('d/m/Y') : 'Inicio' }} - {{ endDate ? endDate|date('d/m/Y') : 'Actualidad' }}
+						{% elseif filters.periodo == 'dia' and startDate %}
+							{{ startDate|date('d') }} de {{ meses[startDate|date('n') - 1] }} de {{ startDate|date('Y') }}
+						{% elseif filters.periodo == 'semana' and startDate and endDate %}
+							Semana del {{ startDate|date('d/m/Y') }} al {{ endDate|date('d/m/Y') }}
+						{% elseif filters.periodo == 'mes' and startDate %}
+							{{ meses[startDate|date('n') - 1]|capitalize }} de {{ startDate|date('Y') }}
 						{% else %}
-							{% if filters.periodo == 'dia' %}
-								{{ "now"|date('d') }} de {{ meses["now"|date('n') - 1] }} de {{ "now"|date('Y') }}
-							{% elseif filters.periodo == 'semana' %}
-								Semana del {{ "now"|date('d') }} de {{ meses["now"|date('n') - 1] }} de {{ "now"|date('Y') }}
-							{% else %}
-								{{ meses["now"|date('n') - 1]|capitalize }} de {{ "now"|date('Y') }}
-							{% endif %}
+							Todo el historial de transacciones
 						{% endif %}
 					</p>
 				</div>
