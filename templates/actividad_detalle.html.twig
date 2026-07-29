@@ -162,8 +162,8 @@
 	</div>
 
 	<!-- Lightbox Modal de Comprobante -->
-	<div id="receiptModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-md">
-		<div class="bg-white rounded-2xl max-w-md w-full p-lg overflow-hidden shadow-2xl relative flex flex-col max-h-[85vh]">
+	<div id="receiptModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-sm md:p-md">
+		<div class="bg-white rounded-2xl max-w-sm w-full p-md md:p-lg overflow-hidden shadow-2xl relative flex flex-col max-h-[75vh]">
 			<div class="flex items-center justify-between pb-md border-b border-outline-variant mb-md">
 				<h3 class="font-headline-sm text-sm font-bold text-primary flex items-center gap-xs">
 					<span class="material-symbols-outlined">receipt</span> Previsualización del Comprobante
@@ -173,8 +173,8 @@
 				</button>
 			</div>
 			<div class="flex-1 overflow-auto flex items-center justify-center bg-surface-container-low rounded-xl p-md">
-				<img id="receiptImage" src="" alt="Comprobante" class="max-w-full max-h-[65vh] object-contain rounded-lg shadow-sm hidden"/>
-				<iframe id="receiptPdf" src="" class="w-full h-[65vh] rounded-lg hidden border-0"></iframe>
+				<img id="receiptImage" src="" alt="Comprobante" class="max-w-full max-h-[50vh] object-contain rounded-lg shadow-sm hidden"/>
+				<iframe id="receiptPdf" src="" class="w-full h-[50vh] rounded-lg hidden border-0"></iframe>
 			</div>
 			<div class="pt-md mt-md border-t border-outline-variant flex justify-between items-center">
 				<a id="receiptDownloadLink" href="#" download class="px-md py-xs bg-primary text-on-primary rounded-lg text-xs font-bold inline-flex items-center gap-xs hover:bg-primary-container transition-all">

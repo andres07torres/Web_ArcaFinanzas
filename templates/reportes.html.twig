@@ -259,21 +259,21 @@
 			</div>
 		</div>
 
-		<div id="receiptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-md">
-			<div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
-				<div class="p-lg bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+		<div id="receiptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-sm md:p-md">
+			<div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden shadow-2xl flex flex-col max-h-[75vh]">
+				<div class="p-md md:p-lg bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
 					<div class="flex items-center gap-md">
 						<span class="material-symbols-outlined text-primary text-2xl">receipt_long</span>
 						<div>
-							<h3 id="receiptModalTitle" class="font-headline-sm text-headline-sm text-primary font-bold">Comprobante de Pago</h3>
-							<p id="receiptModalSubtitle" class="text-xs text-on-surface-variant">Previsualización del archivo adjunto</p>
+							<h3 id="receiptModalTitle" class="font-headline-sm text-sm font-bold text-primary">Comprobante de Pago</h3>
+							<p id="receiptModalSubtitle" class="text-xs text-on-surface-variant hidden md:block">Previsualización del archivo adjunto</p>
 						</div>
 					</div>
 					<button type="button" onclick="closeReceiptPreview()" class="p-sm text-on-surface-variant hover:text-error rounded-full transition-colors cursor-pointer">
 						<span class="material-symbols-outlined">close</span>
 					</button>
 				</div>
-				<div id="receiptModalBody" class="p-lg flex-1 overflow-auto flex items-center justify-center bg-surface-container-lowest min-h-[200px]">
+				<div id="receiptModalBody" class="p-md flex-1 overflow-auto flex items-center justify-center bg-surface-container-lowest min-h-[150px]">
 				</div>
 				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
 					<span class="text-xs text-on-surface-variant font-medium">ArcaFinanzas - Verificación Contable</span>
