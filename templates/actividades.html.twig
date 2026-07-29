@@ -16,7 +16,7 @@
 				<h1 class="font-headline-lg text-headline-lg text-on-background">Gestión de Eventos</h1>
 				<p class="text-on-surface-variant font-body-md mt-xs">Rastree, gestione y cierre eventos de recaudación de fondos y actividades ministeriales.</p>
 			</div>
-			<a href="{{ path('app_actividades_nueva') }}" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-sm">
+			<a href="{{ path('app_actividades_nueva') }}" onclick="event.preventDefault(); document.getElementById('newActivityModal').classList.remove('hidden');" data-new-activity="true" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-sm">
 				<span class="material-symbols-outlined text-base">add</span>
 				Nueva Actividad
 			</a>
@@ -60,11 +60,7 @@
 			<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-xl shadow-sm text-center">
 				<span class="material-symbols-outlined text-6xl text-on-surface-variant opacity-40">event_available</span>
 				<h3 class="font-headline-sm text-headline-sm text-on-background mt-md">No hay actividades registradas</h3>
-				<p class="text-on-surface-variant font-body-sm mt-xs mb-lg">Comienza creando tu primera actividad o evento.</p>
-				<a href="{{ path('app_actividades_nueva') }}" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold shadow-md hover:bg-primary-container transition-all inline-flex items-center gap-sm">
-					<span class="material-symbols-outlined text-base">add</span>
-					Crear Primera Actividad
-				</a>
+				<p class="text-on-surface-variant font-body-sm mt-xs">Comienza creando tu primera actividad o evento.</p>
 			</div>
 		{% else %}
 			<div id="noActivitiesMessage" class="hidden bg-surface-container-lowest border border-outline-variant rounded-xl p-xl shadow-sm text-center py-12">
@@ -273,11 +269,12 @@
 				if (actModal) actModal.classList.add('hidden');
 			}
 
-			document.querySelectorAll('a[href*="/actividades/nueva"]').forEach(link => {
-				link.addEventListener('click', function(e) {
+			document.addEventListener('click', function(e) {
+				const newActBtn = e.target.closest('[data-new-activity="true"]');
+				if (newActBtn) {
 					e.preventDefault();
 					openActModal();
-				});
+				}
 			});
 
 			if (closeActBtn) closeActBtn.addEventListener('click', closeActModal);
@@ -298,16 +295,17 @@
 				if (editActModal) editActModal.classList.add('hidden');
 			}
 
-			document.querySelectorAll('[data-edit-activity="true"]').forEach(btn => {
-				btn.addEventListener('click', function(e) {
+			document.addEventListener('click', function(e) {
+				const editActBtn = e.target.closest('[data-edit-activity="true"]');
+				if (editActBtn) {
 					e.preventDefault();
-					const id = this.getAttribute('data-id');
-					const name = this.getAttribute('data-name');
-					const desc = this.getAttribute('data-description');
-					const cat = this.getAttribute('data-category');
-					const goal = this.getAttribute('data-goal');
-					const start = this.getAttribute('data-start');
-					const end = this.getAttribute('data-end');
+					const id = editActBtn.getAttribute('data-id');
+					const name = editActBtn.getAttribute('data-name');
+					const desc = editActBtn.getAttribute('data-description');
+					const cat = editActBtn.getAttribute('data-category');
+					const goal = editActBtn.getAttribute('data-goal');
+					const start = editActBtn.getAttribute('data-start');
+					const end = editActBtn.getAttribute('data-end');
 
 					if (editActForm) {
 						editActForm.action = '/actividades/' + id + '/editar';
@@ -320,7 +318,7 @@
 					}
 
 					if (editActModal) editActModal.classList.remove('hidden');
-				});
+				}
 			});
 
 			if (closeEditActBtn) closeEditActBtn.addEventListener('click', closeEditActModal);

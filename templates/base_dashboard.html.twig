@@ -243,15 +243,6 @@
 			</div>
 		</header>
 
-		{% for message in app.flashes('success') %}
-			<div class="mx-auto w-full max-w-container-max px-lg pt-lg">
-				<div class="bg-secondary-container/30 text-on-secondary-container border border-secondary/20 px-lg py-md rounded-xl flex items-center gap-md">
-					<span class="material-symbols-outlined">check_circle</span>
-					<span class="font-body-sm">{{ message }}</span>
-				</div>
-			</div>
-		{% endfor %}
-
 		{% block dashboard_content %}{% endblock %}
 	</main>
 
@@ -581,10 +572,17 @@
 			const txModal = document.getElementById('quickTransactionModal');
 			const closeBtn = document.getElementById('closeTxModalBtn');
 			const cancelBtn = document.getElementById('cancelTxModalBtn');
+			const txForm = txModal ? txModal.querySelector('form') : null;
+			const originalTxAction = txForm ? txForm.action : '';
 
-			function openTxModal() {
-				if (txModal) txModal.classList.remove('hidden');
-			}
+			window.openTxModal = function(actividadId = null) {
+				if (txModal) {
+					if (txForm && originalTxAction) {
+						txForm.action = originalTxAction + (actividadId ? '?actividad=' + actividadId : '');
+					}
+					txModal.classList.remove('hidden');
+				}
+			};
 			function closeTxModal() {
 				if (txModal) txModal.classList.add('hidden');
 			}

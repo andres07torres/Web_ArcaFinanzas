@@ -49,21 +49,18 @@ class ActivityController extends AbstractController
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $activity->setStatus('active');
-            $activity->setRaisedAmount('0.00');
-            $activityRepo->save($activity, true);
-
-            $this->addFlash('success', 'Actividad creada exitosamente.');
-
-            return $this->redirectToRoute('app_actividades');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $activity->setStatus('active');
+                $activity->setRaisedAmount('0.00');
+                $activityRepo->save($activity, true);
+                $this->addFlash('success', 'Actividad creada exitosamente.');
+            } else {
+                $this->addFlash('error', 'Error al crear la actividad. Por favor, revise los datos.');
+            }
         }
 
-        return $this->render('actividad_form.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Nueva Actividad',
-            'user' => $this->getUser(),
-        ]);
+        return $this->redirectToRoute('app_actividades');
     }
 
     #[Route('/{id}/editar', name: 'app_actividades_editar', requirements: ['id' => '\d+'])]
@@ -72,20 +69,16 @@ class ActivityController extends AbstractController
         $form = $this->createForm(ActivityType::class, $activity);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $activityRepo->save($activity, true);
-
-            $this->addFlash('success', 'Actividad actualizada exitosamente.');
-
-            return $this->redirectToRoute('app_actividades');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $activityRepo->save($activity, true);
+                $this->addFlash('success', 'Actividad actualizada exitosamente.');
+            } else {
+                $this->addFlash('error', 'Error al actualizar la actividad. Por favor, revise los datos.');
+            }
         }
 
-        return $this->render('actividad_form.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Editar Actividad',
-            'activity' => $activity,
-            'user' => $this->getUser(),
-        ]);
+        return $this->redirectToRoute('app_actividades');
     }
 
     #[Route('/{id}/cerrar', name: 'app_actividades_cerrar', requirements: ['id' => '\d+'], methods: ['POST'])]

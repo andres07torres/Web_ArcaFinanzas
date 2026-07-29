@@ -137,9 +137,7 @@
 						<p class="font-body-md text-body-md text-on-surface-variant">Complete los siguientes datos para que un administrador revise su solicitud.</p>
 					</div>
 					<form class="space-y-4" action="{{ path('app_registro') }}" method="POST">
-						{% for flash in app.flashes('error') %}
-							<div class="bg-error-container text-on-error-container text-body-sm px-md py-sm rounded-xl">{{ flash }}</div>
-						{% endfor %}
+
 						<input type="hidden" name="_csrf_token" value="{{ csrf_token('register') }}">
 						<div class="flex flex-col gap-xs">
 							<label class="font-label-bold text-label-bold text-on-surface-variant ml-xs" for="full_name">Nombre Completo</label>

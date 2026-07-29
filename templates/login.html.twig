@@ -136,12 +136,7 @@
 						<p class="font-body-md text-body-md text-on-surface-variant">Gestione sus finanzas ministeriales con claridad y propósito.</p>
 					</div>
 					<form class="space-y-4" method="post" autocomplete="off">
-						{% for flash in app.flashes('success') %}
-							<div class="bg-tertiary-container text-on-tertiary-container text-body-sm px-md py-sm rounded-xl">{{ flash }}</div>
-						{% endfor %}
-						{% for flash in app.flashes('error') %}
-							<div class="bg-error-container text-on-error-container text-body-sm px-md py-sm rounded-xl">{{ flash }}</div>
-						{% endfor %}
+
 						{% if error %}
 							<div class="bg-error-container text-on-error-container text-body-sm px-md py-sm rounded-xl">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 						{% endif %}

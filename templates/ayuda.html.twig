@@ -18,15 +18,6 @@
 			</div>
 		</div>
 
-		{% for label, messages in app.flashes %}
-			{% for message in messages %}
-				<div class="flex items-center gap-md p-md rounded-xl border shadow-sm {% if label == 'success' %}bg-secondary-container/20 border-secondary/30 text-on-secondary-container{% elseif label == 'error' %}bg-error-container/30 border-error/30 text-on-error-container{% else %}bg-surface-container-low border-outline-variant text-on-surface{% endif %}">
-					<span class="material-symbols-outlined text-[20px]">{% if label == 'success' %}check_circle{% elseif label == 'error' %}error{% else %}info{% endif %}</span>
-					<span class="font-body-sm flex-1">{{ message }}</span>
-				</div>
-			{% endfor %}
-		{% endfor %}
-
 		<!-- Contacto con el Desarrollador -->
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
 			<section class="lg:col-span-5 bg-gradient-to-br from-primary-container to-primary text-on-primary p-xl rounded-2xl shadow-xl flex flex-col justify-between relative overflow-hidden">

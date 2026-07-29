@@ -19,34 +19,14 @@
 				<h1 class="font-headline-lg text-headline-lg text-on-background">Directorio de Miembros</h1>
 				<p class="text-on-surface-variant font-body-md mt-xs">Gestione la información, roles y contribuciones de los miembros de la Comunidad.</p>
 			</div>
-			<a href="{{ path('app_directorio_nuevo') }}" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-sm active:scale-95">
+			<a href="{{ path('app_directorio_nuevo') }}" onclick="event.preventDefault(); document.getElementById('newMemberModal').classList.remove('hidden');" data-new-member="true" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-sm active:scale-95">
 				<span class="material-symbols-outlined text-base">person_add</span>
-				Registrar Nuevo Miembro
+				Nuevo Miembro
 			</a>
 		</div>
 
-		{% for label, messages in app.flashes %}
-			{% for message in messages %}
-				<div class="flex items-center gap-md p-md rounded-xl border shadow-sm {% if label == 'success' %}bg-secondary-container/20 border-secondary/30 text-on-secondary-container{% elseif label == 'error' %}bg-error-container/30 border-error/30 text-on-error-container{% else %}bg-surface-container-low border-outline-variant text-on-surface{% endif %}">
-					<span class="material-symbols-outlined text-[20px]">{% if label == 'success' %}check_circle{% elseif label == 'error' %}error{% else %}info{% endif %}</span>
-					<span class="font-body-sm flex-1">{{ message }}</span>
-				</div>
-			{% endfor %}
-		{% endfor %}
-
-		<div class="grid grid-cols-1 md:grid-cols-12 gap-lg mb-lg">
-			<section class="md:col-span-8 bg-surface p-lg rounded-xl border border-outline-variant shadow-sm flex items-center justify-between">
-				<div>
-					<h2 class="font-bold text-body-lg text-primary">Agregar Miembro</h2>
-					<p class="text-xs text-on-surface-variant mt-0.5">Registre un nuevo miembro en el directorio de la Comunidad.</p>
-				</div>
-				<a href="{{ path('app_directorio_nuevo') }}" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary-container transition-colors shadow-sm inline-flex items-center gap-xs">
-					<span class="material-symbols-outlined text-sm">person_add</span>
-					Registrar Miembro
-				</a>
-			</section>
-
-			<section class="md:col-span-4 bg-primary text-on-primary p-lg rounded-xl shadow-sm flex flex-col justify-between">
+		<div class="flex mb-lg">
+			<section class="w-full md:w-1/3 bg-primary text-on-primary p-lg rounded-xl shadow-sm flex flex-col justify-between">
 				<div class="flex justify-between items-start">
 					<div>
 						<h3 class="font-label-bold text-xs uppercase opacity-70">Directorio Total</h3>
@@ -67,11 +47,7 @@
 			<div class="bg-surface rounded-xl border border-outline-variant shadow-sm p-xl text-center py-12">
 				<span class="material-symbols-outlined text-on-surface-variant text-4xl mb-xs">group_off</span>
 				<h3 class="font-bold text-body-lg text-on-surface mb-xs">No hay miembros registrados</h3>
-				<p class="text-xs text-on-surface-variant mb-md">Comienza agregando el primer miembro al directorio de la Comunidad.</p>
-				<a href="{{ path('app_directorio_nuevo') }}" class="inline-flex items-center gap-xs bg-primary text-on-primary h-9 px-lg rounded-lg font-bold text-xs hover:bg-primary-container transition-colors shadow-sm">
-					<span class="material-symbols-outlined text-sm">person_add</span>
-					Registrar Primer Miembro
-				</a>
+				<p class="text-xs text-on-surface-variant">Puedes comenzar agregando el primer miembro utilizando el botón superior.</p>
 			</div>
 		{% else %}
 			<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
@@ -146,6 +122,9 @@
 										   data-role="{{ selected_member.role|e('html_attr') }}"
 										   data-birthdate="{{ selected_member.joinDate ? selected_member.joinDate|date('Y-m-d') : '' }}"
 										   data-address="{{ selected_member.address|e('html_attr') }}"
+										   data-state="{{ selected_member.state|e('html_attr') }}"
+										   data-city="{{ selected_member.city|e('html_attr') }}"
+										   data-zip="{{ selected_member.zipCode|e('html_attr') }}"
 										   class="h-9 px-lg border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors inline-flex items-center justify-center cursor-pointer">Editar Perfil</a>
 									{% endif %}
 									<button class="h-9 px-lg bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm inline-flex items-center justify-center cursor-pointer">Mensaje</button>
@@ -344,6 +323,20 @@
 						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Dirección</label>
 						<textarea name="member[address]" rows="2" placeholder="Dirección completa..." class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm"></textarea>
 					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Provincia</label>
+							{{ form_widget(form.state, {'attr': {'class': 'w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm'}}) }}
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Ciudad</label>
+							{{ form_widget(form.city, {'attr': {'class': 'w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm'}}) }}
+						</div>
+					</div>
+					<div>
+						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Código Postal</label>
+						{{ form_widget(form.zipCode, {'attr': {'class': 'w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm'}}) }}
+					</div>
 				</div>
 				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-center items-center gap-sm sm:gap-md">
 					<button type="button" id="cancelMemModalBtn" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-variant cursor-pointer">Cancelar</button>
@@ -361,18 +354,19 @@
 			const closeMemBtn = document.getElementById('closeMemModalBtn');
 			const cancelMemBtn = document.getElementById('cancelMemModalBtn');
 
-			function openMemModal() {
+			function openMemberModal() {
 				if (memModal) memModal.classList.remove('hidden');
 			}
 			function closeMemModal() {
 				if (memModal) memModal.classList.add('hidden');
 			}
 
-			document.querySelectorAll('a[href*="/directorio/nuevo"]').forEach(link => {
-				link.addEventListener('click', function(e) {
+			document.addEventListener('click', function(e) {
+				const newMemBtn = e.target.closest('[data-new-member="true"]');
+				if (newMemBtn) {
 					e.preventDefault();
-					openMemModal();
-				});
+					openMemberModal();
+				}
 			});
 
 			if (closeMemBtn) closeMemBtn.addEventListener('click', closeMemModal);
@@ -393,17 +387,21 @@
 				if (editMemModal) editMemModal.classList.add('hidden');
 			}
 
-			document.querySelectorAll('[data-edit-member="true"]').forEach(btn => {
-				btn.addEventListener('click', function(e) {
+			document.addEventListener('click', function(e) {
+				const editBtn = e.target.closest('[data-edit-member="true"]');
+				if (editBtn) {
 					e.preventDefault();
-					const id = this.getAttribute('data-id');
-					const fn = this.getAttribute('data-firstname');
-					const ln = this.getAttribute('data-lastname');
-					const phone = this.getAttribute('data-phone');
-					const email = this.getAttribute('data-email');
-					const role = this.getAttribute('data-role');
-					const bday = this.getAttribute('data-birthdate');
-					const addr = this.getAttribute('data-address');
+					const id = editBtn.getAttribute('data-id');
+					const fn = editBtn.getAttribute('data-firstname');
+					const ln = editBtn.getAttribute('data-lastname');
+					const phone = editBtn.getAttribute('data-phone');
+					const email = editBtn.getAttribute('data-email');
+					const role = editBtn.getAttribute('data-role');
+					const bday = editBtn.getAttribute('data-birthdate');
+					const addr = editBtn.getAttribute('data-address');
+					const state = editBtn.getAttribute('data-state');
+					const city = editBtn.getAttribute('data-city');
+					const zip = editBtn.getAttribute('data-zip');
 
 					if (editMemForm) {
 						editMemForm.action = '/directorio/' + id + '/editar';
@@ -414,10 +412,13 @@
 						document.getElementById('editMemRole').value = role || 'miembro';
 						document.getElementById('editMemBirthDate').value = bday || '';
 						document.getElementById('editMemAddress').value = addr || '';
+						document.getElementById('editMemState').value = state || '';
+						document.getElementById('editMemCity').value = city || '';
+						document.getElementById('editMemZip').value = zip || '';
 					}
 
 					if (editMemModal) editMemModal.classList.remove('hidden');
-				});
+				}
 			});
 
 			if (closeEditMemBtn) closeEditMemBtn.addEventListener('click', closeEditMemModal);
@@ -518,6 +519,20 @@
 					<div>
 						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Dirección</label>
 						<textarea id="editMemAddress" name="member[address]" rows="2" class="w-full p-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm"></textarea>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Provincia</label>
+							{{ form_widget(edit_form.state, {'id': 'editMemState', 'attr': {'class': 'w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm'}}) }}
+						</div>
+						<div>
+							<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Ciudad</label>
+							{{ form_widget(edit_form.city, {'id': 'editMemCity', 'attr': {'class': 'w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm'}}) }}
+						</div>
+					</div>
+					<div>
+						<label class="block font-bold text-xs text-on-surface-variant mb-1 uppercase">Código Postal</label>
+						{{ form_widget(edit_form.zipCode, {'id': 'editMemZip', 'attr': {'class': 'w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm'}}) }}
 					</div>
 				</div>
 				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-center items-center gap-sm sm:gap-md">

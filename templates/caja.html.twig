@@ -22,25 +22,6 @@
 			</a>
 		</div>
 
-		{% for message in app.flashes('success') %}
-			<div class="mb-xl p-xl rounded-xl bg-secondary-container text-on-secondary-container border border-secondary-container/30 flex items-center gap-md shadow-sm">
-				<span class="material-symbols-outlined text-secondary">check_circle</span>
-				<span class="font-body-md text-body-md">{{ message }}</span>
-			</div>
-		{% endfor %}
-		{% for message in app.flashes('error') %}
-			<div class="mb-xl p-xl rounded-xl bg-error-container text-on-error-container border border-error-container/30 flex items-center gap-md shadow-sm">
-				<span class="material-symbols-outlined text-error">error</span>
-				<span class="font-body-md text-body-md">{{ message }}</span>
-			</div>
-		{% endfor %}
-		{% for message in app.flashes('warning') %}
-			<div class="mb-xl p-xl rounded-xl bg-surface-variant text-on-surface-variant border border-outline-variant flex items-center gap-md shadow-sm">
-				<span class="material-symbols-outlined">warning</span>
-				<span class="font-body-md text-body-md">{{ message }}</span>
-			</div>
-		{% endfor %}
-
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-lg">
 			<div class="bg-surface border border-outline-variant rounded-xl p-lg shadow-sm">
 				<div class="flex items-center gap-sm mb-xs">

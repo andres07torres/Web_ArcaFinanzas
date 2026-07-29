@@ -56,6 +56,9 @@ class DirectoryController extends AbstractController
                 ->getResult();
         }
 
+        $memberForm = $this->createForm(MemberType::class, new Member());
+        $editMemberForm = $this->createForm(MemberType::class, new Member());
+
         return $this->render('directorio.html.twig', [
             'user' => $this->getUser(),
             'members' => $members,
@@ -64,6 +67,8 @@ class DirectoryController extends AbstractController
             'total_members' => $totalMembers,
             'active_members' => $activeMembers,
             'search' => $search,
+            'form' => $memberForm->createView(),
+            'edit_form' => $editMemberForm->createView(),
         ]);
     }
 
@@ -74,21 +79,18 @@ class DirectoryController extends AbstractController
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $member->setStatus('active');
-            $member->setUpdatedAt(new \DateTime());
-            $memberRepo->save($member, true);
-
-            $this->addFlash('success', 'Miembro registrado exitosamente.');
-
-            return $this->redirectToRoute('app_directorio');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $member->setStatus('active');
+                $member->setUpdatedAt(new \DateTime());
+                $memberRepo->save($member, true);
+                $this->addFlash('success', 'Miembro registrado exitosamente.');
+            } else {
+                $this->addFlash('error', 'Error al registrar el miembro. Por favor, revise los datos.');
+            }
         }
 
-        return $this->render('miembro_form.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Registrar Miembro',
-            'user' => $this->getUser(),
-        ]);
+        return $this->redirectToRoute('app_directorio');
     }
 
     #[Route('/{id}/editar', name: 'app_directorio_editar', requirements: ['id' => '\d+'])]
@@ -104,21 +106,17 @@ class DirectoryController extends AbstractController
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $member->setUpdatedAt(new \DateTime());
-            $memberRepo->save($member, true);
-
-            $this->addFlash('success', 'Miembro actualizado exitosamente.');
-
-            return $this->redirectToRoute('app_directorio');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $member->setUpdatedAt(new \DateTime());
+                $memberRepo->save($member, true);
+                $this->addFlash('success', 'Perfil actualizado exitosamente.');
+            } else {
+                $this->addFlash('error', 'Error al actualizar el perfil. Por favor, revise los datos.');
+            }
         }
 
-        return $this->render('miembro_form.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Editar Miembro',
-            'member' => $member,
-            'user' => $this->getUser(),
-        ]);
+        return $this->redirectToRoute('app_directorio');
     }
 
     #[Route('/{id}/eliminar', name: 'app_directorio_eliminar', requirements: ['id' => '\d+'], methods: ['POST'])]
