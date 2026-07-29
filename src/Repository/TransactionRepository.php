@@ -57,6 +57,10 @@ class TransactionRepository extends ServiceEntityRepository
     public function findRecentTransactions(int $limit = 5): array
     {
         return $this->createQueryBuilder('t')
+            ->leftJoin('t.activity', 'a')
+            ->addSelect('a')
+            ->leftJoin('t.createdBy', 'u')
+            ->addSelect('u')
             ->orderBy('t.transactionDate', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()

@@ -45,57 +45,61 @@
             });
             </script>
         {% endblock %}
-    </body>
-    {% block flash_messages %}
-        <div id="toast-container" class="fixed top-4 right-4 z-[9999] flex flex-col gap-sm w-[90%] max-w-sm pointer-events-none">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    {% set bg_class = label == 'success' ? 'bg-secondary-container text-on-secondary-container border-secondary/30' : (label == 'error' ? 'bg-error-container text-on-error-container border-error/30' : 'bg-surface-variant text-on-surface-variant border-outline-variant') %}
-                    {% set icon = label == 'success' ? 'check_circle' : (label == 'error' ? 'error' : 'info') %}
-                    
-                    <div class="toast-message pointer-events-auto flex items-start gap-md p-md rounded-xl shadow-lg border {{ bg_class }} transform transition-all duration-300 opacity-0 translate-x-8" role="alert">
-                        <span class="material-symbols-outlined shrink-0 mt-0.5">{{ icon }}</span>
-                        <div class="font-body-sm font-medium flex-1">
-                            {{ message }}
+
+        {% block flash_messages %}
+            <div id="toast-container" class="fixed top-20 right-4 z-[99999] flex flex-col gap-sm w-[90%] max-w-sm pointer-events-none">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        {% set bg_class = label == 'success' ? 'bg-white text-secondary border-secondary/50' : (label == 'error' ? 'bg-white text-error border-error/50' : 'bg-white text-primary border-primary/50') %}
+                        {% set icon = label == 'success' ? 'check_circle' : (label == 'error' ? 'error' : 'info') %}
+                        
+                        <div class="toast-message pointer-events-auto flex items-start gap-md p-md rounded-xl shadow-lg border {{ bg_class }} transform transition-all duration-300 opacity-0 translate-x-8" role="alert">
+                            <span class="material-symbols-outlined shrink-0 mt-0.5">{{ icon }}</span>
+                            <div class="font-body-sm font-medium flex-1">
+                                {{ message }}
+                            </div>
+                            <button type="button" class="close-toast p-xs -m-xs rounded-full hover:bg-black/10 transition-colors cursor-pointer shrink-0">
+                                <span class="material-symbols-outlined text-sm">close</span>
+                            </button>
                         </div>
-                        <button type="button" class="close-toast p-xs -m-xs rounded-full hover:bg-black/10 transition-colors cursor-pointer shrink-0">
-                            <span class="material-symbols-outlined text-sm">close</span>
-                        </button>
-                    </div>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
-        </div>
+            </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const toasts = document.querySelectorAll('.toast-message');
-                toasts.forEach((toast, index) => {
-                    setTimeout(() => {
-                        toast.classList.remove('opacity-0', 'translate-x-8');
-                        toast.classList.add('opacity-100', 'translate-x-0');
-                    }, 100 + (index * 100));
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const toasts = document.querySelectorAll('.toast-message');
+                    toasts.forEach((toast, index) => {
+                        // Entrada animada
+                        setTimeout(() => {
+                            toast.classList.remove('opacity-0', 'translate-x-8');
+                            toast.classList.add('opacity-100', 'translate-x-0');
+                        }, 100 + (index * 100));
 
-                    const hideTimeout = setTimeout(() => {
-                        hideToast(toast);
-                    }, 5000 + (index * 100));
-
-                    const closeBtn = toast.querySelector('.close-toast');
-                    if (closeBtn) {
-                        closeBtn.addEventListener('click', () => {
-                            clearTimeout(hideTimeout);
+                        // Ocultar a los 5 segundos
+                        const hideTimeout = setTimeout(() => {
                             hideToast(toast);
-                        });
+                        }, 5000 + (index * 100));
+
+                        // Ocultar manual
+                        const closeBtn = toast.querySelector('.close-toast');
+                        if (closeBtn) {
+                            closeBtn.addEventListener('click', () => {
+                                clearTimeout(hideTimeout);
+                                hideToast(toast);
+                            });
+                        }
+                    });
+
+                    function hideToast(toast) {
+                        toast.classList.remove('opacity-100', 'translate-x-0');
+                        toast.classList.add('opacity-0', 'translate-x-8');
+                        setTimeout(() => {
+                            toast.remove();
+                        }, 300);
                     }
                 });
-
-                function hideToast(toast) {
-                    toast.classList.remove('opacity-100', 'translate-x-0');
-                    toast.classList.add('opacity-0', 'translate-x-8');
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 300);
-                }
-            });
-        </script>
-    {% endblock %}
+            </script>
+        {% endblock %}
+    </body>
 </html>

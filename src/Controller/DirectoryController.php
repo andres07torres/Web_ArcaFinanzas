@@ -49,6 +49,8 @@ class DirectoryController extends AbstractController
             }
 
             $memberTransactions = $transactionRepo->createQueryBuilder('t')
+                ->leftJoin('t.activity', 'a')
+                ->addSelect('a')
                 ->where('t.createdBy = :member')
                 ->setParameter('member', $selectedMember)
                 ->orderBy('t.transactionDate', 'DESC')

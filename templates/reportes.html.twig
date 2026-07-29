@@ -41,126 +41,114 @@
 				</div>
 			</div>
 
-			<form method="GET" action="{{ path('app_reportes') }}" id="reportFilters">
-				<div class="bg-white border border-outline-variant rounded-xl p-md mb-lg flex flex-wrap items-center gap-lg">
-					<div class="flex flex-col gap-xs">
-						<label class="font-label-bold text-[11px] text-outline uppercase">Rango de Fechas</label>
-						<div class="flex bg-surface-container-low p-1 rounded-lg">
-							<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'dia', 'fechaInicio': '', 'fechaFin': ''})) }}" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'dia' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Día</a>
-							<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'semana', 'fechaInicio': '', 'fechaFin': ''})) }}" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'semana' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Semana</a>
-							<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'mes', 'fechaInicio': '', 'fechaFin': ''})) }}" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'mes' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Mes</a>
-							<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'todos', 'fechaInicio': '', 'fechaFin': ''})) }}" class="px-md py-xs text-body-sm font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'todos' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Todos</a>
-						</div>
-					</div>
-					<input type="hidden" name="periodo" value="{{ filters.periodo }}" />
-					<div class="flex flex-col gap-xs">
-						<label class="font-label-bold text-[11px] text-outline uppercase">Fecha Inicio</label>
-						<input type="date" name="fechaInicio" value="{{ filters.fechaInicio ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]"/>
-					</div>
-					<div class="flex flex-col gap-xs">
-						<label class="font-label-bold text-[11px] text-outline uppercase">Fecha Fin</label>
-						<input type="date" name="fechaFin" value="{{ filters.fechaFin ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]"/>
-					</div>
-					<div class="flex flex-col gap-xs">
-						<label class="font-label-bold text-[11px] text-outline uppercase">Filtro de Actividad</label>
-						<select name="actividad" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[200px]">
-							<option value="">Todas las Actividades</option>
-							{% for activity in activities %}
-								<option value="{{ activity.id }}" {{ filters.actividad == activity.id ? 'selected' : '' }}>{{ activity.name }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="flex flex-col gap-xs">
-						<label class="font-label-bold text-[11px] text-outline uppercase">Categoría</label>
-						<select name="categoria" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[200px]">
-							<option value="">Todas las Categorías</option>
-							{% for cat in categories %}
-								<option value="{{ cat }}" {{ filters.categoria == cat ? 'selected' : '' }}>{{ cat }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="flex flex-col gap-xs">
-						<label class="font-label-bold text-[11px] text-outline uppercase">Tipo</label>
-						<select name="tipo" onchange="this.form.submit()" class="bg-surface-container-low border-none rounded-lg text-body-sm font-medium focus:ring-2 focus:ring-primary h-9 min-w-[160px]">
-							<option value="">Todos</option>
-							<option value="income" {{ filters.tipo == 'income' ? 'selected' : '' }}>Ingresos</option>
-							<option value="expense" {{ filters.tipo == 'expense' ? 'selected' : '' }}>Egresos</option>
-						</select>
-					</div>
-					<div class="ml-auto flex items-center gap-md">
-						<button type="submit" class="flex items-center gap-xs text-primary font-label-bold text-label-bold hover:underline cursor-pointer">
-							<span class="material-symbols-outlined">filter_list</span>
-							Aplicar Filtros
-						</button>
-						{% if filters.periodo != 'mes' or filters.fechaInicio or filters.fechaFin or filters.actividad or filters.categoria or filters.tipo %}
-							<a href="{{ path('app_reportes') }}" class="flex items-center gap-xs text-error font-label-bold text-label-bold hover:underline">
-								<span class="material-symbols-outlined">close</span>
-								Limpiar
-							</a>
-						{% endif %}
-					</div>
-				</div>
-			</form>
-
-			<div class="bento-grid mb-lg">
-				<div class="col-span-12 md:col-span-8 corte-card rounded-xl p-lg flex flex-col justify-between relative overflow-hidden">
-					<div class="relative z-10">
-						<div class="flex justify-between items-start mb-sm">
-							<div>
-								<h3 class="font-label-bold text-xs text-outline uppercase">Posición Neta de Caja</h3>
-								<p class="font-headline-md text-headline-md text-primary mt-xs">${{ balance|number_format(2, '.', ',') }}</p>
-							</div>
-							{% if balance_change != 0 %}
-								<div class="bg-{{ balance_change > 0 ? 'secondary-container text-on-secondary-container' : 'error-container text-on-error-container' }} px-sm py-xs rounded text-[10px] font-bold">
-									{{ balance_change > 0 ? '+' : '' }}{{ balance_change }}% vs PERÍODO ANTERIOR
-								</div>
+			<div class="flex flex-col lg:flex-row gap-lg">
+				
+				<!-- SIDEBAR DE FILTROS -->
+				<div class="w-full lg:w-64 shrink-0">
+					<form method="GET" action="{{ path('app_reportes') }}" id="reportFilters" class="bg-white border border-outline-variant rounded-xl p-md shadow-sm lg:sticky lg:top-6">
+						<div class="flex items-center justify-between mb-md">
+							<h3 class="font-headline-sm text-sm font-bold text-on-background">Filtros</h3>
+							{% if filters.periodo != 'mes' or filters.fechaInicio or filters.fechaFin or filters.actividad or filters.categoria or filters.tipo %}
+								<a href="{{ path('app_reportes') }}" class="text-error font-label-bold text-[10px] hover:underline flex items-center gap-0.5">
+									<span class="material-symbols-outlined text-[14px]">close</span> Limpiar
+								</a>
 							{% endif %}
 						</div>
-						<div class="grid grid-cols-3 gap-lg border-t border-outline-variant pt-lg mt-md">
-							<div>
-								<p class="text-[11px] font-label-bold text-outline uppercase">Ingresos Totales</p>
-								<p class="text-body-lg font-bold text-secondary">+${{ total_income|number_format(2, '.', ',') }}</p>
-							</div>
-							<div>
-								<p class="text-[11px] font-label-bold text-outline uppercase">Egresos Totales</p>
-								<p class="text-body-lg font-bold text-error">-${{ total_expenses|number_format(2, '.', ',') }}</p>
-							</div>
-							<div>
-								<p class="text-[11px] font-label-bold text-outline uppercase">Total Transacciones</p>
-								<p class="text-body-lg font-bold">{{ total_transactions }}</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-span-12 md:col-span-4 corte-card rounded-xl p-lg border-l-4 border-l-secondary">
-					<h3 class="font-label-bold text-label-bold text-outline uppercase mb-sm">Resumen del Período</h3>
-					<div class="flex flex-col gap-md">
-						<div class="flex items-center gap-sm">
-							<span class="material-symbols-outlined text-secondary">trending_up</span>
-							<div>
-								<p class="text-[11px] font-label-bold text-outline uppercase">Ingresos</p>
-								<p class="text-body-sm font-bold text-secondary">{{ total_income > 0 ? '+' : '' }}${{ total_income|number_format(2, '.', ',') }}</p>
-							</div>
-						</div>
-						<div class="flex items-center gap-sm">
-							<span class="material-symbols-outlined text-error">trending_down</span>
-							<div>
-								<p class="text-[11px] font-label-bold text-outline uppercase">Egresos</p>
-								<p class="text-body-sm font-bold text-error">{{ total_expenses > 0 ? '-' : '' }}${{ total_expenses|number_format(2, '.', ',') }}</p>
-							</div>
-						</div>
-						<div class="flex items-center gap-sm">
-							<span class="material-symbols-outlined text-primary">account_balance</span>
-							<div>
-								<p class="text-[11px] font-label-bold text-outline uppercase">Balance Neto</p>
-								<p class="text-body-sm font-bold text-primary">{{ balance >= 0 ? '+' : '' }}${{ balance|number_format(2, '.', ',') }}</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 
-			<div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+						<div class="space-y-sm">
+							<!-- Rango de Fechas -->
+							<div class="flex flex-col gap-xs">
+								<label class="font-label-bold text-[10px] text-outline uppercase">Período</label>
+								<div class="flex flex-wrap bg-surface-container-low p-1 rounded-lg gap-1">
+									<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'dia', 'fechaInicio': '', 'fechaFin': ''})) }}" class="flex-1 text-center py-1 text-[11px] font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'dia' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Día</a>
+									<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'semana', 'fechaInicio': '', 'fechaFin': ''})) }}" class="flex-1 text-center py-1 text-[11px] font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'semana' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Semana</a>
+									<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'mes', 'fechaInicio': '', 'fechaFin': ''})) }}" class="flex-1 text-center py-1 text-[11px] font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'mes' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Mes</a>
+									<a href="{{ path('app_reportes', app.request.query.all|merge({'periodo': 'todos', 'fechaInicio': '', 'fechaFin': ''})) }}" class="flex-1 text-center py-1 text-[11px] font-medium rounded-md hover:bg-white transition-colors {{ filters.periodo == 'todos' and not filters.fechaInicio ? 'bg-white shadow-sm font-bold text-primary' : '' }}">Todos</a>
+								</div>
+							</div>
+							<input type="hidden" name="periodo" value="{{ filters.periodo }}" />
+
+							<!-- Fechas Personalizadas -->
+							<div class="grid grid-cols-2 gap-sm pt-xs">
+								<div class="flex flex-col gap-xs">
+									<label class="font-label-bold text-[10px] text-outline uppercase">Desde</label>
+									<input type="date" name="fechaInicio" value="{{ filters.fechaInicio ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full"/>
+								</div>
+								<div class="flex flex-col gap-xs">
+									<label class="font-label-bold text-[10px] text-outline uppercase">Hasta</label>
+									<input type="date" name="fechaFin" value="{{ filters.fechaFin ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full"/>
+								</div>
+							</div>
+
+							<!-- Filtros Select -->
+							<div class="flex flex-col gap-xs pt-xs">
+								<label class="font-label-bold text-[10px] text-outline uppercase">Actividad</label>
+								<select name="actividad" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full">
+									<option value="">Todas las Actividades</option>
+									{% for activity in activities %}
+										<option value="{{ activity.id }}" {{ filters.actividad == activity.id ? 'selected' : '' }}>{{ activity.name }}</option>
+									{% endfor %}
+								</select>
+							</div>
+
+							<div class="flex flex-col gap-xs">
+								<label class="font-label-bold text-[10px] text-outline uppercase">Categoría</label>
+								<select name="categoria" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full">
+									<option value="">Todas las Categorías</option>
+									{% for cat in categories %}
+										<option value="{{ cat }}" {{ filters.categoria == cat ? 'selected' : '' }}>{{ cat }}</option>
+									{% endfor %}
+								</select>
+							</div>
+
+							<div class="flex flex-col gap-xs">
+								<label class="font-label-bold text-[10px] text-outline uppercase">Tipo</label>
+								<select name="tipo" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full">
+									<option value="">Todos los Tipos</option>
+									<option value="income" {{ filters.tipo == 'income' ? 'selected' : '' }}>Ingresos (+)</option>
+									<option value="expense" {{ filters.tipo == 'expense' ? 'selected' : '' }}>Egresos (-)</option>
+								</select>
+							</div>
+
+							<div class="pt-sm">
+								<button type="submit" class="w-full flex items-center justify-center gap-xs bg-primary text-on-primary rounded-md h-8 text-[11px] font-bold hover:bg-primary-container transition-colors shadow-sm">
+									<span class="material-symbols-outlined text-[14px]">filter_list</span> Aplicar Filtros
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<!-- CONTENIDO PRINCIPAL -->
+				<div class="flex-1 min-w-0 flex flex-col gap-lg">
+					
+					<!-- TARJETAS COMPACTAS -->
+					<div class="grid grid-cols-2 xl:grid-cols-4 gap-md">
+						<div class="bg-white border border-outline-variant rounded-xl p-md shadow-sm">
+							<p class="text-[10px] font-label-bold text-outline uppercase mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">account_balance</span> Posición Neta</p>
+							<p class="text-title-lg font-bold text-primary">${{ balance|number_format(2, '.', ',') }}</p>
+							{% if balance_change != 0 %}
+								<p class="text-[9px] font-bold mt-1 {{ balance_change > 0 ? 'text-secondary' : 'text-error' }}">
+									{{ balance_change > 0 ? '▲ +' : '▼ ' }}{{ balance_change }}% vs anterior
+								</p>
+							{% endif %}
+						</div>
+						<div class="bg-white border border-outline-variant rounded-xl p-md shadow-sm">
+							<p class="text-[10px] font-label-bold text-outline uppercase mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">trending_up</span> Ingresos</p>
+							<p class="text-title-lg font-bold text-secondary">+${{ total_income|number_format(2, '.', ',') }}</p>
+						</div>
+						<div class="bg-white border border-outline-variant rounded-xl p-md shadow-sm">
+							<p class="text-[10px] font-label-bold text-outline uppercase mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">trending_down</span> Egresos</p>
+							<p class="text-title-lg font-bold text-error">-${{ total_expenses|number_format(2, '.', ',') }}</p>
+						</div>
+						<div class="bg-white border border-outline-variant rounded-xl p-md shadow-sm">
+							<p class="text-[10px] font-label-bold text-outline uppercase mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">receipt_long</span> Transacciones</p>
+							<p class="text-title-lg font-bold text-on-surface">{{ total_transactions }}</p>
+						</div>
+					</div>
+
+					<!-- TABLA -->
+					<div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
 				<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
 					<h3 class="font-headline-sm text-headline-sm text-primary">Auditoría Detallada de Transacciones</h3>
 					<div class="flex gap-sm items-center">
@@ -272,7 +260,7 @@
 		</div>
 
 		<div id="receiptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-md">
-			<div class="bg-white rounded-2xl max-w-3xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+			<div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
 				<div class="p-lg bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
 					<div class="flex items-center gap-md">
 						<span class="material-symbols-outlined text-primary text-2xl">receipt_long</span>

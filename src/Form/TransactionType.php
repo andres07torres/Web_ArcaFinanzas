@@ -56,6 +56,7 @@ class TransactionType extends AbstractType
                 'choices' => [
                     'Efectivo' => 'efectivo',
                     'Transferencia Bancaria' => 'transferencia',
+                    'Depósito' => 'deposito',
                     'Cheque' => 'cheque',
                     'Tarjeta de Crédito' => 'tarjeta_credito',
                     'Tarjeta de Débito' => 'tarjeta_debito',

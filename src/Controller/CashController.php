@@ -56,6 +56,14 @@ class CashController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Si el formulario HTML manual no envió la actividad, la forzamos desde el parámetro de la URL
+            if (!$transaction->getActivity() && $actividadId) {
+                $act = $activityRepo->find($actividadId);
+                if ($act) {
+                    $transaction->setActivity($act);
+                }
+            }
+
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile|null $receiptFile */
             $receiptFile = $form->get('receipt')->getData();
             if ($receiptFile) {
@@ -84,6 +92,10 @@ class CashController extends AbstractController
             }
 
             $this->addFlash('success', 'Transacción registrada exitosamente.');
+
+            if ($activity) {
+                return $this->redirectToRoute('app_actividades_detalle', ['id' => $activity->getId()]);
+            }
 
             return $this->redirectToRoute('app_caja');
         }
