@@ -72,18 +72,18 @@
 							<div class="grid grid-cols-2 gap-sm pt-xs">
 								<div class="flex flex-col gap-xs">
 									<label class="font-label-bold text-[10px] text-outline uppercase">Desde</label>
-									<input type="date" name="fechaInicio" value="{{ filters.fechaInicio ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full"/>
+									<input type="date" name="fechaInicio" value="{{ filters.fechaInicio ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary py-1.5 px-2 w-full"/>
 								</div>
 								<div class="flex flex-col gap-xs">
 									<label class="font-label-bold text-[10px] text-outline uppercase">Hasta</label>
-									<input type="date" name="fechaFin" value="{{ filters.fechaFin ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full"/>
+									<input type="date" name="fechaFin" value="{{ filters.fechaFin ?? '' }}" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary py-1.5 px-2 w-full"/>
 								</div>
 							</div>
 
 							<!-- Filtros Select -->
 							<div class="flex flex-col gap-xs pt-xs">
 								<label class="font-label-bold text-[10px] text-outline uppercase">Actividad</label>
-								<select name="actividad" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full">
+								<select name="actividad" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary py-1.5 px-2 w-full">
 									<option value="">Todas las Actividades</option>
 									{% for activity in activities %}
 										<option value="{{ activity.id }}" {{ filters.actividad == activity.id ? 'selected' : '' }}>{{ activity.name }}</option>
@@ -93,7 +93,7 @@
 
 							<div class="flex flex-col gap-xs">
 								<label class="font-label-bold text-[10px] text-outline uppercase">Categoría</label>
-								<select name="categoria" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full">
+								<select name="categoria" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary py-1.5 px-2 w-full">
 									<option value="">Todas las Categorías</option>
 									{% for cat in categories %}
 										<option value="{{ cat }}" {{ filters.categoria == cat ? 'selected' : '' }}>{{ cat }}</option>
@@ -103,7 +103,7 @@
 
 							<div class="flex flex-col gap-xs">
 								<label class="font-label-bold text-[10px] text-outline uppercase">Tipo</label>
-								<select name="tipo" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary h-8 px-2 w-full">
+								<select name="tipo" onchange="this.form.submit()" class="bg-surface-container-low border border-outline-variant rounded-md text-[11px] font-medium focus:ring-1 focus:ring-primary py-1.5 px-2 w-full">
 									<option value="">Todos los Tipos</option>
 									<option value="income" {{ filters.tipo == 'income' ? 'selected' : '' }}>Ingresos (+)</option>
 									<option value="expense" {{ filters.tipo == 'expense' ? 'selected' : '' }}>Egresos (-)</option>
