@@ -51,7 +51,7 @@
 			</div>
 		{% else %}
 			<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
-				<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-[600px] flex flex-col">
+				<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden max-h-[600px] flex flex-col">
 					<div class="p-md border-b border-outline-variant bg-surface-container-low">
 						<form method="get" action="{{ path('app_directorio') }}" class="relative">
 							<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
@@ -74,7 +74,7 @@
 				</div>
 
 				{% if selected_member %}
-					<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-fit lg:h-[600px] flex flex-col">
+					<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-fit lg:max-h-[600px] flex flex-col">
 						<div class="p-xl bg-gradient-to-r from-surface-container-low to-surface-container-lowest border-b border-outline-variant">
 							<div class="flex flex-col md:flex-row gap-xl items-start md:items-center">
 								<div class="w-24 h-24 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-3xl shadow-sm">
@@ -253,7 +253,7 @@
 						</div>
 					</div>
 				{% else %}
-					<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-[600px] flex flex-col items-center justify-center">
+					<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden min-h-[400px] flex flex-col items-center justify-center">
 						<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">person_search</span>
 						<p class="font-body-sm text-on-surface-variant">Seleccione un miembro para ver su información</p>
 					</div>
@@ -338,7 +338,7 @@
 						{{ form_widget(form.zipCode, {'attr': {'class': 'w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm'}}) }}
 					</div>
 				</div>
-				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-center items-center gap-sm sm:gap-md">
+				<div class="p-md bg-surface-container-low border-t border-outline-variant flex flex-row-reverse justify-center items-center gap-sm sm:gap-md">
 					<button type="button" id="cancelMemModalBtn" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-variant cursor-pointer">Cancelar</button>
 					<button type="submit" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary-container cursor-pointer shadow-xs flex items-center gap-xs">
 						<span class="material-symbols-outlined text-sm">save</span> Registrar Miembro
@@ -535,7 +535,7 @@
 						{{ form_widget(edit_form.zipCode, {'id': 'editMemZip', 'attr': {'class': 'w-full h-11 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary text-body-sm'}}) }}
 					</div>
 				</div>
-				<div class="p-md bg-surface-container-low border-t border-outline-variant flex justify-center items-center gap-sm sm:gap-md">
+				<div class="p-md bg-surface-container-low border-t border-outline-variant flex flex-row-reverse justify-center items-center gap-sm sm:gap-md">
 					<button type="button" id="cancelEditMemModalBtn" class="h-9 px-lg border border-outline text-on-surface-variant rounded-lg font-bold text-xs hover:bg-surface-variant cursor-pointer">Cancelar</button>
 					<button type="submit" class="h-9 px-lg bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary-container cursor-pointer shadow-xs flex items-center gap-xs">
 						<span class="material-symbols-outlined text-sm">save</span> Guardar Cambios
