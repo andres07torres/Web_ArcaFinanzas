@@ -19,247 +19,252 @@
 				<h1 class="font-headline-lg text-headline-lg text-on-background">Directorio de Miembros</h1>
 				<p class="text-on-surface-variant font-body-md mt-xs">Gestione la información, roles y contribuciones de los miembros de la Comunidad.</p>
 			</div>
-			<a href="{{ path('app_directorio_nuevo') }}" onclick="event.preventDefault(); document.getElementById('newMemberModal').classList.remove('hidden');" data-new-member="true" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-sm active:scale-95">
-				<span class="material-symbols-outlined text-base">person_add</span>
-				Nuevo Miembro
-			</a>
-		</div>
-
-		<div class="flex mb-lg">
-			<section class="w-full md:w-1/3 bg-primary text-on-primary p-lg rounded-xl shadow-sm flex flex-col justify-between">
-				<div class="flex justify-between items-start">
-					<div>
-						<h3 class="font-label-bold text-xs uppercase opacity-70">Directorio Total</h3>
-						<div class="font-headline-md text-headline-md font-bold leading-tight text-white mt-xs">{{ total_members }} <span class="text-xs font-normal opacity-80">({{ active_members }} Activos)</span></div>
+			<div class="flex flex-col sm:flex-row items-stretch gap-md w-full md:w-auto mt-md md:mt-0">
+				<div class="bg-surface-container-lowest border border-outline-variant rounded-xl px-md py-xs flex items-center gap-md shadow-sm">
+					<div class="w-9 h-9 rounded-full bg-success/10 flex items-center justify-center text-success shrink-0">
+						<span class="material-symbols-outlined text-[20px]">how_to_reg</span>
 					</div>
-					<span class="material-symbols-outlined text-secondary-fixed text-xl">groups</span>
-				</div>
-				<div class="pt-xs">
-					<div class="h-1 bg-on-primary/20 rounded-full overflow-hidden mb-1">
-						<div class="h-full bg-secondary-fixed" style="width: {{ active_pct }}%"></div>
+					<div class="pr-sm">
+						<p class="text-[10px] font-bold text-on-surface-variant uppercase leading-tight tracking-wider">Miembros Activos</p>
+						<p class="text-body-lg font-bold text-on-background leading-tight">{{ active_members }} <span class="text-xs font-normal text-on-surface-variant">/ {{ total_members }}</span></p>
 					</div>
-					<p class="text-[10px] font-bold text-secondary-fixed">{{ active_pct }}% Colaboradores Activos</p>
 				</div>
-			</section>
-		</div>
-
-		{% if members is empty %}
-			<div class="bg-surface rounded-xl border border-outline-variant shadow-sm p-xl text-center py-12">
-				<span class="material-symbols-outlined text-on-surface-variant text-4xl mb-xs">group_off</span>
-				<h3 class="font-bold text-body-lg text-on-surface mb-xs">No hay miembros registrados</h3>
-				<p class="text-xs text-on-surface-variant">Puedes comenzar agregando el primer miembro utilizando el botón superior.</p>
+				<a href="{{ path('app_directorio_nuevo') }}" onclick="event.preventDefault(); document.getElementById('newMemberModal').classList.remove('hidden');" data-new-member="true" class="bg-primary text-on-primary px-xl py-md rounded-xl font-label-bold text-label-bold shadow-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-sm shrink-0">
+					<span class="material-symbols-outlined text-base">person_add</span>
+					<span>Nuevo Miembro</span>
+				</a>
 			</div>
-		{% else %}
-			<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
-				<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden max-h-[600px] flex flex-col">
-					<div class="p-md border-b border-outline-variant bg-surface-container-low">
-						<form method="get" action="{{ path('app_directorio') }}" class="relative">
-							<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
-							<input name="search" value="{{ search }}" class="w-full pl-10 pr-md py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary" placeholder="Buscar miembros..." type="text"/>
-						</form>
-					</div>
-					<div class="flex-1 overflow-y-auto hide-scrollbar divide-y divide-outline-variant">
-						{% for member in members %}
-							{% set is_selected = selected_member and member.id == selected_member.id %}
-							<a href="{{ path('app_directorio', {id: member.id}) }}" class="p-md flex items-center gap-md hover:bg-surface-container-low cursor-pointer transition-colors {% if is_selected %}bg-secondary-container/20 border-l-4 border-secondary{% else %}group{% endif %}">
-								<div class="w-10 h-10 rounded-full {% if is_selected %}bg-primary-container text-on-primary-container{% else %}bg-surface-variant text-on-surface{% endif %} flex items-center justify-center font-bold text-sm">{{ member.getInitials() }}</div>
-								<div class="flex-1 min-w-0">
-									<h4 class="font-label-bold text-body-sm truncate">{{ member.getFullName() }}</h4>
-									<p class="text-xs text-on-surface-variant truncate">{{ member.role }}</p>
-								</div>
-								<span class="material-symbols-outlined {% if is_selected %}text-secondary{% else %}text-outline-variant group-hover:text-primary transition-colors{% endif %} text-[20px]">chevron_right</span>
-							</a>
-						{% endfor %}
-					</div>
-				</div>
+		</div>
 
-				{% if selected_member %}
-					<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-fit lg:max-h-[600px] flex flex-col">
-						<div class="p-xl bg-gradient-to-r from-surface-container-low to-surface-container-lowest border-b border-outline-variant">
-							<div class="flex flex-col md:flex-row gap-xl items-start md:items-center">
-								<div class="w-24 h-24 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-3xl shadow-sm">
-									{{ selected_member.getInitials() }}
-								</div>
-								<div class="flex-1">
-									<div class="flex flex-wrap items-center gap-md mb-xs">
-										<h2 class="font-headline-md text-headline-md text-on-background">{{ selected_member.getFullName() }}</h2>
-										{% if selected_member.status == 'active' %}
-											<span class="px-md py-xs bg-success/10 text-secondary border border-secondary/20 rounded-full font-label-bold text-[10px] uppercase">Miembro Activo</span>
-										{% else %}
-											<span class="px-md py-xs bg-surface-variant text-on-surface-variant border border-outline-variant rounded-full font-label-bold text-[10px] uppercase">Miembro Inactivo</span>
-										{% endif %}
-									</div>
-									<div class="flex flex-wrap gap-xl text-on-surface-variant font-body-sm">
-										{% if selected_member.email %}
-											<div class="flex items-center gap-xs">
-												<span class="material-symbols-outlined text-[18px]">mail</span>
-												{{ selected_member.email }}
-											</div>
-										{% endif %}
-										{% if selected_member.phone %}
-											<div class="flex items-center gap-xs">
-												<span class="material-symbols-outlined text-[18px]">call</span>
-												{{ selected_member.phone }}
-											</div>
-										{% endif %}
-										{% if selected_member.joinDate %}
-											<div class="flex items-center gap-xs">
-												<span class="material-symbols-outlined text-[18px]">cake</span>
-												Cumpleaños: {{ selected_member.joinDate|date('d/m/Y') }}
-											</div>
-										{% endif %}
-									</div>
-								</div>
-								<div class="flex gap-sm w-full md:w-auto">
-									{% if app.user and (app.user.email == selected_member.email or app.user.registrationRole in ['tesorero', 'administrador']) %}
-										<a href="{{ path('app_directorio_editar', {id: selected_member.id}) }}"
-										   data-edit-member="true"
-										   data-id="{{ selected_member.id }}"
-										   data-firstname="{{ selected_member.firstName|e('html_attr') }}"
-										   data-lastname="{{ selected_member.lastName|e('html_attr') }}"
-										   data-phone="{{ selected_member.phone|e('html_attr') }}"
-										   data-email="{{ selected_member.email|e('html_attr') }}"
-										   data-role="{{ selected_member.role|e('html_attr') }}"
-										   data-birthdate="{{ selected_member.joinDate ? selected_member.joinDate|date('Y-m-d') : '' }}"
-										   data-address="{{ selected_member.address|e('html_attr') }}"
-										   data-state="{{ selected_member.state|e('html_attr') }}"
-										   data-city="{{ selected_member.city|e('html_attr') }}"
-										   data-zip="{{ selected_member.zipCode|e('html_attr') }}"
-										   class="h-9 px-lg border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors inline-flex items-center justify-center cursor-pointer">Editar Perfil</a>
-									{% endif %}
-									<button class="h-9 px-lg bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm inline-flex items-center justify-center cursor-pointer">Mensaje</button>
-								</div>
-							</div>
+		<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+			<!-- COLUMNA IZQUIERDA (Lista y Buscador) -->
+			<div class="lg:col-span-4">
+				{% if members is not empty %}
+					<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden max-h-[600px] flex flex-col">
+						<div class="p-md border-b border-outline-variant bg-surface-container-low">
+							<form method="get" action="{{ path('app_directorio') }}" class="relative">
+								<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+								<input name="search" value="{{ search }}" class="w-full pl-10 pr-md py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm focus:ring-1 focus:ring-primary" placeholder="Buscar miembros..." type="text"/>
+							</form>
 						</div>
-						<div class="flex-1 flex flex-col min-h-0">
-							<div class="px-xl flex border-b border-outline-variant">
-								<button type="button" data-member-tab="contributions" class="member-tab-btn py-md px-md border-b-2 border-primary text-primary font-label-bold text-label-bold cursor-pointer transition-colors">Historial de Contribuciones</button>
-								<button type="button" data-member-tab="tickets" class="member-tab-btn py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors cursor-pointer">Tickets y Eventos</button>
-								<button type="button" data-member-tab="notes" class="member-tab-btn py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors cursor-pointer">Notas</button>
-							</div>
-							<div class="flex-1 overflow-y-auto p-xl space-y-md">
-								<!-- PESTAÑA 1: HISTORIAL DE CONTRIBUCIONES -->
-								<div id="memberTab_contributions" class="member-tab-content">
-									{% if member_transactions is empty %}
-										<div class="text-center py-xl">
-											<span class="material-symbols-outlined text-on-surface-variant text-5xl">receipt_long</span>
-											<p class="font-body-sm text-on-surface-variant mt-md">No hay transacciones registradas</p>
-										</div>
-									{% else %}
-										<table class="w-full text-left">
-											<thead class="text-on-surface-variant font-label-bold text-label-bold uppercase border-b border-outline-variant">
-												<tr>
-													<th class="pb-md">Fecha</th>
-													<th class="pb-md">Categoría</th>
-													<th class="pb-md text-right">Monto</th>
-													<th class="pb-md text-center">Estado</th>
-												</tr>
-											</thead>
-											<tbody class="divide-y divide-outline-variant">
-												{% for transaction in member_transactions %}
-													<tr class="hover:bg-surface-container-low transition-colors">
-														<td class="py-md font-data-mono text-body-sm">{{ transaction.transactionDate|date('d') }} de {{ months[transaction.transactionDate|date('n') - 1] }}, {{ transaction.transactionDate|date('Y') }}</td>
-														<td class="py-md">
-															<div class="flex items-center gap-sm">
-																{% if transaction.type == 'income' %}
-																	<span class="material-symbols-outlined text-secondary text-[18px]">volunteer_activism</span>
-																{% else %}
-																	<span class="material-symbols-outlined text-error text-[18px]">payments</span>
-																{% endif %}
-																{{ transaction.category }}
-															</div>
-														</td>
-														<td class="py-md text-right font-bold">${{ transaction.amount|number_format(2, '.', ',') }}</td>
-														<td class="py-md text-center">
-															{% if transaction.type == 'income' %}
-																<span class="px-sm py-1 bg-secondary-container/30 text-on-secondary-container rounded text-[10px] font-bold uppercase">Ingreso</span>
-															{% else %}
-																<span class="px-sm py-1 bg-error-container/40 text-on-error-container rounded text-[10px] font-bold uppercase">Gasto</span>
-															{% endif %}
-														</td>
-													</tr>
-												{% endfor %}
-											</tbody>
-										</table>
-										<div class="pt-xl flex justify-center">
-											<button type="button" onclick="window.print()" class="text-body-sm font-label-bold text-primary flex items-center gap-xs cursor-pointer hover:underline">
-												Imprimir Historial <span class="material-symbols-outlined text-[18px]">print</span>
-											</button>
-										</div>
-									{% endif %}
-								</div>
-
-								<!-- PESTAÑA 2: TICKETS Y EVENTOS -->
-								<div id="memberTab_tickets" class="member-tab-content hidden space-y-md">
-									{% set has_events = false %}
-									{% for tx in member_transactions %}
-										{% if tx.activity %}
-											{% set has_events = true %}
-										{% endif %}
-									{% endfor %}
-
-									{% if has_events %}
-										<div class="space-y-sm">
-											{% for tx in member_transactions %}
-												{% if tx.activity %}
-													<div class="p-md bg-surface-container-low border border-outline-variant rounded-xl flex items-center justify-between">
-														<div class="flex items-center gap-md">
-															<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
-																<span class="material-symbols-outlined text-xl">confirmation_number</span>
-															</div>
-															<div>
-																<h4 class="font-bold text-body-md text-on-background">{{ tx.activity.name }}</h4>
-																<p class="text-xs text-on-surface-variant">{{ tx.transactionDate|date('d/m/Y') }} · {{ tx.activity.category }}</p>
-															</div>
-														</div>
-														<span class="px-md py-xs bg-secondary-container/30 text-on-secondary-container rounded-full text-xs font-bold">${{ tx.amount|number_format(2, '.', ',') }}</span>
-													</div>
-												{% endif %}
-											{% endfor %}
-										</div>
-									{% else %}
-										<div class="text-center py-xl">
-											<span class="material-symbols-outlined text-on-surface-variant text-5xl opacity-40">confirmation_number</span>
-											<p class="font-body-sm font-semibold text-on-background mt-md">No hay tickets ni eventos registrados</p>
-											<p class="text-xs text-on-surface-variant mt-xs">Este miembro aún no ha participado en actividades vinculadas.</p>
-										</div>
-									{% endif %}
-								</div>
-
-								<!-- PESTAÑA 3: NOTAS Y DIRECCIÓN -->
-								<div id="memberTab_notes" class="member-tab-content hidden space-y-md">
-									<div class="bg-surface-container-low border border-outline-variant rounded-xl p-lg space-y-md">
-										<div>
-											<h4 class="font-bold text-xs uppercase text-on-surface-variant mb-xs">Dirección Registrada</h4>
-											<p class="text-body-md text-on-background font-medium">
-												{% if selected_member.address %}
-													{{ selected_member.address }}{% if selected_member.city %}, {{ selected_member.city }}{% endif %}{% if selected_member.state %}, {{ selected_member.state }}{% endif %}
-												{% else %}
-													<span class="text-on-surface-variant italic">No se ha registrado una dirección física.</span>
-												{% endif %}
-											</p>
-										</div>
-										<div class="pt-md border-t border-outline-variant">
-											<h4 class="font-bold text-xs uppercase text-on-surface-variant mb-xs">Notas Adicionales</h4>
-											{% if selected_member.notes %}
-												<p class="text-body-sm text-on-background whitespace-pre-line">{{ selected_member.notes }}</p>
-											{% else %}
-												<p class="text-xs text-on-surface-variant italic">No existen observaciones o notas para este miembro.</p>
-											{% endif %}
-										</div>
+						<div class="flex-1 overflow-y-auto hide-scrollbar divide-y divide-outline-variant">
+							{% for member in members %}
+								{% set is_selected = selected_member and member.id == selected_member.id %}
+								<a href="{{ path('app_directorio', {id: member.id}) }}" class="p-md flex items-center gap-md hover:bg-surface-container-low cursor-pointer transition-colors {% if is_selected %}bg-secondary-container/20 border-l-4 border-secondary{% else %}border-l-4 border-transparent{% endif %}">
+									<div class="w-10 h-10 rounded-full {% if is_selected %}bg-primary-container text-on-primary-container{% else %}bg-surface-variant text-on-surface{% endif %} flex items-center justify-center font-bold text-sm">
+										{{ member.getInitials() }}
 									</div>
-								</div>
-							</div>
+									<div class="flex-1 min-w-0">
+										<h4 class="font-label-bold text-body-sm truncate {% if is_selected %}text-primary{% endif %}">{{ member.getFullName() }}</h4>
+										<p class="text-xs text-on-surface-variant truncate">{{ member.role }}</p>
+									</div>
+									<span class="material-symbols-outlined {% if is_selected %}text-secondary{% else %}text-outline-variant{% endif %} text-[20px]">chevron_right</span>
+								</a>
+							{% endfor %}
 						</div>
-					</div>
-				{% else %}
-					<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden min-h-[400px] flex flex-col items-center justify-center">
-						<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">person_search</span>
-						<p class="font-body-sm text-on-surface-variant">Seleccione un miembro para ver su información</p>
 					</div>
 				{% endif %}
 			</div>
-		{% endif %}
+
+			<!-- COLUMNA DERECHA (Estadísticas y Detalles) -->
+			<div class="lg:col-span-8 flex flex-col gap-lg">
+
+
+				{% if members is empty %}
+					<div class="bg-surface rounded-xl border border-outline-variant shadow-sm p-xl text-center py-12">
+						<span class="material-symbols-outlined text-on-surface-variant text-4xl mb-xs">group_off</span>
+						<h3 class="font-bold text-body-lg text-on-surface mb-xs">No hay miembros registrados</h3>
+						<p class="text-xs text-on-surface-variant">Puedes comenzar agregando el primer miembro utilizando el botón superior.</p>
+					</div>
+				{% else %}
+					{% if selected_member %}
+						<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden h-fit lg:max-h-[600px] flex flex-col">
+							<div class="p-xl bg-surface-container-low border-b border-outline-variant">
+								<div class="flex flex-col md:flex-row gap-xl items-start md:items-center">
+									<div class="w-24 h-24 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-3xl shadow-sm">
+										{{ selected_member.getInitials() }}
+									</div>
+									<div class="flex-1">
+										<div class="flex flex-wrap items-center gap-md mb-xs">
+											<h2 class="font-headline-md text-headline-md text-on-background">{{ selected_member.getFullName() }}</h2>
+											{% if selected_member.status == 'active' %}
+												<span class="px-md py-xs bg-success/10 text-secondary border border-secondary/20 rounded-full font-label-bold text-[10px] uppercase">Miembro Activo</span>
+											{% else %}
+												<span class="px-md py-xs bg-surface-variant text-on-surface-variant border border-outline-variant rounded-full font-label-bold text-[10px] uppercase">Miembro Inactivo</span>
+											{% endif %}
+										</div>
+										<div class="flex flex-wrap gap-xl text-on-surface-variant font-body-sm">
+											{% if selected_member.email %}
+												<div class="flex items-center gap-xs">
+													<span class="material-symbols-outlined text-[18px]">mail</span>
+													{{ selected_member.email }}
+												</div>
+											{% endif %}
+											{% if selected_member.phone %}
+												<div class="flex items-center gap-xs">
+													<span class="material-symbols-outlined text-[18px]">call</span>
+													{{ selected_member.phone }}
+												</div>
+											{% endif %}
+											{% if selected_member.joinDate %}
+												<div class="flex items-center gap-xs">
+													<span class="material-symbols-outlined text-[18px]">cake</span>
+													Cumpleaños: {{ selected_member.joinDate|date('d/m/Y') }}
+												</div>
+											{% endif %}
+										</div>
+									</div>
+									<div class="flex gap-sm w-full md:w-auto">
+										{% if app.user and (app.user.email == selected_member.email or app.user.registrationRole in ['tesorero', 'administrador']) %}
+											<a href="{{ path('app_directorio_editar', {id: selected_member.id}) }}"
+											   data-edit-member="true"
+											   data-id="{{ selected_member.id }}"
+											   data-firstname="{{ selected_member.firstName|e('html_attr') }}"
+											   data-lastname="{{ selected_member.lastName|e('html_attr') }}"
+											   data-phone="{{ selected_member.phone|e('html_attr') }}"
+											   data-email="{{ selected_member.email|e('html_attr') }}"
+											   data-role="{{ selected_member.role|e('html_attr') }}"
+											   data-birthdate="{{ selected_member.joinDate ? selected_member.joinDate|date('Y-m-d') : '' }}"
+											   data-address="{{ selected_member.address|e('html_attr') }}"
+											   data-state="{{ selected_member.state|e('html_attr') }}"
+											   data-city="{{ selected_member.city|e('html_attr') }}"
+											   data-zip="{{ selected_member.zipCode|e('html_attr') }}"
+											   class="h-9 px-lg border border-outline-variant rounded-lg font-label-bold text-label-bold hover:bg-surface-container-high transition-colors inline-flex items-center justify-center cursor-pointer">Editar Perfil</a>
+										{% endif %}
+										<button class="h-9 px-lg bg-primary text-on-primary rounded-lg font-label-bold text-label-bold shadow-sm inline-flex items-center justify-center cursor-pointer">Mensaje</button>
+									</div>
+								</div>
+							</div>
+							<div class="flex-1 flex flex-col min-h-0">
+								<div class="px-xl flex border-b border-outline-variant">
+									<button type="button" data-member-tab="contributions" class="member-tab-btn py-md px-md border-b-2 border-primary text-primary font-label-bold text-label-bold cursor-pointer transition-colors">Historial de Contribuciones</button>
+									<button type="button" data-member-tab="tickets" class="member-tab-btn py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors cursor-pointer">Tickets y Eventos</button>
+									<button type="button" data-member-tab="notes" class="member-tab-btn py-md px-md text-on-surface-variant font-label-bold text-label-bold hover:text-primary transition-colors cursor-pointer">Notas</button>
+								</div>
+								<div class="flex-1 overflow-y-auto p-xl space-y-md">
+									<!-- PESTAÑA 1: HISTORIAL DE CONTRIBUCIONES -->
+									<div id="memberTab_contributions" class="member-tab-content">
+										{% if member_transactions is empty %}
+											<div class="text-center py-xl">
+												<span class="material-symbols-outlined text-on-surface-variant text-5xl">receipt_long</span>
+												<p class="font-body-sm text-on-surface-variant mt-md">No hay transacciones registradas</p>
+											</div>
+										{% else %}
+											<table class="w-full text-left">
+												<thead class="text-on-surface-variant font-label-bold text-label-bold uppercase border-b border-outline-variant">
+													<tr>
+														<th class="pb-md">Fecha</th>
+														<th class="pb-md">Categoría</th>
+														<th class="pb-md text-right">Monto</th>
+														<th class="pb-md text-center">Estado</th>
+													</tr>
+												</thead>
+												<tbody class="divide-y divide-outline-variant">
+													{% for transaction in member_transactions %}
+														<tr class="hover:bg-surface-container-low transition-colors">
+															<td class="py-md font-data-mono text-body-sm">{{ transaction.transactionDate|date('d') }} de {{ months[transaction.transactionDate|date('n') - 1] }}, {{ transaction.transactionDate|date('Y') }}</td>
+															<td class="py-md">
+																<div class="flex items-center gap-sm">
+																	{% if transaction.type == 'income' %}
+																		<span class="material-symbols-outlined text-secondary text-[18px]">volunteer_activism</span>
+																	{% else %}
+																		<span class="material-symbols-outlined text-error text-[18px]">payments</span>
+																	{% endif %}
+																	{{ transaction.category }}
+																</div>
+															</td>
+															<td class="py-md text-right font-bold">${{ transaction.amount|number_format(2, '.', ',') }}</td>
+															<td class="py-md text-center">
+																{% if transaction.type == 'income' %}
+																	<span class="px-sm py-1 bg-secondary-container/30 text-on-secondary-container rounded text-[10px] font-bold uppercase">Ingreso</span>
+																{% else %}
+																	<span class="px-sm py-1 bg-error-container/40 text-on-error-container rounded text-[10px] font-bold uppercase">Gasto</span>
+																{% endif %}
+															</td>
+														</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+											<div class="pt-xl flex justify-center">
+												<button type="button" onclick="window.print()" class="text-body-sm font-label-bold text-primary flex items-center gap-xs cursor-pointer hover:underline">
+													Imprimir Historial <span class="material-symbols-outlined text-[18px]">print</span>
+												</button>
+											</div>
+										{% endif %}
+									</div>
+
+									<!-- PESTAÑA 2: TICKETS Y EVENTOS -->
+									<div id="memberTab_tickets" class="member-tab-content hidden space-y-md">
+										{% set has_events = false %}
+										{% for tx in member_transactions %}
+											{% if tx.activity %}
+												{% set has_events = true %}
+											{% endif %}
+										{% endfor %}
+
+										{% if has_events %}
+											<div class="space-y-sm">
+												{% for tx in member_transactions %}
+													{% if tx.activity %}
+														<div class="p-md bg-surface-container-low border border-outline-variant rounded-xl flex items-center justify-between">
+															<div class="flex items-center gap-md">
+																<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
+																	<span class="material-symbols-outlined text-xl">confirmation_number</span>
+																</div>
+																<div>
+																	<h4 class="font-bold text-body-md text-on-background">{{ tx.activity.name }}</h4>
+																	<p class="text-xs text-on-surface-variant">{{ tx.transactionDate|date('d/m/Y') }} · {{ tx.activity.category }}</p>
+																</div>
+															</div>
+															<span class="px-md py-xs bg-secondary-container/30 text-on-secondary-container rounded-full text-xs font-bold">${{ tx.amount|number_format(2, '.', ',') }}</span>
+														</div>
+													{% endif %}
+												{% endfor %}
+											</div>
+										{% else %}
+											<div class="text-center py-xl">
+												<span class="material-symbols-outlined text-on-surface-variant text-5xl opacity-40">confirmation_number</span>
+												<p class="font-body-sm font-semibold text-on-background mt-md">No hay tickets ni eventos registrados</p>
+												<p class="text-xs text-on-surface-variant mt-xs">Este miembro aún no ha participado en actividades vinculadas.</p>
+											</div>
+										{% endif %}
+									</div>
+
+									<!-- PESTAÑA 3: NOTAS Y DIRECCIÓN -->
+									<div id="memberTab_notes" class="member-tab-content hidden space-y-md">
+										<div class="bg-surface-container-low border border-outline-variant rounded-xl p-lg space-y-md">
+											<div>
+												<h4 class="font-bold text-xs uppercase text-on-surface-variant mb-xs">Dirección Registrada</h4>
+												<p class="text-body-md text-on-background font-medium">
+													{% if selected_member.address %}
+														{{ selected_member.address }}{% if selected_member.city %}, {{ selected_member.city }}{% endif %}{% if selected_member.state %}, {{ selected_member.state }}{% endif %}
+													{% else %}
+														<span class="text-on-surface-variant italic">No se ha registrado una dirección física.</span>
+													{% endif %}
+												</p>
+											</div>
+											<div class="pt-md border-t border-outline-variant">
+												<h4 class="font-bold text-xs uppercase text-on-surface-variant mb-xs">Notas Adicionales</h4>
+												{% if selected_member.notes %}
+													<p class="text-body-sm text-on-background whitespace-pre-line">{{ selected_member.notes }}</p>
+												{% else %}
+													<p class="text-xs text-on-surface-variant italic">No existen observaciones o notas para este miembro.</p>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden min-h-[400px] flex flex-col items-center justify-center">
+							<span class="material-symbols-outlined text-on-surface-variant text-6xl mb-md">person_search</span>
+							<p class="font-body-sm text-on-surface-variant">Seleccione un miembro para ver su información</p>
+						</div>
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
 	</div>
 
 	<!-- MODAL: REGISTRAR NUEVO MIEMBRO -->
