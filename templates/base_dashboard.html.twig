@@ -122,58 +122,59 @@
 {% block body %}
 	{% set active_menu = active_menu|default('dashboard') %}
 
-	<div id="mobileSidebarBackdrop" class="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-xs transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+	<div id="mobileSidebarBackdrop" class="fixed inset-0 bg-black/60 z-[60] lg:hidden backdrop-blur-xs transition-opacity duration-300 opacity-0 pointer-events-none"></div>
 
-	<aside class="flex fixed left-0 top-0 h-full w-64 flex-col py-lg bg-surface-container-low border-r border-outline-variant z-50 shadow-2xl lg:shadow-none transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0">
-		<div class="px-lg mb-xl flex items-start justify-between">
-			<div>
-				<h2 class="font-headline-md text-headline-md text-primary">Comunidad</h2>
-				<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del {{ app.user ? app.user.displayRole : 'Tesorero' }}</p>
+	<aside id="mobileSidebar" class="flex fixed left-0 top-0 h-full max-h-screen w-64 flex-col bg-surface-container-low border-r border-outline-variant z-[70] shadow-2xl lg:shadow-none -translate-x-full lg:translate-x-0">
+		<div class="flex-1 overflow-y-auto flex flex-col pt-lg pb-10">
+			<div class="px-lg mb-xl flex items-start justify-between shrink-0">
+				<div>
+					<h2 class="font-headline-md text-headline-md text-primary">Comunidad</h2>
+					<p class="font-label-bold text-label-bold text-on-surface-variant opacity-70">Portal del {{ app.user ? app.user.displayRole : 'Tesorero' }}</p>
+				</div>
+				<button type="button" id="mobileSidebarClose" class="lg:hidden p-xs text-on-surface-variant hover:text-error hover:bg-surface-variant rounded-full transition-colors cursor-pointer" title="Cerrar Menú">
+					<span class="material-symbols-outlined text-2xl">close</span>
+				</button>
 			</div>
-			<button type="button" id="mobileSidebarClose" class="lg:hidden p-xs text-on-surface-variant hover:text-error hover:bg-surface-variant rounded-full transition-colors cursor-pointer" title="Cerrar Menú">
-				<span class="material-symbols-outlined text-2xl">close</span>
-			</button>
-		</div>
-		<nav class="flex-1 space-y-1">
-			<a class="flex items-center {{ active_menu == 'dashboard' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
-				<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">dashboard</span>
-				<span class="font-label-bold text-label-bold">Tablero</span>
-			</a>
-			<a class="flex items-center {{ active_menu == 'actividades' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
-				<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">event_available</span>
-				<span class="font-label-bold text-label-bold">Actividades</span>
-			</a>
-			<a class="flex items-center {{ active_menu == 'caja' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
-				<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">account_balance_wallet</span>
-				<span class="font-label-bold text-label-bold">Control de Caja</span>
-			</a>
-			<a class="flex items-center {{ active_menu == 'directorio' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_directorio') }}">
-				<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">group</span>
-				<span class="font-label-bold text-label-bold">Directorio</span>
-			</a>
-			<a class="flex items-center {{ active_menu == 'reportes' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_reportes') }}">
-				<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">assessment</span>
-				<span class="font-label-bold text-label-bold">Informes</span>
-			</a>
-		</nav>
-		<div class="px-md mt-auto pt-lg border-t border-outline-variant space-y-1">
-
-			<a class="flex items-center {{ active_menu == 'configuracion' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_configuracion') }}">
-				<span class="material-symbols-outlined mr-md">person</span>
-				<span class="font-label-bold text-label-bold">Mi Perfil</span>
-			</a>
-			<a class="flex items-center {{ active_menu == 'ayuda' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_ayuda') }}">
-				<span class="material-symbols-outlined mr-md">help</span>
-				<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
-			</a>
-			<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="{{ path('app_logout') }}">
-				<span class="material-symbols-outlined mr-md">logout</span>
-				<span class="font-label-bold text-label-bold">Cerrar Sesión</span>
-			</a>
+			<nav class="flex-none space-y-1">
+				<a class="flex items-center {{ active_menu == 'dashboard' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
+					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">dashboard</span>
+					<span class="font-label-bold text-label-bold">Tablero</span>
+				</a>
+				<a class="flex items-center {{ active_menu == 'actividades' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
+					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">event_available</span>
+					<span class="font-label-bold text-label-bold">Actividades</span>
+				</a>
+				<a class="flex items-center {{ active_menu == 'caja' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
+					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">account_balance_wallet</span>
+					<span class="font-label-bold text-label-bold">Control de Caja</span>
+				</a>
+				<a class="flex items-center {{ active_menu == 'directorio' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_directorio') }}">
+					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">group</span>
+					<span class="font-label-bold text-label-bold">Directorio</span>
+				</a>
+				<a class="flex items-center {{ active_menu == 'reportes' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_reportes') }}">
+					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">assessment</span>
+					<span class="font-label-bold text-label-bold">Informes</span>
+				</a>
+			</nav>
+			<div class="px-md mt-auto pt-lg border-t border-outline-variant space-y-1">
+				<a class="flex items-center {{ active_menu == 'configuracion' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_configuracion') }}">
+					<span class="material-symbols-outlined mr-md">person</span>
+					<span class="font-label-bold text-label-bold">Mi Perfil</span>
+				</a>
+				<a class="flex items-center {{ active_menu == 'ayuda' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_ayuda') }}">
+					<span class="material-symbols-outlined mr-md">help</span>
+					<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
+				</a>
+				<a class="flex items-center text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="{{ path('app_logout') }}">
+					<span class="material-symbols-outlined mr-md">logout</span>
+					<span class="font-label-bold text-label-bold">Cerrar Sesión</span>
+				</a>
+			</div>
 		</div>
 	</aside>
 
-	<main class="lg:ml-64 min-h-screen flex flex-col pb-20 lg:pb-0">
+	<main class="lg:ml-64 min-h-screen flex flex-col pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-0">
 		<header class="sticky top-0 w-full z-40 flex justify-between items-center px-lg h-16 bg-surface border-b border-outline-variant shadow-sm">
 			<div class="flex items-center gap-md">
 				<button type="button" id="mobileSidebarToggle" class="lg:hidden p-xs text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors cursor-pointer" title="Menú">
@@ -243,7 +244,7 @@
 		{% block dashboard_content %}{% endblock %}
 	</main>
 
-	<nav class="lg:hidden fixed bottom-0 left-0 w-full bg-surface-container-highest border-t border-outline-variant flex justify-around items-center h-16 z-50 shadow-lg">
+	<nav class="lg:hidden fixed bottom-0 left-0 w-full bg-surface-container-highest border-t border-outline-variant flex justify-around items-center h-[calc(4rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)] z-50 shadow-lg px-2">
 		<a class="flex flex-col items-center gap-1 {{ active_menu == 'dashboard' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_dashboard') }}">
 			<span class="material-symbols-outlined" {{ active_menu == 'dashboard' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>dashboard</span>
 			<span class="text-[10px] font-label-bold">Inicio</span>
@@ -260,19 +261,11 @@
 			<span class="material-symbols-outlined" {{ active_menu == 'directorio' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>group</span>
 			<span class="text-[10px] font-label-bold">Directorio</span>
 		</a>
-				<a class="flex flex-col items-center gap-1 {{ active_menu == 'reportes' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_reportes') }}">
-					<span class="material-symbols-outlined" {{ active_menu == 'reportes' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>assessment</span>
-					<span class="text-[10px] font-label-bold">Informes</span>
-				</a>
-				<a class="flex flex-col items-center gap-1 {{ active_menu == 'configuracion' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_configuracion') }}">
-					<span class="material-symbols-outlined" {{ active_menu == 'configuracion' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>person</span>
-					<span class="text-[10px] font-label-bold">Perfil</span>
-				</a>
-				<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:bg-surface-variant rounded-xl p-md transition-all" href="{{ path('app_logout') }}">
-					<span class="material-symbols-outlined">logout</span>
-					<span class="text-[10px] font-label-bold">Salir</span>
-				</a>
-			</nav>
+		<a class="flex flex-col items-center gap-1 {{ active_menu == 'reportes' ? 'text-primary' : 'text-on-surface-variant' }}" href="{{ path('app_reportes') }}">
+			<span class="material-symbols-outlined" {{ active_menu == 'reportes' ? 'style="font-variation-settings: \'FILL\' 1;"' : '' }}>assessment</span>
+			<span class="text-[10px] font-label-bold">Informes</span>
+		</a>
+	</nav>
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
@@ -364,7 +357,14 @@
 			const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
 			const mobileSidebarClose = document.getElementById('mobileSidebarClose');
 			const mobileSidebarBackdrop = document.getElementById('mobileSidebarBackdrop');
-			const sidebar = document.querySelector('aside');
+			const sidebar = document.getElementById('mobileSidebar');
+
+			// Evitar que el sidebar se anime al cargar la página (FOUC)
+			if (sidebar) {
+				setTimeout(() => {
+					sidebar.classList.add('transition-transform', 'duration-300', 'ease-in-out');
+				}, 100);
+			}
 
 			function openMobileSidebar() {
 				if (sidebar) {
