@@ -150,46 +150,44 @@
 												<p class="font-body-sm text-on-surface-variant mt-md">No hay transacciones registradas</p>
 											</div>
 										{% else %}
-											<table class="w-full text-left">
-												<thead class="text-on-surface-variant font-label-bold text-label-bold uppercase border-b border-outline-variant">
-													<tr>
-														<th class="pb-md">Fecha</th>
-														<th class="pb-md">Categoría</th>
-														<th class="pb-md text-right">Monto</th>
-														<th class="pb-md text-center">Estado</th>
-													</tr>
-												</thead>
-												<tbody class="divide-y divide-outline-variant">
-													{% for transaction in member_transactions %}
-														<tr class="hover:bg-surface-container-low transition-colors">
-															<td class="py-md font-data-mono text-body-sm">{{ transaction.transactionDate|date('d') }} de {{ months[transaction.transactionDate|date('n') - 1] }}, {{ transaction.transactionDate|date('Y') }}</td>
-															<td class="py-md">
-																<div class="flex items-center gap-sm">
-																	{% if transaction.type == 'income' %}
-																		<span class="material-symbols-outlined text-secondary text-[18px]">volunteer_activism</span>
-																	{% else %}
-																		<span class="material-symbols-outlined text-error text-[18px]">payments</span>
-																	{% endif %}
-																	{{ transaction.category }}
-																</div>
-															</td>
-															<td class="py-md text-right font-bold">${{ transaction.amount|number_format(2, '.', ',') }}</td>
-															<td class="py-md text-center">
-																{% if transaction.type == 'income' %}
-																	<span class="px-sm py-1 bg-secondary-container/30 text-on-secondary-container rounded text-[10px] font-bold uppercase">Ingreso</span>
-																{% else %}
-																	<span class="px-sm py-1 bg-error-container/40 text-on-error-container rounded text-[10px] font-bold uppercase">Gasto</span>
-																{% endif %}
-															</td>
+											<div class="overflow-x-auto">
+												<table class="w-full text-left min-w-[600px]">
+													<thead class="text-on-surface-variant font-label-bold text-label-bold uppercase border-b border-outline-variant">
+														<tr>
+															<th class="pb-md px-md">Fecha</th>
+															<th class="pb-md px-md">Categoría</th>
+															<th class="pb-md px-md text-right">Monto</th>
+															<th class="pb-md px-md text-center">Estado</th>
 														</tr>
-													{% endfor %}
-												</tbody>
-											</table>
-											<div class="pt-xl flex justify-center">
-												<button type="button" onclick="window.print()" class="text-body-sm font-label-bold text-primary flex items-center gap-xs cursor-pointer hover:underline">
-													Imprimir Historial <span class="material-symbols-outlined text-[18px]">print</span>
-												</button>
+													</thead>
+													<tbody class="divide-y divide-outline-variant">
+														{% for transaction in member_transactions %}
+															<tr class="hover:bg-surface-container-low transition-colors">
+																<td class="py-md px-md font-data-mono text-body-sm whitespace-nowrap">{{ transaction.transactionDate|date('d') }} de {{ months[transaction.transactionDate|date('n') - 1] }}, {{ transaction.transactionDate|date('Y') }}</td>
+																<td class="py-md px-md whitespace-nowrap">
+																	<div class="flex items-center gap-sm">
+																		{% if transaction.type == 'income' %}
+																			<span class="material-symbols-outlined text-secondary text-[18px]">volunteer_activism</span>
+																		{% else %}
+																			<span class="material-symbols-outlined text-error text-[18px]">payments</span>
+																		{% endif %}
+																		{{ transaction.category }}
+																	</div>
+																</td>
+																<td class="py-md px-md text-right font-bold whitespace-nowrap">${{ transaction.amount|number_format(2, '.', ',') }}</td>
+																<td class="py-md px-md text-center whitespace-nowrap">
+																	{% if transaction.type == 'income' %}
+																		<span class="px-sm py-1 bg-secondary-container/30 text-on-secondary-container rounded text-[10px] font-bold uppercase">Ingreso</span>
+																	{% else %}
+																		<span class="px-sm py-1 bg-error-container/40 text-on-error-container rounded text-[10px] font-bold uppercase">Gasto</span>
+																	{% endif %}
+																</td>
+															</tr>
+														{% endfor %}
+													</tbody>
+												</table>
 											</div>
+
 										{% endif %}
 									</div>
 
