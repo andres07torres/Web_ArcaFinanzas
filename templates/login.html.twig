@@ -114,74 +114,92 @@
 	{{ parent() }}
 {% endblock %}
 
-{% block body_class %}min-h-screen lg:h-screen w-full bg-surface p-0 m-0 overflow-x-hidden lg:overflow-hidden{% endblock %}
+{% block body_class %}min-h-screen w-full bg-surface p-0 m-0 overflow-x-hidden{% endblock %}
 
 {% block body %}
-	<div class="min-h-screen lg:h-screen w-full flex flex-col lg:flex-row">
-		<!-- Columna Izquierda: Imagen Arca_home (Solo visible en Escritorio/Web, Oculta en Móvil) -->
-		<div class="hidden lg:block relative lg:w-1/2 overflow-hidden bg-surface-container-high">
-			<img src="{{ asset('images/logo.png') }}" alt="Arca Finanzas" class="absolute inset-0 object-cover object-center w-full h-full" style="min-height: 100%;"/>
+	<div class="min-h-screen w-full flex flex-col justify-center items-center bg-gradient-to-br from-primary-container via-primary to-[#001040] relative px-4 sm:px-6 py-6 sm:py-10">
+		
+		<!-- Efectos de fondo modernos (Orbs) -->
+		<div class="absolute inset-0 overflow-hidden pointer-events-none">
+			<div class="absolute -top-[20%] -left-[10%] w-[500px] h-[500px] rounded-full bg-tertiary-container/40 blur-[80px]"></div>
+			<div class="absolute top-[40%] -right-[10%] w-[400px] h-[400px] rounded-full bg-secondary-container/20 blur-[80px]"></div>
+			<div class="absolute -bottom-[20%] left-[20%] w-[600px] h-[600px] rounded-full bg-primary/50 blur-[100px]"></div>
 		</div>
 
-		<!-- Columna Derecha: Tarjeta Login Centrada (50% pantalla en web) -->
-		<div class="w-full lg:w-1/2 min-h-screen lg:h-screen flex flex-col justify-start lg:justify-center items-center px-4 sm:px-6 lg:px-12 py-2 sm:py-4 lg:py-12 bg-surface lg:overflow-y-auto">
-			<!-- Logo Móvil (visible solo en móvil) -->
-			<div class="flex lg:hidden">
-				<img src="{{ asset('images/logo_movil.png') }}" alt="Arca Finanzas" class="h-56 w-auto object-contain"/>
+		<!-- Contenedor Principal Centrado -->
+		<div class="w-full max-w-[420px] relative z-10 flex flex-col items-center">
+			
+			<!-- Logo -->
+			<div class="mb-6 transform transition-transform hover:scale-105 duration-300 mt-auto">
+				<img src="{{ asset('images/logo_movil.png') }}" alt="Arca Finanzas" class="h-20 sm:h-24 w-auto object-contain drop-shadow-2xl"/>
 			</div>
-			<main class="w-full max-w-[420px] mt-[-4vh]">
-				<section class="glass-card border border-outline-variant rounded-2xl shadow-sm p-5 sm:p-6 w-full">
-					<div class="mb-4">
-						<h1 class="font-headline-md text-headline-md text-on-surface mb-2">Bienvenido de nuevo</h1>
-						<p class="font-body-md text-body-md text-on-surface-variant">Gestione sus finanzas ministeriales con claridad y propósito.</p>
-					</div>
-					<form class="space-y-4" method="post" autocomplete="off">
 
+			<main class="w-full mb-auto">
+				<section class="bg-surface/95 backdrop-blur-2xl border border-white/20 rounded-[2rem] shadow-2xl p-5 sm:p-7 w-full relative overflow-hidden">
+					<!-- Brillo sutil superior en la tarjeta -->
+					<div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent"></div>
+
+					<div class="mb-6 text-center">
+						<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-1">Bienvenido de nuevo</h1>
+						<p class="font-body-sm text-body-sm text-on-surface-variant">Gestione sus finanzas ministeriales con claridad y propósito.</p>
+					</div>
+					
+					<form class="space-y-4" method="post" autocomplete="off">
 						{% if error %}
-							<div class="bg-error-container text-on-error-container text-body-sm px-md py-sm rounded-xl">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+							<div class="bg-error-container/90 border border-error/20 text-on-error-container text-body-sm px-4 py-3 rounded-xl flex items-center gap-2 animate-pulse">
+								<span class="material-symbols-outlined text-error" data-icon="error">error</span>
+								{{ error.messageKey|trans(error.messageData, 'security') }}
+							</div>
 						{% endif %}
 						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-						<div class="flex flex-col gap-xs">
-							<label class="font-label-bold text-label-bold text-on-surface-variant ml-xs" for="email">Correo Electrónico</label>
+						
+						<div class="flex flex-col gap-1">
+							<label class="font-label-bold text-[11px] text-on-surface-variant ml-1" for="email">Correo Electrónico</label>
 							<div class="relative group">
-								<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary" data-icon="mail">mail</span>
-								<input class="w-full pl-[52px] pr-md py-[12px] md:py-md bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-body-md outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10" id="email" name="email" placeholder="ejemplo@grace.org" type="email" value="{{ last_username }}"/>
+								<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary text-[20px]" data-icon="mail">mail</span>
+								<input class="w-full pl-[42px] pr-4 py-2.5 bg-surface-container-lowest border border-outline-variant/60 rounded-xl font-body-sm text-body-sm outline-none transition-all duration-300 hover:border-primary/50 focus:bg-surface-container-lowest focus:border-primary focus:ring-2 focus:ring-primary/20" id="email" name="email" placeholder="ejemplo@grace.org" type="email" value="{{ last_username }}"/>
 							</div>
 						</div>
-						<div class="flex flex-col gap-xs">
-							<div class="flex justify-between items-center ml-xs">
-								<label class="font-label-bold text-label-bold text-on-surface-variant" for="password">Contraseña</label>
-								<a class="font-label-bold text-label-bold text-primary hover:underline transition-all" href="#">¿Olvidó su contraseña?</a>
+						
+						<div class="flex flex-col gap-1">
+							<div class="flex justify-between items-center ml-1">
+								<label class="font-label-bold text-[11px] text-on-surface-variant" for="password">Contraseña</label>
+								<a class="font-label-bold text-[11px] text-primary hover:text-primary-container transition-colors" href="#">¿Olvidó su contraseña?</a>
 							</div>
 							<div class="relative group">
-								<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary" data-icon="lock">lock</span>
-								<input class="w-full pl-[52px] pr-xl py-[12px] md:py-md bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-body-md outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10" id="password" name="password" placeholder="••••••••" type="password" autocomplete="off"/>
-								{# Botón ojo: toggle visibilidad de contraseña. La lógica JS está en assets/app.js #}
-								<button class="absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors" id="togglePassword" type="button">
-									<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+								<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary text-[20px]" data-icon="lock">lock</span>
+								<input class="w-full pl-[42px] pr-12 py-2.5 bg-surface-container-lowest border border-outline-variant/60 rounded-xl font-body-sm text-body-sm outline-none transition-all duration-300 hover:border-primary/50 focus:bg-surface-container-lowest focus:border-primary focus:ring-2 focus:ring-primary/20" id="password" name="password" placeholder="••••••••" type="password" autocomplete="off"/>
+								<button class="absolute right-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" id="togglePassword" type="button">
+									<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
 								</button>
 							</div>
 						</div>
-						<div class="flex items-center gap-sm">
-							<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer" id="remember" name="_remember_me" type="checkbox"/>
-							<label class="font-body-sm text-body-sm text-on-surface-variant cursor-pointer select-none" for="remember">Mantener sesión iniciada (Recordar sesión)</label>
+						
+						<div class="flex items-center gap-2 pt-1">
+							<div class="relative flex items-center h-4 mt-0.5">
+								<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer transition-colors" id="remember" name="_remember_me" type="checkbox"/>
+							</div>
+							<label class="font-body-sm text-[12px] text-on-surface-variant cursor-pointer select-none" for="remember">Mantener sesión iniciada</label>
 						</div>
-						<button class="bg-primary text-on-primary font-label-bold text-label-bold px-lg py-sm rounded-xl shadow-sm hover:bg-primary-container active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-sm mx-auto" type="submit">
+						
+						<button class="w-full mt-2 bg-primary text-on-primary font-label-bold text-[14px] px-6 py-3 rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 hover:bg-primary-container active:scale-[0.98] active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2 group" type="submit">
 							<span>Iniciar Sesión</span>
-							<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+							<span class="material-symbols-outlined text-[18px] transition-transform duration-300 group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
 						</button>
 					</form>
-					<div class="mt-5 pt-4 border-t border-outline-variant flex flex-col items-center gap-3">
-						<p class="font-body-sm text-body-sm text-on-surface-variant">¿No tiene una cuenta administrativa?</p>
-						<a class="px-lg py-sm border border-secondary text-on-secondary-container font-label-bold text-label-bold rounded-full hover:bg-secondary-container transition-colors inline-block" href="{{ path('app_registro') }}">
+					
+					<div class="mt-6 pt-5 border-t border-outline-variant/30 flex flex-col items-center gap-3">
+						<p class="font-body-sm text-[12px] text-on-surface-variant">¿No tiene una cuenta administrativa?</p>
+						<a class="px-6 py-2 border-2 border-primary/20 text-primary font-label-bold text-[13px] rounded-full hover:bg-primary/5 hover:border-primary/40 transition-all duration-300" href="{{ path('app_registro') }}">
 							Solicitar Acceso
 						</a>
 					</div>
 				</section>
-				<footer class="mt-5 flex justify-center gap-lg">
-					<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Términos</a>
-					<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Privacidad</a>
-					<a class="font-label-bold text-label-bold text-on-surface-variant hover:text-primary" href="#">Ayuda</a>
+				
+				<footer class="mt-6 flex justify-center gap-6">
+					<a class="font-label-bold text-[12px] text-white/70 hover:text-white transition-colors" href="#">Términos</a>
+					<a class="font-label-bold text-[12px] text-white/70 hover:text-white transition-colors" href="#">Privacidad</a>
+					<a class="font-label-bold text-[12px] text-white/70 hover:text-white transition-colors" href="#">Ayuda</a>
 				</footer>
 			</main>
 		</div>
