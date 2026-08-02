@@ -19,14 +19,17 @@ class ReportController extends AbstractController
         ActivityRepository $activityRepo,
         LoggerInterface $logger
     ): Response {
+        $startDate = null;
+        $endDate = null;
+
         try {
             $periodo = $request->query->get('periodo', 'mes');
             $fechaInicio = $request->query->get('fechaInicio');
             $fechaFin = $request->query->get('fechaFin');
-            $actividadId = $request->query->getInt('actividad');
+            $actividadId = (int) $request->query->get('actividad');
             $categoria = $request->query->get('categoria');
             $tipo = $request->query->get('tipo');
-            $page = max(1, $request->query->getInt('page', 1));
+            $page = max(1, (int) $request->query->get('page', 1));
 
             $dates = $this->parseDates($periodo, $fechaInicio, $fechaFin);
             $startDate = $dates['start'];
@@ -110,7 +113,7 @@ class ReportController extends AbstractController
     {
         $fechaInicio = $request->query->get('fechaInicio');
         $fechaFin = $request->query->get('fechaFin');
-        $actividadId = $request->query->getInt('actividad');
+        $actividadId = (int) $request->query->get('actividad');
         $categoria = $request->query->get('categoria');
         $tipo = $request->query->get('tipo');
         $periodo = $request->query->get('periodo', 'mes');
@@ -159,7 +162,7 @@ class ReportController extends AbstractController
     {
         $fechaInicio = $request->query->get('fechaInicio');
         $fechaFin = $request->query->get('fechaFin');
-        $actividadId = $request->query->getInt('actividad');
+        $actividadId = (int) $request->query->get('actividad');
         $categoria = $request->query->get('categoria');
         $tipo = $request->query->get('tipo');
         $periodo = $request->query->get('periodo', 'mes');

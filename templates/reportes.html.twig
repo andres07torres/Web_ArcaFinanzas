@@ -181,7 +181,7 @@
 						<tbody class="divide-y divide-outline-variant">
 							{% for tx in transactions %}
 								<tr class="{{ loop.index is odd ? '' : 'bg-surface-container-lowest/30' }} hover:bg-surface-container-lowest transition-colors">
-									<td class="px-lg py-sm font-data-mono text-data-mono">{{ tx.transactionDate|date('d/m/Y H:i') }}</td>
+									<td class="px-lg py-sm font-data-mono text-data-mono whitespace-nowrap">{{ tx.transactionDate|date('d/m/Y H:i') }}</td>
 									<td class="px-lg py-sm font-body-sm font-semibold text-primary">{{ tx.description }}</td>
 									<td class="px-lg py-sm font-body-sm">{{ tx.activity ? tx.activity.name : '---' }}</td>
 									<td class="px-lg py-sm">
@@ -191,11 +191,13 @@
 											---
 										{% endif %}
 									</td>
-									<td class="px-lg py-sm font-data-mono text-right font-bold {{ tx.type == 'income' ? 'text-secondary' : 'text-error' }}">
-										{{ tx.type == 'income' ? '+' : '-' }}${{ tx.amount|number_format(2, '.', ',') }}
-										<span class="px-1.5 py-0.5 rounded text-[9px] font-bold ml-1 {{ tx.type == 'income' ? 'bg-secondary-fixed text-on-secondary-fixed' : 'bg-error-container text-on-error-container' }}">
-											{{ tx.type == 'income' ? 'ING' : 'EGR' }}
-										</span>
+									<td class="px-lg py-sm font-data-mono font-bold {{ tx.type == 'income' ? 'text-secondary' : 'text-error' }}">
+										<div class="flex items-center justify-end whitespace-nowrap">
+											{{ tx.type == 'income' ? '+' : '-' }}${{ tx.amount|number_format(2, '.', ',') }}
+											<span class="px-1.5 py-0.5 rounded text-[9px] font-bold ml-1 {{ tx.type == 'income' ? 'bg-secondary-fixed text-on-secondary-fixed' : 'bg-error-container text-on-error-container' }}">
+												{{ tx.type == 'income' ? 'ING' : 'EGR' }}
+											</span>
+										</div>
 									</td>
 									<td class="px-lg py-sm font-body-sm text-on-surface-variant">{{ tx.paymentMethod ?? '---' }}</td>
 									<td class="px-lg py-sm font-body-sm text-on-surface-variant">{{ tx.createdBy ? tx.createdBy.fullName : '---' }}</td>
@@ -260,7 +262,7 @@
 		</div>
 
 		<div id="receiptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-sm md:p-md">
-			<div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden shadow-2xl flex flex-col max-h-[75vh]">
+			<div class="bg-white rounded-2xl max-w-[90vw] md:max-w-2xl lg:max-w-3xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[75vh] md:max-h-[90vh]">
 				<div class="p-md md:p-lg bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
 					<div class="flex items-center gap-md">
 						<span class="material-symbols-outlined text-primary text-2xl">receipt_long</span>
@@ -302,9 +304,9 @@
 
 				const ext = fileUrl.split('.').pop().toLowerCase();
 				if (ext === 'pdf') {
-					modalBody.innerHTML = `<iframe src="${fileUrl}" class="w-full h-[300px] border-none rounded-lg"></iframe>`;
+					modalBody.innerHTML = `<iframe src="${fileUrl}" class="w-full h-[50vh] md:h-[75vh] border-none rounded-lg"></iframe>`;
 				} else {
-					modalBody.innerHTML = `<img src="${fileUrl}" alt="Comprobante" class="max-w-full max-h-[300px] object-contain rounded-lg shadow-sm border border-outline-variant"/>`;
+					modalBody.innerHTML = `<img src="${fileUrl}" alt="Comprobante" class="max-w-full max-h-[50vh] md:max-h-[75vh] object-contain rounded-lg shadow-sm border border-outline-variant"/>`;
 				}
 
 				modal.classList.remove('hidden');

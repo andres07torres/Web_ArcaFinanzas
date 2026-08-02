@@ -44,7 +44,7 @@ class CashController extends AbstractController
         $transaction->setTransactionDate(new \DateTime());
         $transaction->setCreatedBy($this->getUser());
 
-        $actividadId = $request->query->getInt('actividad');
+        $actividadId = (int) $request->query->get('actividad');
         if ($actividadId) {
             $act = $activityRepo->find($actividadId);
             if ($act) {

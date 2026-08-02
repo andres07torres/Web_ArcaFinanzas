@@ -123,7 +123,7 @@
 					<tbody class="divide-y divide-outline-variant text-body-sm">
 						{% for tx in transactions %}
 							<tr class="hover:bg-surface-container-low transition-colors">
-								<td class="p-md font-mono">{{ tx.transactionDate|date('d/m/Y') }}</td>
+								<td class="p-md font-data-mono text-data-mono whitespace-nowrap">{{ tx.transactionDate|date('d/m/Y H:i') }}</td>
 								<td class="p-md font-bold text-on-background">{{ tx.description }}</td>
 								<td class="p-md">{{ tx.category ?? 'Sin categoría' }}</td>
 								<td class="p-md">
@@ -133,8 +133,10 @@
 										<span class="px-sm py-[2px] bg-error-container text-on-error-container text-[10px] font-bold rounded-full uppercase">Egreso</span>
 									{% endif %}
 								</td>
-								<td class="p-md text-right font-bold {{ tx.type == 'income' ? 'text-secondary' : 'text-error' }}">
-									{{ tx.type == 'income' ? '+' : '-' }}${{ tx.amount|number_format(2, '.', ',') }}
+								<td class="p-md font-bold {{ tx.type == 'income' ? 'text-secondary' : 'text-error' }}">
+									<div class="flex items-center justify-end whitespace-nowrap">
+										{{ tx.type == 'income' ? '+' : '-' }}${{ tx.amount|number_format(2, '.', ',') }}
+									</div>
 								</td>
 								<td class="p-md">{{ tx.createdBy ? tx.createdBy.fullName : '---' }}</td>
 								<td class="p-md text-center">
@@ -163,7 +165,7 @@
 
 	<!-- Lightbox Modal de Comprobante -->
 	<div id="receiptModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-sm md:p-md">
-		<div class="bg-white rounded-2xl max-w-sm w-full p-md md:p-lg overflow-hidden shadow-2xl relative flex flex-col max-h-[75vh]">
+		<div class="bg-white rounded-2xl max-w-[90vw] md:max-w-2xl lg:max-w-3xl w-full p-md md:p-lg overflow-hidden shadow-2xl relative flex flex-col max-h-[75vh] md:max-h-[90vh]">
 			<div class="flex items-center justify-between pb-md border-b border-outline-variant mb-md">
 				<h3 class="font-headline-sm text-sm font-bold text-primary flex items-center gap-xs">
 					<span class="material-symbols-outlined">receipt</span> Previsualización del Comprobante
@@ -173,8 +175,8 @@
 				</button>
 			</div>
 			<div class="flex-1 overflow-auto flex items-center justify-center bg-surface-container-low rounded-xl p-md">
-				<img id="receiptImage" src="" alt="Comprobante" class="max-w-full max-h-[50vh] object-contain rounded-lg shadow-sm hidden"/>
-				<iframe id="receiptPdf" src="" class="w-full h-[50vh] rounded-lg hidden border-0"></iframe>
+				<img id="receiptImage" src="" alt="Comprobante" class="max-w-full max-h-[50vh] md:max-h-[75vh] object-contain rounded-lg shadow-sm hidden"/>
+				<iframe id="receiptPdf" src="" class="w-full h-[50vh] md:h-[75vh] rounded-lg hidden border-0"></iframe>
 			</div>
 			<div class="pt-md mt-md border-t border-outline-variant flex justify-between items-center">
 				<a id="receiptDownloadLink" href="#" download class="px-md py-xs bg-primary text-on-primary rounded-lg text-xs font-bold inline-flex items-center gap-xs hover:bg-primary-container transition-all">

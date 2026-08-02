@@ -16,15 +16,15 @@
 						"on-surface-variant": "#444651",
 						"on-primary": "#ffffff",
 						"surface-dim": "#d8dadc",
-						"on-secondary-fixed-variant": "#005049",
+						"on-secondary-fixed-variant": "#264191",
 						"on-primary-fixed-variant": "#264191",
 						"outline-variant": "#c5c5d3",
-						"secondary": "#006a61",
+						"secondary": "#00236f",
 						"background": "#f7f9fb",
 						"on-tertiary-container": "#a1a4ff",
 						"tertiary-fixed-dim": "#c0c1ff",
 						"on-background": "#191c1e",
-						"secondary-fixed": "#89f5e7",
+						"secondary-fixed": "#dce1ff",
 						"primary-fixed-dim": "#b6c4ff",
 						"surface-container-lowest": "#ffffff",
 						"on-primary-container": "#90a8ff",
@@ -45,14 +45,14 @@
 						"surface-tint": "#4059aa",
 						"surface-container-low": "#f2f4f6",
 						"on-error-container": "#93000a",
-						"on-secondary-fixed": "#00201d",
+						"on-secondary-fixed": "#00164e",
 						"on-primary-fixed": "#00164e",
-						"on-secondary-container": "#006f66",
+						"on-secondary-container": "#00164e",
 						"tertiary-fixed": "#e1e0ff",
 						"surface-container": "#eceef0",
-						"secondary-fixed-dim": "#6bd8cb",
+						"secondary-fixed-dim": "#b6c4ff",
 						"surface": "#f7f9fb",
-						"secondary-container": "#86f2e4",
+						"secondary-container": "#dce1ff",
 						"primary-fixed": "#dce1ff",
 						"on-error": "#ffffff",
 						"on-surface": "#191c1e",
@@ -136,33 +136,33 @@
 				</button>
 			</div>
 			<nav class="flex-none space-y-1">
-				<a class="flex items-center {{ active_menu == 'dashboard' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
+				<a class="flex items-center {{ active_menu == 'dashboard' ? 'bg-primary text-on-primary shadow-md shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_dashboard') }}">
 					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">dashboard</span>
 					<span class="font-label-bold text-label-bold">Tablero</span>
 				</a>
-				<a class="flex items-center {{ active_menu == 'actividades' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
+				<a class="flex items-center {{ active_menu == 'actividades' ? 'bg-primary text-on-primary shadow-md shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_actividades') }}">
 					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">event_available</span>
 					<span class="font-label-bold text-label-bold">Actividades</span>
 				</a>
-				<a class="flex items-center {{ active_menu == 'caja' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
+				<a class="flex items-center {{ active_menu == 'caja' ? 'bg-primary text-on-primary shadow-md shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_caja') }}">
 					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">account_balance_wallet</span>
 					<span class="font-label-bold text-label-bold">Control de Caja</span>
 				</a>
-				<a class="flex items-center {{ active_menu == 'directorio' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_directorio') }}">
+				<a class="flex items-center {{ active_menu == 'directorio' ? 'bg-primary text-on-primary shadow-md shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_directorio') }}">
 					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">group</span>
 					<span class="font-label-bold text-label-bold">Directorio</span>
 				</a>
-				<a class="flex items-center {{ active_menu == 'reportes' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_reportes') }}">
+				<a class="flex items-center {{ active_menu == 'reportes' ? 'bg-primary text-on-primary shadow-md shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl mx-md p-md transition-all group" href="{{ path('app_reportes') }}">
 					<span class="material-symbols-outlined text-[18px] w-6 text-center mr-md group-hover:translate-x-1 duration-300">assessment</span>
 					<span class="font-label-bold text-label-bold">Informes</span>
 				</a>
 			</nav>
 			<div class="px-md mt-auto pt-lg border-t border-outline-variant space-y-1">
-				<a class="flex items-center {{ active_menu == 'configuracion' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_configuracion') }}">
+				<a class="flex items-center {{ active_menu == 'configuracion' ? 'bg-primary text-on-primary shadow-md shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_configuracion') }}">
 					<span class="material-symbols-outlined mr-md">person</span>
 					<span class="font-label-bold text-label-bold">Mi Perfil</span>
 				</a>
-				<a class="flex items-center {{ active_menu == 'ayuda' ? 'bg-secondary-container text-on-secondary-container' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_ayuda') }}">
+				<a class="flex items-center {{ active_menu == 'ayuda' ? 'bg-primary text-on-primary shadow-md shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-variant' }} rounded-xl p-md transition-all" href="{{ path('app_ayuda') }}">
 					<span class="material-symbols-outlined mr-md">help</span>
 					<span class="font-label-bold text-label-bold">Centro de Ayuda</span>
 				</a>
@@ -635,6 +635,95 @@
 			if (txModal) {
 				txModal.addEventListener('click', function(e) {
 					if (e.target === txModal) closeTxModal();
+				});
+			}
+
+			// Lógica del Buscador Global
+			const searchInput = document.getElementById('globalSearchInput');
+			const searchPopover = document.getElementById('globalSearchResultsPopover');
+			const searchContent = document.getElementById('globalSearchResultsContent');
+			const searchWrapper = document.getElementById('globalSearchWrapper');
+
+			if (searchInput && searchPopover && searchContent && searchWrapper) {
+				let searchTimeout;
+
+				// Atajo Ctrl+K
+				document.addEventListener('keydown', (e) => {
+					if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+						e.preventDefault();
+						searchInput.focus();
+					}
+				});
+
+				// Ocultar al hacer clic fuera
+				document.addEventListener('click', (e) => {
+					if (!searchWrapper.contains(e.target)) {
+						searchPopover.classList.add('hidden');
+					}
+				});
+
+				// Mostrar al enfocar si hay texto
+				searchInput.addEventListener('focus', () => {
+					if (searchInput.value.trim().length >= 2) {
+						searchPopover.classList.remove('hidden');
+					}
+				});
+
+				// Petición a la API con debounce
+				searchInput.addEventListener('input', (e) => {
+					const query = e.target.value.trim();
+					
+					clearTimeout(searchTimeout);
+
+					if (query.length < 2) {
+						searchPopover.classList.add('hidden');
+						return;
+					}
+
+					searchTimeout = setTimeout(() => {
+						fetch('/api/buscar?q=' + encodeURIComponent(query))
+							.then(response => response.json())
+							.then(data => {
+								searchContent.innerHTML = '';
+								
+								if (data.total === 0) {
+									searchContent.innerHTML = `
+										<div class="p-xl flex flex-col items-center justify-center text-center">
+											<span class="material-symbols-outlined text-4xl text-outline mb-3">search_off</span>
+											<h4 class="font-headline-sm text-sm font-bold text-on-surface mb-1">Sin resultados para "${query}"</h4>
+											<p class="text-xs text-on-surface-variant">Intenta buscando por nombre, descripción o categoría.</p>
+										</div>
+									`;
+								} else {
+									data.results.forEach(item => {
+										const html = `
+											<a href="${item.url}" class="block p-sm hover:bg-surface-container-low transition-colors group cursor-pointer">
+												<div class="flex items-start gap-sm">
+													<div class="w-10 h-10 rounded-full ${item.icon_bg} flex justify-center items-center shrink-0">
+														<span class="material-symbols-outlined text-lg">${item.icon}</span>
+													</div>
+													<div class="flex-1 min-w-0">
+														<div class="flex justify-between items-start gap-2">
+															<span class="font-label-bold text-sm text-on-surface truncate group-hover:text-primary transition-colors">${item.title}</span>
+															<span class="text-[10px] font-medium text-on-surface-variant whitespace-nowrap">${item.date}</span>
+														</div>
+														<div class="text-xs text-on-surface-variant mt-0.5 truncate">${item.subtitle}</div>
+														<div class="text-[9px] font-bold text-primary mt-1 uppercase tracking-wider">${item.category}</div>
+													</div>
+												</div>
+											</a>
+										`;
+										searchContent.insertAdjacentHTML('beforeend', html);
+									});
+								}
+								searchPopover.classList.remove('hidden');
+							})
+							.catch(error => {
+								console.error('Error fetching search results:', error);
+								searchContent.innerHTML = '<div class="p-md text-center text-xs text-error font-medium">Hubo un error al buscar. Intenta de nuevo.</div>';
+								searchPopover.classList.remove('hidden');
+							});
+					}, 300);
 				});
 			}
 		});

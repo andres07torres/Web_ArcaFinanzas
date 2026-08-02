@@ -90,7 +90,7 @@
 							{% if recent_transactions|length > 0 %}
 								{% for transaction in recent_transactions %}
 									<tr class="hover:bg-surface-container-low transition-colors group">
-										<td class="px-lg py-md font-data-mono text-data-mono">{{ transaction.transactionDate|date('d/m/Y') }}</td>
+										<td class="px-lg py-md font-data-mono text-data-mono whitespace-nowrap">{{ transaction.transactionDate|date('d/m/Y') }}</td>
 										<td class="px-lg py-md font-body-sm text-body-sm text-on-surface">{{ transaction.description }}</td>
 										<td class="px-lg py-md">
 											<span class="bg-secondary-container/30 text-on-secondary-container px-sm py-xs rounded text-[11px] font-bold uppercase">{{ transaction.category ?? 'Sin categoría' }}</span>
@@ -101,8 +101,10 @@
 												{{ transaction.createdBy ? transaction.createdBy.fullName|default(transaction.createdBy.email) : '---' }}
 											</div>
 										</td>
-										<td class="px-lg py-md font-data-mono text-data-mono text-right {{ transaction.type == 'income' ? 'text-secondary' : 'text-error' }}">
-											{{ transaction.type == 'income' ? '+' : '-' }}${{ transaction.amount|number_format(2, '.', ',') }}
+										<td class="px-lg py-md font-data-mono text-data-mono {{ transaction.type == 'income' ? 'text-secondary' : 'text-error' }}">
+											<div class="flex items-center justify-end whitespace-nowrap">
+												{{ transaction.type == 'income' ? '+' : '-' }}${{ transaction.amount|number_format(2, '.', ',') }}
+											</div>
 										</td>
 									</tr>
 								{% endfor %}
