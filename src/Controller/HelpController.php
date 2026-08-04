@@ -18,10 +18,10 @@ class HelpController extends AbstractController
 
             if ($asunto && $mensaje) {
                 $this->addFlash('success', 'Tu consulta ha sido enviada exitosamente al soporte técnico del desarrollador. Te responderemos a la brevedad.');
+
                 return $this->redirectToRoute('app_ayuda');
-            } else {
-                $this->addFlash('error', 'Por favor completa todos los campos del formulario de soporte.');
             }
+            $this->addFlash('error', 'Por favor completa todos los campos del formulario de soporte.');
         }
 
         return $this->render('ayuda.html.twig', [

@@ -121,8 +121,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->fullName) {
             $parts = explode(' ', trim($this->fullName));
             if (count($parts) >= 2) {
-                return strtoupper(substr($parts[0], 0, 1) . substr($parts[count($parts) - 1], 0, 1));
+                return strtoupper(substr($parts[0], 0, 1).substr($parts[count($parts) - 1], 0, 1));
             }
+
             return strtoupper(substr($parts[0], 0, 2));
         }
 
@@ -145,6 +146,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             'admin' => 'Administrador',
             'colaborador' => 'Colaborador',
         ];
+
         return $map[strtolower($this->registrationRole)] ?? ucfirst($this->registrationRole);
     }
 }

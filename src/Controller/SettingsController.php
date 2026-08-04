@@ -20,6 +20,7 @@ class SettingsController extends AbstractController
 
         if (!$user) {
             $this->addFlash('error', 'Debes iniciar sesión para acceder a la configuración.');
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -27,6 +28,7 @@ class SettingsController extends AbstractController
             $csrf = (string) $request->request->get('_csrf_token');
             if (!$this->isCsrfTokenValid('settings_profile', $csrf)) {
                 $this->addFlash('error', 'Token CSRF inválido.');
+
                 return $this->redirectToRoute('app_configuracion');
             }
 
@@ -36,8 +38,9 @@ class SettingsController extends AbstractController
             $newPassword = (string) $request->request->get('newPassword');
             $role = strtolower(trim((string) $request->request->get('role')));
 
-            if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if ('' === $email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->addFlash('error', 'Por favor ingresa un correo electrónico válido.');
+
                 return $this->redirectToRoute('app_configuracion');
             }
 
@@ -45,24 +48,27 @@ class SettingsController extends AbstractController
                 $existing = $em->getRepository(User::class)->findOneBy(['email' => $email]);
                 if ($existing && $existing->getId() !== $user->getId()) {
                     $this->addFlash('error', 'El correo electrónico ya está registrado por otro usuario.');
+
                     return $this->redirectToRoute('app_configuracion');
                 }
                 $user->setEmail($email);
             }
 
-            $user->setFullName($fullName !== '' ? $fullName : null);
+            $user->setFullName('' !== $fullName ? $fullName : null);
             if (in_array($role, ['tesorero', 'administrador', 'colaborador'], true)) {
                 $user->setRegistrationRole($role);
             }
 
-            if ($newPassword !== '') {
-                if ($currentPassword === '' || !$passwordHasher->isPasswordValid($user, $currentPassword)) {
+            if ('' !== $newPassword) {
+                if ('' === $currentPassword || !$passwordHasher->isPasswordValid($user, $currentPassword)) {
                     $this->addFlash('error', 'La contraseña actual no es correcta.');
+
                     return $this->redirectToRoute('app_configuracion');
                 }
 
                 if (strlen($newPassword) < 8) {
                     $this->addFlash('error', 'La nueva contraseña debe tener al menos 8 caracteres.');
+
                     return $this->redirectToRoute('app_configuracion');
                 }
 
@@ -71,6 +77,7 @@ class SettingsController extends AbstractController
 
             $em->flush();
             $this->addFlash('success', 'Perfil y configuración actualizados correctamente.');
+
             return $this->redirectToRoute('app_configuracion');
         }
 

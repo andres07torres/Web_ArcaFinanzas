@@ -4,10 +4,12 @@ namespace App\Form;
 
 use App\Entity\Activity;
 use App\Entity\Transaction;
+use App\Enum\TransactionTypeEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -20,12 +22,10 @@ class TransactionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('type', ChoiceType::class, [
+            ->add('type', EnumType::class, [
+                'class' => TransactionTypeEnum::class,
+                'choice_label' => fn (TransactionTypeEnum $choice) => $choice->getLabel(),
                 'label' => 'Tipo de Transacción',
-                'choices' => [
-                    'Ingreso' => 'income',
-                    'Gasto' => 'expense',
-                ],
                 'attr' => [
                     'class' => 'w-full h-12 px-md rounded-lg border border-outline-variant bg-white focus:ring-2 focus:ring-primary',
                 ],

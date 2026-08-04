@@ -15,7 +15,7 @@
 					<span class="text-primary">Detalle de Actividad</span>
 				</nav>
 				<div class="flex items-center gap-md">
-					<h1 class="font-headline-lg text-headline-lg text-on-background font-bold">{{ activity.name }}</h1>
+					<h1 class="font-headline-md text-headline-md text-primary font-bold">{{ activity.name }}</h1>
 					{% if activity.status == 'active' %}
 						<span class="bg-secondary-container text-on-secondary-container text-xs px-md py-xs rounded-full font-label-bold uppercase">En Proceso</span>
 					{% elseif activity.status == 'finished' %}

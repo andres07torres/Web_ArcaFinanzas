@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
-use App\Repository\TransactionRepository;
+use App\Enum\TransactionTypeEnum;
 use App\Repository\ActivityRepository;
+use App\Repository\TransactionRepository;
+use App\Service\ExportService;
+use App\Service\ReportService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +20,8 @@ class ReportController extends AbstractController
         Request $request,
         TransactionRepository $transactionRepo,
         ActivityRepository $activityRepo,
-        LoggerInterface $logger
+        ReportService $reportService,
+        LoggerInterface $logger,
     ): Response {
         $startDate = null;
         $endDate = null;
@@ -28,55 +32,44 @@ class ReportController extends AbstractController
             $fechaFin = $request->query->get('fechaFin');
             $actividadId = (int) $request->query->get('actividad');
             $categoria = $request->query->get('categoria');
-            $tipo = $request->query->get('tipo');
+            $tipoStr = $request->query->get('tipo');
+            $tipo = $tipoStr ? TransactionTypeEnum::tryFrom($tipoStr) : null;
             $page = max(1, (int) $request->query->get('page', 1));
 
-            $dates = $this->parseDates($periodo, $fechaInicio, $fechaFin);
+            $dates = $reportService->parseDates($periodo, $fechaInicio, $fechaFin);
             $startDate = $dates['start'];
             $endDate = $dates['end'];
 
-            $prevStartDate = null;
-            $prevEndDate = null;
-            if ($startDate && $endDate) {
-                $diff = $startDate->diff($endDate);
-                $prevEndDate = (clone $startDate)->modify('-1 second');
-                $prevStartDate = (clone $prevEndDate)->modify("-{$diff->days} days")->setTime(0, 0, 0);
-            }
-
-            $totalIncome = $transactionRepo->getTotalByTypeAndDateRange('income', $startDate, $endDate, $actividadId ?: null, $categoria ?: null);
-            $totalExpenses = $transactionRepo->getTotalByTypeAndDateRange('expense', $startDate, $endDate, $actividadId ?: null, $categoria ?: null);
-            $balance = $totalIncome - $totalExpenses;
-
-            $prevIncome = $transactionRepo->getTotalByTypeAndDateRange('income', $prevStartDate, $prevEndDate, $actividadId ?: null, $categoria ?: null);
-            $prevExpenses = $transactionRepo->getTotalByTypeAndDateRange('expense', $prevStartDate, $prevEndDate, $actividadId ?: null, $categoria ?: null);
-            $prevBalance = $prevIncome - $prevExpenses;
-
-            $balanceChange = 0;
-            if ($prevBalance != 0) {
-                $balanceChange = round((($balance - $prevBalance) / abs($prevBalance)) * 100, 1);
-            }
+            $metrics = $reportService->calculateBalanceMetrics(
+                $startDate,
+                $endDate,
+                $actividadId ?: null,
+                $categoria ?: null
+            );
 
             $reportData = $transactionRepo->getReportTransactions(
                 $startDate,
                 $endDate,
                 $actividadId ?: null,
                 $categoria ?: null,
-                $tipo ?: null,
+                $tipo,
                 $page
             );
 
             $activities = $activityRepo->findAll();
             $categories = $transactionRepo->getTransactionCategories();
         } catch (\Throwable $e) {
-            $logger->error('Error al cargar reportes: ' . $e->getMessage(), [
+            $logger->error('Error al cargar reportes: '.$e->getMessage(), [
                 'exception' => $e,
                 'trace' => $e->getTraceAsString(),
             ]);
 
-            $totalIncome = 0.0;
-            $totalExpenses = 0.0;
-            $balance = 0.0;
-            $balanceChange = 0;
+            $metrics = [
+                'totalIncome' => 0.0,
+                'totalExpenses' => 0.0,
+                'balance' => 0.0,
+                'balanceChange' => 0,
+            ];
             $reportData = ['transactions' => [], 'total' => 0, 'page' => 1, 'limit' => 10, 'pages' => 0];
             $activities = [];
             $categories = [];
@@ -84,10 +77,10 @@ class ReportController extends AbstractController
 
         return $this->render('reportes.html.twig', [
             'user' => $this->getUser(),
-            'total_income' => $totalIncome,
-            'total_expenses' => $totalExpenses,
-            'balance' => $balance,
-            'balance_change' => $balanceChange,
+            'total_income' => $metrics['totalIncome'],
+            'total_expenses' => $metrics['totalExpenses'],
+            'balance' => $metrics['balance'],
+            'balance_change' => $metrics['balanceChange'],
             'transactions' => $reportData['transactions'],
             'total_transactions' => $reportData['total'],
             'current_page' => $reportData['page'],
@@ -101,7 +94,7 @@ class ReportController extends AbstractController
                 'fechaFin' => $fechaFin ?? null,
                 'actividad' => $actividadId ?? 0,
                 'categoria' => $categoria ?? null,
-                'tipo' => $tipo ?? null,
+                'tipo' => $tipoStr ?? null,
             ],
             'startDate' => $startDate,
             'endDate' => $endDate,
@@ -109,67 +102,50 @@ class ReportController extends AbstractController
     }
 
     #[Route('/reportes/exportar/excel', name: 'app_reportes_exportar_excel')]
-    public function exportExcel(Request $request, TransactionRepository $transactionRepo): Response
-    {
+    public function exportExcel(
+        Request $request,
+        TransactionRepository $transactionRepo,
+        ReportService $reportService,
+        ExportService $exportService,
+    ): Response {
         $fechaInicio = $request->query->get('fechaInicio');
         $fechaFin = $request->query->get('fechaFin');
         $actividadId = (int) $request->query->get('actividad');
         $categoria = $request->query->get('categoria');
-        $tipo = $request->query->get('tipo');
+        $tipoStr = $request->query->get('tipo');
+        $tipo = $tipoStr ? TransactionTypeEnum::tryFrom($tipoStr) : null;
         $periodo = $request->query->get('periodo', 'mes');
 
-        $dates = $this->parseDates($periodo, $fechaInicio, $fechaFin);
-        $reportData = $transactionRepo->getReportTransactions(
+        $dates = $reportService->parseDates($periodo, $fechaInicio, $fechaFin);
+
+        $transactionsIterable = $transactionRepo->getReportTransactionsIterable(
             $dates['start'],
             $dates['end'],
             $actividadId ?: null,
             $categoria ?: null,
-            $tipo ?: null,
-            1,
-            10000
+            $tipo
         );
 
-        $transactions = $reportData['transactions'];
-
-        $csvData = "\xEF\xBB\xBF";
-        $csvData .= "ID;Fecha;Descripción;Tipo;Categoría;Actividad;Monto;Método de Pago;Registrado Por;Comprobante\n";
-
-        foreach ($transactions as $tx) {
-            $tipoText = $tx->getType() === 'income' ? 'Ingreso' : 'Egreso';
-            $fecha = $tx->getTransactionDate() ? $tx->getTransactionDate()->format('d/m/Y') : '';
-            $desc = '"' . str_replace('"', '""', $tx->getDescription()) . '"';
-            $cat = '"' . str_replace('"', '""', $tx->getCategory() ?? 'Sin categoría') . '"';
-            $act = '"' . str_replace('"', '""', $tx->getActivity() ? $tx->getActivity()->getName() : '---') . '"';
-            $monto = number_format((float)$tx->getAmount(), 2, '.', '');
-            $metodo = '"' . str_replace('"', '""', $tx->getPaymentMethod() ?? '---') . '"';
-            $usuario = '"' . str_replace('"', '""', $tx->getCreatedBy() ? $tx->getCreatedBy()->getFullName() : '---') . '"';
-            $comprobante = $tx->getReceiptFilename() ? 'Adjunto' : 'Sin comprobante';
-
-            $csvData .= "{$tx->getId()};{$fecha};{$desc};{$tipoText};{$cat};{$act};{$monto};{$metodo};{$usuario};{$comprobante}\n";
-        }
-
-        $filename = 'informe_transparencia_arcafinanzas_' . (new \DateTime())->format('Ymd_His') . '.csv';
-
-        $response = new Response($csvData);
-        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
-
-        return $response;
+        return $exportService->exportCsv($transactionsIterable);
     }
 
     #[Route('/reportes/exportar/pdf', name: 'app_reportes_exportar_pdf')]
-    public function exportPdf(Request $request, TransactionRepository $transactionRepo): Response
-    {
+    public function exportPdf(
+        Request $request,
+        TransactionRepository $transactionRepo,
+        ReportService $reportService,
+    ): Response {
         $fechaInicio = $request->query->get('fechaInicio');
         $fechaFin = $request->query->get('fechaFin');
         $actividadId = (int) $request->query->get('actividad');
         $categoria = $request->query->get('categoria');
-        $tipo = $request->query->get('tipo');
+        $tipoStr = $request->query->get('tipo');
+        $tipo = $tipoStr ? TransactionTypeEnum::tryFrom($tipoStr) : null;
         $periodo = $request->query->get('periodo', 'mes');
 
-        $dates = $this->parseDates($periodo, $fechaInicio, $fechaFin);
-        $totalIncome = $transactionRepo->getTotalByTypeAndDateRange('income', $dates['start'], $dates['end'], $actividadId ?: null, $categoria ?: null);
-        $totalExpenses = $transactionRepo->getTotalByTypeAndDateRange('expense', $dates['start'], $dates['end'], $actividadId ?: null, $categoria ?: null);
+        $dates = $reportService->parseDates($periodo, $fechaInicio, $fechaFin);
+        $totalIncome = $transactionRepo->getTotalByTypeAndDateRange(TransactionTypeEnum::INCOME, $dates['start'], $dates['end'], $actividadId ?: null, $categoria ?: null);
+        $totalExpenses = $transactionRepo->getTotalByTypeAndDateRange(TransactionTypeEnum::EXPENSE, $dates['start'], $dates['end'], $actividadId ?: null, $categoria ?: null);
         $balance = $totalIncome - $totalExpenses;
 
         $reportData = $transactionRepo->getReportTransactions(
@@ -177,7 +153,7 @@ class ReportController extends AbstractController
             $dates['end'],
             $actividadId ?: null,
             $categoria ?: null,
-            $tipo ?: null,
+            $tipo,
             1,
             10000
         );
@@ -190,43 +166,5 @@ class ReportController extends AbstractController
             'startDate' => $dates['start'],
             'endDate' => $dates['end'],
         ]);
-    }
-
-    private function parseDates(string $periodo, ?string $fechaInicio, ?string $fechaFin): array
-    {
-        $now = new \DateTime();
-        $startDate = null;
-        $endDate = null;
-
-        if ($fechaInicio || $fechaFin) {
-            if ($fechaInicio && \DateTime::createFromFormat('Y-m-d', $fechaInicio)) {
-                $startDate = \DateTime::createFromFormat('Y-m-d', $fechaInicio)->setTime(0, 0, 0);
-            }
-            if ($fechaFin && \DateTime::createFromFormat('Y-m-d', $fechaFin)) {
-                $endDate = \DateTime::createFromFormat('Y-m-d', $fechaFin)->setTime(23, 59, 59);
-            }
-        } else {
-            switch ($periodo) {
-                case 'dia':
-                    $startDate = (clone $now)->setTime(0, 0, 0);
-                    $endDate = (clone $now)->setTime(23, 59, 59);
-                    break;
-                case 'semana':
-                    $startDate = (clone $now)->modify('monday this week')->setTime(0, 0, 0);
-                    $endDate = (clone $now)->modify('sunday this week')->setTime(23, 59, 59);
-                    break;
-                case 'todos':
-                    $startDate = null;
-                    $endDate = null;
-                    break;
-                case 'mes':
-                default:
-                    $startDate = (clone $now)->modify('first day of this month')->setTime(0, 0, 0);
-                    $endDate = (clone $now)->modify('last day of this month')->setTime(23, 59, 59);
-                    break;
-            }
-        }
-
-        return ['start' => $startDate, 'end' => $endDate];
     }
 }

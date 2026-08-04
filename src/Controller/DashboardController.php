@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Enum\TransactionTypeEnum;
 use App\Repository\ActivityRepository;
 use App\Repository\TransactionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,8 +15,8 @@ class DashboardController extends AbstractController
     public function index(TransactionRepository $transactionRepo, ActivityRepository $activityRepo): Response
     {
         $user = $this->getUser();
-        $totalIncome = $transactionRepo->getTotalByType('income');
-        $totalExpenses = $transactionRepo->getTotalByType('expense');
+        $totalIncome = $transactionRepo->getTotalByType(TransactionTypeEnum::INCOME);
+        $totalExpenses = $transactionRepo->getTotalByType(TransactionTypeEnum::EXPENSE);
         $balance = $transactionRepo->getBalance();
         $recentTransactions = $transactionRepo->findRecentTransactions(5);
         $transactionCount = $transactionRepo->getTransactionCount();

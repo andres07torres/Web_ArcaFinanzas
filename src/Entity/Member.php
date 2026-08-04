@@ -83,6 +83,7 @@ class Member
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
+
         return $this;
     }
 
@@ -94,17 +95,18 @@ class Member
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
+
         return $this;
     }
 
     public function getFullName(): string
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->firstName.' '.$this->lastName;
     }
 
     public function getInitials(): string
     {
-        return strtoupper(substr($this->firstName, 0, 1) . substr($this->lastName, 0, 1));
+        return strtoupper(substr($this->firstName, 0, 1).substr($this->lastName, 0, 1));
     }
 
     public function getEmail(): ?string
@@ -115,6 +117,7 @@ class Member
     public function setEmail(?string $email): static
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -126,6 +129,7 @@ class Member
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
+
         return $this;
     }
 
@@ -137,6 +141,7 @@ class Member
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -148,6 +153,7 @@ class Member
     public function setRole(?string $role): static
     {
         $this->role = $role;
+
         return $this;
     }
 
@@ -159,6 +165,7 @@ class Member
     public function setJoinDate(?\DateTimeInterface $joinDate): static
     {
         $this->joinDate = $joinDate;
+
         return $this;
     }
 
@@ -170,6 +177,7 @@ class Member
     public function setAddress(?string $address): static
     {
         $this->address = $address;
+
         return $this;
     }
 
@@ -181,6 +189,7 @@ class Member
     public function setCity(?string $city): static
     {
         $this->city = $city;
+
         return $this;
     }
 
@@ -192,6 +201,7 @@ class Member
     public function setState(?string $state): static
     {
         $this->state = $state;
+
         return $this;
     }
 
@@ -203,6 +213,7 @@ class Member
     public function setZipCode(?string $zipCode): static
     {
         $this->zipCode = $zipCode;
+
         return $this;
     }
 
@@ -214,6 +225,7 @@ class Member
     public function setNotes(?string $notes): static
     {
         $this->notes = $notes;
+
         return $this;
     }
 
@@ -225,6 +237,7 @@ class Member
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -236,6 +249,7 @@ class Member
     public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

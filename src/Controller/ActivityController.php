@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
+use App\Enum\TransactionTypeEnum;
 use App\Form\ActivityType;
 use App\Repository\ActivityRepository;
 use App\Repository\TransactionRepository;
@@ -123,7 +124,7 @@ class ActivityController extends AbstractController
         $totalExpenses = 0.0;
 
         foreach ($transactions as $tx) {
-            if ($tx->getType() === 'income') {
+            if (TransactionTypeEnum::INCOME === $tx->getType()) {
                 $totalIncome += (float) $tx->getAmount();
             } else {
                 $totalExpenses += (float) $tx->getAmount();

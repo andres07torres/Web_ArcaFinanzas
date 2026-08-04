@@ -57,6 +57,7 @@ class Activity
     public function setName(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -68,6 +69,7 @@ class Activity
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -79,6 +81,7 @@ class Activity
     public function setStartDate(?\DateTimeInterface $startDate): static
     {
         $this->startDate = $startDate;
+
         return $this;
     }
 
@@ -90,6 +93,7 @@ class Activity
     public function setEndDate(?\DateTimeInterface $endDate): static
     {
         $this->endDate = $endDate;
+
         return $this;
     }
 
@@ -101,6 +105,7 @@ class Activity
     public function setGoalAmount(string $goalAmount): static
     {
         $this->goalAmount = $goalAmount;
+
         return $this;
     }
 
@@ -112,6 +117,7 @@ class Activity
     public function setRaisedAmount(string $raisedAmount): static
     {
         $this->raisedAmount = $raisedAmount;
+
         return $this;
     }
 
@@ -123,6 +129,7 @@ class Activity
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -134,6 +141,7 @@ class Activity
     public function setCategory(?string $category): static
     {
         $this->category = $category;
+
         return $this;
     }
 
@@ -142,6 +150,7 @@ class Activity
         if ($this->goalAmount <= 0) {
             return 0;
         }
-        return round(($this->raisedAmount / $this->goalAmount) * 100, 0);
+
+        return round(((float)$this->raisedAmount / (float)$this->goalAmount) * 100, 0);
     }
 }

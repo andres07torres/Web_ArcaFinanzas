@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Enum\TransactionTypeEnum;
 use App\Repository\ActivityRepository;
 use App\Repository\MemberRepository;
 use App\Repository\TransactionRepository;
@@ -17,7 +18,7 @@ class SearchController extends AbstractController
         Request $request,
         TransactionRepository $transactionRepo,
         MemberRepository $memberRepo,
-        ActivityRepository $activityRepo
+        ActivityRepository $activityRepo,
     ): JsonResponse {
         $q = trim((string) $request->query->get('q', ''));
 
@@ -37,10 +38,10 @@ class SearchController extends AbstractController
             $results[] = [
                 'type' => 'transaccion',
                 'category' => 'Caja y Finanzas',
-                'icon' => $tx->getType() === 'income' ? 'arrow_upward' : 'arrow_downward',
-                'icon_bg' => $tx->getType() === 'income' ? 'bg-secondary-container text-on-secondary-container' : 'bg-error-container text-on-error-container',
+                'icon' => TransactionTypeEnum::INCOME === $tx->getType() ? 'arrow_upward' : 'arrow_downward',
+                'icon_bg' => TransactionTypeEnum::INCOME === $tx->getType() ? 'bg-secondary-container text-on-secondary-container' : 'bg-error-container text-on-error-container',
                 'title' => $tx->getDescription(),
-                'subtitle' => ($tx->getType() === 'income' ? '+' : '-') . '$' . number_format((float)$tx->getAmount(), 2) . ' · ' . ($tx->getCategory() ?? 'General'),
+                'subtitle' => (TransactionTypeEnum::INCOME === $tx->getType() ? '+' : '-').'$'.number_format((float) $tx->getAmount(), 2).' · '.($tx->getCategory() ?? 'General'),
                 'date' => $tx->getTransactionDate() ? $tx->getTransactionDate()->format('d/m/Y') : '',
                 'url' => $this->generateUrl('app_caja'),
             ];
@@ -56,9 +57,9 @@ class SearchController extends AbstractController
                 'icon' => 'person',
                 'icon_bg' => 'bg-primary-container text-on-primary-container',
                 'title' => $member->getFullName(),
-                'subtitle' => ($member->getEmail() ?? 'Sin correo') . ($member->getPhone() ? ' · ' . $member->getPhone() : ''),
+                'subtitle' => ($member->getEmail() ?? 'Sin correo').($member->getPhone() ? ' · '.$member->getPhone() : ''),
                 'date' => $member->getRole() ?? 'Miembro',
-                'url' => $this->generateUrl('app_directorio') . '?selected=' . $member->getId(),
+                'url' => $this->generateUrl('app_directorio').'?selected='.$member->getId(),
             ];
         }
 
@@ -71,7 +72,7 @@ class SearchController extends AbstractController
                 'icon' => 'event',
                 'icon_bg' => 'bg-surface-container-high text-primary',
                 'title' => $act->getName(),
-                'subtitle' => $act->getDescription() ? mb_strimwidth($act->getDescription(), 0, 50, '...') : 'Meta: $' . number_format((float)$act->getGoalAmount(), 2),
+                'subtitle' => $act->getDescription() ? mb_strimwidth($act->getDescription(), 0, 50, '...') : 'Meta: $'.number_format((float) $act->getGoalAmount(), 2),
                 'date' => $act->getStartDate() ? $act->getStartDate()->format('d/m/Y') : '',
                 'url' => $this->generateUrl('app_actividades'),
             ];

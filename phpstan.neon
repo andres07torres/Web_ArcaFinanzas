@@ -1,0 +1,13 @@
+includes:
+    # Need to install these extensions if we use them, for now I'll keep it simple
+    # - vendor/phpstan/phpstan-doctrine/extension.neon
+    # - vendor/phpstan/phpstan-symfony/extension.neon
+
+parameters:
+    level: 5
+    paths:
+        - src/
+        - tests/
+    excludePaths:
+        - vendor/
+    inferPrivatePropertyTypeFromConstructor: true

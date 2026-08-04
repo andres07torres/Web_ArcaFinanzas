@@ -39,6 +39,7 @@ class HomeController extends AbstractController
             $csrf = $request->request->get('_csrf_token');
             if (!$this->isCsrfTokenValid('register', $csrf)) {
                 $this->addFlash('error', 'Token CSRF inválido.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
@@ -48,50 +49,58 @@ class HomeController extends AbstractController
             $role = strtolower(trim((string) $request->request->get('role')));
             $terms = $request->request->get('terms');
 
-            if ($email === '' || $password === '' || !$terms) {
+            if ('' === $email || '' === $password || !$terms) {
                 $this->addFlash('error', 'Completa todos los campos requeridos.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
             if (strlen($email) > self::MAX_EMAIL_LENGTH) {
                 $this->addFlash('error', 'El correo electrónico es demasiado largo.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->addFlash('error', 'El correo electrónico no tiene un formato válido.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
             if (strlen($fullName) > self::MAX_NAME_LENGTH) {
                 $this->addFlash('error', 'El nombre es demasiado largo.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
             if (strlen($password) < self::MIN_PASSWORD_LENGTH) {
-                $this->addFlash('error', 'La contraseña debe tener al menos ' . self::MIN_PASSWORD_LENGTH . ' caracteres.');
+                $this->addFlash('error', 'La contraseña debe tener al menos '.self::MIN_PASSWORD_LENGTH.' caracteres.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
             if (strlen($password) > self::MAX_PASSWORD_LENGTH) {
                 $this->addFlash('error', 'La contraseña es demasiado larga.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
             if (!in_array($role, self::ALLOWED_ROLES, true)) {
                 $this->addFlash('error', 'El rol seleccionado no es válido.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
             $existing = $em->getRepository(User::class)->findOneBy(['email' => $email]);
             if ($existing) {
                 $this->addFlash('error', 'Este correo ya está registrado.');
+
                 return $this->redirectToRoute('app_registro');
             }
 
             $user = new User();
             $user->setEmail($email);
-            $user->setFullName($fullName !== '' ? $fullName : null);
+            $user->setFullName('' !== $fullName ? $fullName : null);
             $user->setRegistrationRole($role);
             $user->setPassword($passwordHasher->hashPassword($user, $password));
 
@@ -100,19 +109,20 @@ class HomeController extends AbstractController
             // Crear el miembro para el directorio
             $member = new \App\Entity\Member();
             $member->setEmail($email);
-            
+
             $nameParts = explode(' ', trim($fullName), 2);
             $member->setFirstName($nameParts[0] ?: 'Desconocido');
             $member->setLastName(isset($nameParts[1]) ? $nameParts[1] : 'Desconocido');
-            
+
             $member->setRole($user->getDisplayRole());
             $member->setStatus('active');
-            
+
             $em->persist($member);
 
             $em->flush();
 
             $this->addFlash('success', 'Solicitud enviada. Un administrador revisará tu registro.');
+
             return $this->redirectToRoute('app_login');
         }
 

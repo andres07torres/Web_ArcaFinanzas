@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Transaction;
+use App\Enum\TransactionTypeEnum;
 use App\Form\TransactionType;
 use App\Repository\ActivityRepository;
 use App\Repository\TransactionRepository;
+use App\Service\TransactionService;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +21,8 @@ class CashController extends AbstractController
     #[Route('', name: 'app_caja')]
     public function index(TransactionRepository $transactionRepo, ActivityRepository $activityRepo): Response
     {
-        $totalIncome = $transactionRepo->getTotalByType('income');
-        $totalExpenses = $transactionRepo->getTotalByType('expense');
+        $totalIncome = $transactionRepo->getTotalByType(TransactionTypeEnum::INCOME);
+        $totalExpenses = $transactionRepo->getTotalByType(TransactionTypeEnum::EXPENSE);
         $balance = $transactionRepo->getBalance();
         $recentTransactions = $transactionRepo->findRecentTransactions(10);
         $transactionCount = $transactionRepo->getTransactionCount();
@@ -38,11 +40,13 @@ class CashController extends AbstractController
     }
 
     #[Route('/nueva', name: 'app_caja_nueva')]
-    public function create(Request $request, TransactionRepository $transactionRepo, ActivityRepository $activityRepo, FilesystemOperator $supabaseStorage): Response
+    public function create(Request $request, TransactionRepository $transactionRepo, ActivityRepository $activityRepo, FilesystemOperator $supabaseStorage, TransactionService $transactionService): Response
     {
         $transaction = new Transaction();
         $transaction->setTransactionDate(new \DateTime());
-        $transaction->setCreatedBy($this->getUser());
+        /** @var \App\Entity\User|null $user */
+        $user = $this->getUser();
+        $transaction->setCreatedBy($user);
 
         $actividadId = (int) $request->query->get('actividad');
         if ($actividadId) {
@@ -67,7 +71,7 @@ class CashController extends AbstractController
             /** @var \Symfony\Component\HttpFoundation\File\UploadedFile|null $receiptFile */
             $receiptFile = $form->get('receipt')->getData();
             if ($receiptFile) {
-                $newFilename = uniqid('receipt_', true) . '.' . $receiptFile->guessExtension();
+                $newFilename = uniqid('receipt_', true).'.'.$receiptFile->guessExtension();
 
                 try {
                     $contenido = file_get_contents($receiptFile->getPathname());
@@ -81,15 +85,7 @@ class CashController extends AbstractController
             $transactionRepo->save($transaction, true);
 
             $activity = $transaction->getActivity();
-            if ($activity) {
-                $activityIncomes = $transactionRepo->findBy(['activity' => $activity, 'type' => 'income']);
-                $totalRaised = 0.0;
-                foreach ($activityIncomes as $inc) {
-                    $totalRaised += (float) $inc->getAmount();
-                }
-                $activity->setRaisedAmount((string) $totalRaised);
-                $activityRepo->save($activity, true);
-            }
+            $transactionService->processActivityRaisedAmount($transaction);
 
             $this->addFlash('success', 'Transacción registrada exitosamente.');
 
@@ -111,15 +107,16 @@ class CashController extends AbstractController
     public function uploadReceipt(Transaction $transaction, Request $request, TransactionRepository $transactionRepo, FilesystemOperator $supabaseStorage): Response
     {
         $csrf = (string) $request->request->get('_csrf_token');
-        if (!$this->isCsrfTokenValid('upload_receipt_' . $transaction->getId(), $csrf)) {
+        if (!$this->isCsrfTokenValid('upload_receipt_'.$transaction->getId(), $csrf)) {
             $this->addFlash('error', 'Token CSRF inválido.');
+
             return $this->redirectToRoute('app_reportes');
         }
 
         /** @var \Symfony\Component\HttpFoundation\File\UploadedFile|null $receiptFile */
         $receiptFile = $request->files->get('receipt_file');
         if ($receiptFile) {
-            $newFilename = uniqid('receipt_', true) . '.' . $receiptFile->guessExtension();
+            $newFilename = uniqid('receipt_', true).'.'.$receiptFile->guessExtension();
 
             try {
                 $contenido = file_get_contents($receiptFile->getPathname());
@@ -135,6 +132,7 @@ class CashController extends AbstractController
         }
 
         $redirect = $request->headers->get('referer') ?? $this->generateUrl('app_reportes');
+
         return $this->redirect($redirect);
     }
 
@@ -154,6 +152,7 @@ class CashController extends AbstractController
         });
 
         $response->headers->set('Content-Type', $mimeType);
+
         return $response;
     }
 

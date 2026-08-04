@@ -66,7 +66,7 @@ class MemberRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('m')
             ->where('m.firstName LIKE :query OR m.lastName LIKE :query OR m.email LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('query', '%'.$query.'%')
             ->orderBy('m.lastName', 'ASC')
             ->getQuery()
             ->getResult();

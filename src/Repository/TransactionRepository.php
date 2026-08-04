@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Transaction;
+use App\Enum\TransactionTypeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -34,12 +35,12 @@ class TransactionRepository extends ServiceEntityRepository
         }
     }
 
-    public function getTotalByType(string $type): float
+    public function getTotalByType(TransactionTypeEnum $type): float
     {
         $result = $this->createQueryBuilder('t')
             ->select('SUM(t.amount) as total')
             ->where('t.type = :type')
-            ->setParameter('type', $type)
+            ->setParameter('type', $type->value)
             ->getQuery()
             ->getOneOrNullResult();
 
@@ -48,8 +49,8 @@ class TransactionRepository extends ServiceEntityRepository
 
     public function getBalance(): float
     {
-        $totalIncome = $this->getTotalByType('income');
-        $totalExpenses = $this->getTotalByType('expense');
+        $totalIncome = $this->getTotalByType(TransactionTypeEnum::INCOME);
+        $totalExpenses = $this->getTotalByType(TransactionTypeEnum::EXPENSE);
 
         return $totalIncome - $totalExpenses;
     }
@@ -89,8 +90,8 @@ class TransactionRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
             ->select('MONTH(t.transactionDate) as month, YEAR(t.transactionDate) as year, SUM(CASE WHEN t.type = :income THEN t.amount ELSE 0 END) as income, SUM(CASE WHEN t.type = :expense THEN t.amount ELSE 0 END) as expense')
-            ->setParameter('income', 'income')
-            ->setParameter('expense', 'expense')
+            ->setParameter('income', TransactionTypeEnum::INCOME->value)
+            ->setParameter('expense', TransactionTypeEnum::EXPENSE->value)
             ->groupBy('year, month')
             ->orderBy('year, month', 'DESC')
             ->setMaxResults(6)
@@ -99,16 +100,16 @@ class TransactionRepository extends ServiceEntityRepository
     }
 
     public function getTotalByTypeAndDateRange(
-        string $type,
+        TransactionTypeEnum $type,
         ?\DateTimeInterface $startDate = null,
         ?\DateTimeInterface $endDate = null,
         ?int $activityId = null,
-        ?string $category = null
+        ?string $category = null,
     ): float {
         $qb = $this->createQueryBuilder('t')
             ->select('SUM(t.amount) as total')
             ->where('t.type = :type')
-            ->setParameter('type', $type);
+            ->setParameter('type', $type->value);
 
         if ($activityId) {
             $qb->leftJoin('t.activity', 'a');
@@ -117,6 +118,7 @@ class TransactionRepository extends ServiceEntityRepository
         $this->applyReportFilters($qb, $startDate, $endDate, $activityId, $category, null);
 
         $result = $qb->getQuery()->getOneOrNullResult();
+
         return (float) ($result['total'] ?? 0);
     }
 
@@ -125,9 +127,9 @@ class TransactionRepository extends ServiceEntityRepository
         ?\DateTimeInterface $endDate = null,
         ?int $activityId = null,
         ?string $category = null,
-        ?string $type = null,
+        ?TransactionTypeEnum $type = null,
         int $page = 1,
-        int $limit = 10
+        int $limit = 10,
     ): array {
         $countQb = $this->createQueryBuilder('t')
             ->select('COUNT(t.id)');
@@ -163,13 +165,34 @@ class TransactionRepository extends ServiceEntityRepository
         ];
     }
 
+    public function getReportTransactionsIterable(
+        ?\DateTimeInterface $startDate = null,
+        ?\DateTimeInterface $endDate = null,
+        ?int $activityId = null,
+        ?string $category = null,
+        ?TransactionTypeEnum $type = null,
+    ): iterable {
+        $qb = $this->createQueryBuilder('t')
+            ->leftJoin('t.activity', 'a')
+            ->addSelect('a')
+            ->leftJoin('t.createdBy', 'u')
+            ->addSelect('u');
+
+        $this->applyReportFilters($qb, $startDate, $endDate, $activityId, $category, $type);
+
+        $qb->orderBy('t.transactionDate', 'DESC')
+           ->addOrderBy('t.id', 'DESC');
+
+        return $qb->getQuery()->toIterable();
+    }
+
     private function applyReportFilters(
         \Doctrine\ORM\QueryBuilder $qb,
         ?\DateTimeInterface $startDate,
         ?\DateTimeInterface $endDate,
         ?int $activityId,
         ?string $category,
-        ?string $type
+        ?TransactionTypeEnum $type,
     ): void {
         if ($startDate) {
             $qb->andWhere('t.transactionDate >= :startDate')
@@ -189,7 +212,7 @@ class TransactionRepository extends ServiceEntityRepository
         }
         if ($type) {
             $qb->andWhere('t.type = :type')
-               ->setParameter('type', $type);
+               ->setParameter('type', $type->value);
         }
     }
 
@@ -217,7 +240,7 @@ class TransactionRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
             ->where('t.description LIKE :query OR t.category LIKE :query OR t.paymentMethod LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('query', '%'.$query.'%')
             ->orderBy('t.transactionDate', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()

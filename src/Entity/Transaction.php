@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\TransactionTypeEnum;
 use App\Repository\TransactionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,9 +21,9 @@ class Transaction
     #[Assert\NotNull(message: 'El monto es requerido.')]
     private ?string $amount = null;
 
-    #[ORM\Column(length: 20)]
-    #[Assert\Choice(choices: ['income', 'expense'], message: 'El tipo debe ser income o expense.')]
-    private ?string $type = null;
+    #[ORM\Column(length: 20, enumType: TransactionTypeEnum::class)]
+    #[Assert\NotNull(message: 'El tipo es requerido.')]
+    private ?TransactionTypeEnum $type = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'La descripción es requerida.')]
@@ -74,17 +75,19 @@ class Transaction
     public function setAmount(string $amount): static
     {
         $this->amount = $amount;
+
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): ?TransactionTypeEnum
     {
         return $this->type;
     }
 
-    public function setType(string $type): static
+    public function setType(TransactionTypeEnum $type): static
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -96,6 +99,7 @@ class Transaction
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -107,6 +111,7 @@ class Transaction
     public function setCategory(?string $category): static
     {
         $this->category = $category;
+
         return $this;
     }
 
@@ -118,6 +123,7 @@ class Transaction
     public function setPaymentMethod(?string $paymentMethod): static
     {
         $this->paymentMethod = $paymentMethod;
+
         return $this;
     }
 
@@ -129,6 +135,7 @@ class Transaction
     public function setTransactionDate(\DateTimeInterface $transactionDate): static
     {
         $this->transactionDate = $transactionDate;
+
         return $this;
     }
 
@@ -140,6 +147,7 @@ class Transaction
     public function setActivity(?Activity $activity): static
     {
         $this->activity = $activity;
+
         return $this;
     }
 
@@ -151,6 +159,7 @@ class Transaction
     public function setCreatedBy(?User $createdBy): static
     {
         $this->createdBy = $createdBy;
+
         return $this;
     }
 
@@ -162,6 +171,7 @@ class Transaction
     public function setNotes(?string $notes): static
     {
         $this->notes = $notes;
+
         return $this;
     }
 
@@ -173,6 +183,7 @@ class Transaction
     public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -184,12 +195,14 @@ class Transaction
     public function setReceiptFilename(?string $receiptFilename): static
     {
         $this->receiptFilename = $receiptFilename;
+
         return $this;
     }
 
     public function getSignedAmount(): float
     {
         $amount = (float) $this->amount;
-        return $this->type === 'expense' ? -$amount : $amount;
+
+        return TransactionTypeEnum::EXPENSE === $this->type ? -$amount : $amount;
     }
 }

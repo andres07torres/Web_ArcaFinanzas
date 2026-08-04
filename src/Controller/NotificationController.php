@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Enum\TransactionTypeEnum;
 use App\Repository\ActivityRepository;
 use App\Repository\MemberRepository;
 use App\Repository\TransactionRepository;
@@ -17,10 +18,10 @@ class NotificationController extends AbstractController
         Request $request,
         TransactionRepository $transactionRepo,
         ActivityRepository $activityRepo,
-        MemberRepository $memberRepo
+        MemberRepository $memberRepo,
     ): JsonResponse {
         $notifications = $this->buildNotifications($transactionRepo, $activityRepo, $memberRepo);
-        
+
         $session = $request->getSession();
         $clearedHash = $session->get('notifications_cleared_hash', '');
         $currentHash = md5(json_encode(array_slice($notifications, 0, 8)));
@@ -38,7 +39,7 @@ class NotificationController extends AbstractController
         Request $request,
         TransactionRepository $transactionRepo,
         ActivityRepository $activityRepo,
-        MemberRepository $memberRepo
+        MemberRepository $memberRepo,
     ): JsonResponse {
         $notifications = $this->buildNotifications($transactionRepo, $activityRepo, $memberRepo);
         $currentHash = md5(json_encode(array_slice($notifications, 0, 8)));
@@ -55,20 +56,20 @@ class NotificationController extends AbstractController
     private function buildNotifications(
         TransactionRepository $transactionRepo,
         ActivityRepository $activityRepo,
-        MemberRepository $memberRepo
+        MemberRepository $memberRepo,
     ): array {
         $notifications = [];
 
         $recentTransactions = $transactionRepo->findBy([], ['id' => 'DESC'], 5);
         foreach ($recentTransactions as $tx) {
-            $typeLabel = $tx->getType() === 'income' ? 'Ingreso' : 'Gasto';
+            $typeLabel = TransactionTypeEnum::INCOME === $tx->getType() ? 'Ingreso' : 'Gasto';
             $notifications[] = [
                 'type' => 'transaction',
-                'title' => 'Nueva transacción (' . $typeLabel . ')',
-                'message' => $tx->getDescription() . ' - $' . number_format((float) $tx->getAmount(), 2),
+                'title' => 'Nueva transacción ('.$typeLabel.')',
+                'message' => $tx->getDescription().' - $'.number_format((float) $tx->getAmount(), 2),
                 'date' => $tx->getTransactionDate()?->format('d M, Y') ?? 'Hoy',
-                'icon' => $tx->getType() === 'income' ? 'add_circle' : 'remove_circle',
-                'color' => $tx->getType() === 'income' ? 'text-secondary' : 'text-error',
+                'icon' => TransactionTypeEnum::INCOME === $tx->getType() ? 'add_circle' : 'remove_circle',
+                'color' => TransactionTypeEnum::INCOME === $tx->getType() ? 'text-secondary' : 'text-error',
                 'url' => $this->generateUrl('app_caja'),
             ];
         }
@@ -78,7 +79,7 @@ class NotificationController extends AbstractController
             $notifications[] = [
                 'type' => 'member',
                 'title' => 'Nuevo miembro registrado',
-                'message' => $m->getFullName() . ($m->getRole() ? ' (' . $m->getRole() . ')' : ''),
+                'message' => $m->getFullName().($m->getRole() ? ' ('.$m->getRole().')' : ''),
                 'date' => $m->getJoinDate()?->format('d M, Y') ?? 'Hoy',
                 'icon' => 'person_add',
                 'color' => 'text-primary',
@@ -90,8 +91,8 @@ class NotificationController extends AbstractController
         foreach ($recentActivities as $act) {
             $notifications[] = [
                 'type' => 'activity',
-                'title' => 'Evento: ' . $act->getName(),
-                'message' => 'Estado: ' . strtoupper((string) $act->getStatus()) . ' - Meta: $' . number_format((float) $act->getGoalAmount(), 2),
+                'title' => 'Evento: '.$act->getName(),
+                'message' => 'Estado: '.strtoupper((string) $act->getStatus()).' - Meta: $'.number_format((float) $act->getGoalAmount(), 2),
                 'date' => $act->getStartDate()?->format('d M, Y') ?? 'Hoy',
                 'icon' => 'event',
                 'color' => 'text-on-secondary-container',

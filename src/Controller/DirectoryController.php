@@ -18,7 +18,7 @@ class DirectoryController extends AbstractController
     public function index(Request $request, MemberRepository $memberRepo, TransactionRepository $transactionRepo): Response
     {
         $search = $request->query->get('search', '');
-        
+
         if ($search) {
             $members = $memberRepo->searchMembers($search);
         } else {
@@ -27,11 +27,11 @@ class DirectoryController extends AbstractController
 
         $totalMembers = $memberRepo->getMemberCount();
         $activeMembers = $memberRepo->getActiveMemberCount();
-        
+
         $selectedMember = null;
         $memberTransactions = [];
-        
-        if ($members && count($members) > 0) {
+
+        if (!empty($members)) {
             $selectedId = $request->query->get('id');
             if ($selectedId) {
                 // Buscar el miembro en la lista actual
@@ -42,7 +42,7 @@ class DirectoryController extends AbstractController
                     }
                 }
             }
-            
+
             // Si no se encontró o no se pasó ID, seleccionar el primero
             if (!$selectedMember) {
                 $selectedMember = $members[0];
@@ -102,6 +102,7 @@ class DirectoryController extends AbstractController
         $user = $this->getUser();
         if (!$user || ($user->getEmail() !== $member->getEmail() && !in_array($user->getRegistrationRole(), ['tesorero', 'administrador']))) {
             $this->addFlash('error', 'No tienes permiso para editar el perfil de este miembro.');
+
             return $this->redirectToRoute('app_directorio');
         }
 
